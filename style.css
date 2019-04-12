@@ -1,0 +1,32 @@
+body{
+    margin:200px;
+}
+
+h2
+{
+    color: white;
+    text-align: center;
+
+}
+header{
+    background-color:#343a40;
+    padding:15px 0px 15px 0px;
+    opacity: 0.75;
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+
+}
+
+.img-fluid
+{
+    height:50px;
+    -webkit-filter: invert(100%);
+
+}
+
+.align-right
+{  
+    float:right;
+}
