@@ -9,7 +9,7 @@
         <meta charset="utf-8">
         <title>Projet BDW1</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <link rel="stylesheet" type="text/css" href="http://localhost/projet-bdw1/style.css"/>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
     </head>
@@ -19,7 +19,7 @@
             
             <div class="col-3">
                 <div class="p-2 bd-highlight">
-                    <img src="./data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
+                    <img src="http://localhost/projet-bdw1//data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
                 </div>
             </div>
             <div class="col-6">

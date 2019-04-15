@@ -26,12 +26,11 @@ CREATE TABLE adherent(
         nom            Varchar (50) NOT NULL,
         prenom         Varchar (200) NOT NULL,
         num_adherent   Int NOT NULL,
-        certif_club    Varchar (200),
+        date_certif_club    Date,
         sexe           Varchar (20) NOT NULL,
         adresse        Varchar (200),
         club           Varchar (200),
         date_naissance Date,
-        id_user        Int NOT NULL,
 	    PRIMARY KEY (id_adherent)
 );
 
@@ -43,9 +42,8 @@ CREATE TABLE adherent(
 CREATE TABLE course(
         id_course      Int  AUTO_INCREMENT  NOT NULL,
         nom            Varchar (100) NOT NULL,
-        annee_creation Date NOT NULL,
+        annee_creation YEAR NOT NULL,
         mois           Int NOT NULL,
-        id_edition     Int NOT NULL,
 	    PRIMARY KEY (id_course)
 ) ;
 
@@ -66,7 +64,6 @@ CREATE TABLE edition(
         date_inscription      Date NOT NULL,
         date_depot_certificat Date NOT NULL,
         date_recup_dossard    Date NOT NULL,
-        id_epreuve            Int NOT NULL,
 	    PRIMARY KEY (id_edition)
 );
 
@@ -82,7 +79,6 @@ CREATE TABLE tarif(
         age_min                 Int NOT NULL,
         age_max                 Int NOT NULL,
         tarif                   Int NOT NULL,
-        id_epreuve_A_pour_tarif Int NOT NULL,
 	    PRIMARY KEY (id_tarif)
 );
 
@@ -94,11 +90,11 @@ CREATE TABLE tarif(
 CREATE TABLE epreuve(
         id_epreuve   Int  AUTO_INCREMENT  NOT NULL,
         id_edition   Int NOT NULL,
+        id_tarif     Int NOT NULL,
         distance     Int NOT NULL,
         nom          Varchar (200) NOT NULL,
         denivelee    Int NOT NULL,
         type_epreuve Varchar (200) NOT NULL,
-        id_tarif     Int NOT NULL,
 	    PRIMARY KEY (id_epreuve)
 );
 
@@ -108,14 +104,11 @@ CREATE TABLE epreuve(
 #------------------------------------------------------------
 
 CREATE TABLE participation(
-        id_participation    Int NOT NULL,
+        id_participation    Int AUTO_INCREMENT NOT NULL,
         dossard             Int NOT NULL,
         id_adherent         Int NOT NULL,
         id_epreuve          Int NOT NULL,
         id_edition          Int NOT NULL,
-        id_epreuve_possede  Int NOT NULL,
-        id_adherent_possede Int NOT NULL,
-        dossard_resultat    Int NOT NULL,
 	    PRIMARY KEY (id_participation,dossard)
 );
 
@@ -143,13 +136,10 @@ CREATE TABLE resultat(
 
 CREATE TABLE temps_passage(
         id_temps              Int  AUTO_INCREMENT  NOT NULL,
+        id_participation      Int NOT NULL,
         dossard               Int NOT NULL,
         km                    Int NOT NULL,
         temps                 Int NOT NULL,
-        id_edition            Int NOT NULL,
-        id_preuve             Int NOT NULL,
-        id_participation      Int NOT NULL,
-        dossard_participation Int NOT NULL,
 	    PRIMARY KEY (id_temps)
 );
 

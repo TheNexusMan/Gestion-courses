@@ -65,3 +65,25 @@ footer{
 footer p{
     margin: 0;
 }
+
+/*ADHERENT*/
+.adherent{
+    margin-bottom: 50px;
+}
+.adherentInfosBloc{
+    border: 1px solid #E6E7E6;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.adherentInfos p{
+    margin: 0;
+}
+
+.nomInfo{
+    font-weight: bold;
+}
+
+.ligneInfo{
+    margin-bottom: 10px;
+}
