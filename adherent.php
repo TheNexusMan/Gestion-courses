@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "./header.php";
+    include "includes/header.php";
 
     $user = 'root' ;
     $mdp = '' ;
@@ -123,5 +123,5 @@
     }
     mysqli_close($connexion);
 
-    include "./footer.php";
+    include "includes/footer.php";
 ?>
