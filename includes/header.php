@@ -29,12 +29,15 @@
 
             
                 <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-outline-success" id="logout">Logout</button>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                                <button type="button" class="btn btn-outline-success" id="home">Home</button>
-                        </div>
+                 <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-outline-success" id="home">Home</button>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-outline-success" id="logout">Logout</button>
+                </div>
+
+                
+
 
                 </div>
             </div>
