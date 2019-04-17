@@ -1,5 +1,4 @@
 <?php
-    session_start();
     include "includes/header.php";
 
     $user = 'root' ;
@@ -11,7 +10,7 @@
     if(mysqli_connect_errno()) // erreur si > 0
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-        $idUser = 2016008;
+        $idUser = $_SESSION['id_adherent'];
 
         $requete = "SELECT *
                     FROM adherent
@@ -80,12 +79,12 @@
 
             //Affichage des éditions participées par l'adhérent
             $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps
-                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = 2016008) AS Part
+                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
                                 NATURAL JOIN epreuve Ep
                                 NATURAL JOIN edition Ed
                                 JOIN COURSE Co ON Ed.id_course = Co.id_course
-                                JOIN (SELECT  dossard, MAX(temps) AS temps, id_participation
-                                    FROM temps_passage GROUP BY id_participation) AS Tp ON Tp.id_participation = Part.id_participation";
+                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
 
             $resultat = mysqli_query($connexion, $requete);
 
@@ -109,9 +108,9 @@
                 $temps = $nuplet['temps'];
                 print "<tr>
                             <td>$annee</td>
-                            <td>$distance</td>
+                            <td>$distance Km</td>
                             <td>$nom</td>
-                            <td>$temps</td>
+                            <td>$temps min</td>
                         </tr>";
             }
 

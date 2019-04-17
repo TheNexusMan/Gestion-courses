@@ -34,7 +34,7 @@ if((isset($_POST['pseudoInput'])) && (isset($_POST['inputPw'])))
 
             while($nuplet = mysqli_fetch_assoc($resultat))
             {
-                $_SESSION['id_user'] = $nuplet['id_user'];
+                $_SESSION['id_adherent'] = $nuplet['id_adherent'];
                 $type = $nuplet['type'];
             }
 

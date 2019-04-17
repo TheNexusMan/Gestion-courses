@@ -25,10 +25,10 @@ CREATE TABLE adherent(
         id_adherent    Int NOT NULL,
         nom            Varchar (50) NOT NULL,
         prenom         Varchar (50) NOT NULL,
-        date_naissance Date,
+        date_naissance Date NOT NULL,
         sexe           Varchar (20) NOT NULL,
         adresse        Varchar (200),
-        date_certif_club    Date,
+        date_certif_club    Date NOT NULL,
         club           Varchar (200),
 	PRIMARY KEY (id_adherent)
 );
@@ -73,7 +73,6 @@ CREATE TABLE edition(
 
 CREATE TABLE tarif(
         id_tarif                Int  AUTO_INCREMENT  NOT NULL,
-        id_edition              Int NOT NULL,
         id_epreuve              Int NOT NULL,
         age_min                 Int NOT NULL,
         age_max                 Int NOT NULL,
@@ -89,7 +88,6 @@ CREATE TABLE tarif(
 CREATE TABLE epreuve(
         id_epreuve   Int  AUTO_INCREMENT  NOT NULL,
         id_edition   Int NOT NULL,
-        id_tarif     Int NOT NULL,
         distance     Int NOT NULL,
         nom          Varchar (200) NOT NULL,
         denivelee    Int NOT NULL,
@@ -149,16 +147,10 @@ ALTER TABLE edition
 ADD CONSTRAINT id_course FOREIGN KEY (id_course) REFERENCES course(id_course);
 
 ALTER TABLE tarif
-ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition(id_edition);
-
-ALTER TABLE tarif
 ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
 
 ALTER TABLE epreuve
 ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition(id_edition);
-
-ALTER TABLE epreuve
-ADD CONSTRAINT id_tarif FOREIGN KEY (id_tarif) REFERENCES tarif(id_tarif);
 
 ALTER TABLE participation
 ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
@@ -200,32 +192,88 @@ INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adress
 VALUES (3, 2, 2018, 32, 'runlyon.jpg', 'Quai Tilsitt, Lyon', '2018-10-07', 'http://www.runinlyon.com/fr', '2018-01-07', '2018-08-01', '2018-10-01');
 
 #EPREUVES
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (1, 1, 1, 'Paris centre by Nike', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (1, 1, 'Paris centre by Nike', 10, 0, '10 Km');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (2, 1, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (2, 1, 'Marathon de Paris', 42.195, 0, 'Marathon');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (3, 1, 3, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (3, 1, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (4, 2, 1, 'Adidas 10 km Paris', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (4, 2, 'Adidas 10 km Paris', 10, 0, '10 Km');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (5, 2, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (5, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (6, 2, 3, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (6, 2, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (7, 3, 4, 'Run in Lyon 10 km', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (7, 3, 'Run in Lyon 10 km', 10, 0, '10 Km');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (8, 3, 5, 'Run in Lyon Marathon', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (8, 3, 'Run in Lyon Marathon', 42.195, 0, 'Marathon');
 
-INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
-VALUES (9, 3, 6, 'Run in Lyon Semi-Marathon', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
+VALUES (9, 3, 'Run in Lyon Semi-Marathon', 21.097, 0, 'Semi-Marathon');
+
+#USERS
+INSERT INTO user (id_adherent, type, mdp, pseudo)
+VALUES (2016004, 'Adherent', '1234', 'Mat');
+
+INSERT INTO user (id_adherent, type, mdp, pseudo)
+VALUES (2016008, 'Adherent', 'DSA22', 'Chris');
+
+INSERT INTO user (id_adherent, type, mdp, pseudo)
+VALUES (2017001, 'Adherent', 'SDAZ13', 'Bruno');
+
+INSERT INTO user (type, mdp, pseudo)
+VALUES ('Admin', 'azerty', 'Arnaud');
+
+INSERT INTO user (type, mdp, pseudo)
+VALUES ('Admin', 'azerty', 'Damien');
+
+#TARIFS
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (1, 12, 25, 15);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (1, 25, 99, 20);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (2, 12, 25, 20);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (2, 25, 99, 25);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (3, 18, 25, 30);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (3, 25, 99, 35);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (4, 12, 99, 21);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (5, 18, 99, 26);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (6, 18, 99, 31);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (7, 18, 25, 10);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (7, 25, 99, 15);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (8, 18, 95, 20);
+
+INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
+VALUES (9, 18, 95, 25);
 
 #PARTICIPATIONS
 INSERT INTO participation (dossard, id_adherent, id_epreuve)
