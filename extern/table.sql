@@ -226,3 +226,9 @@ VALUES (8, 3, 5, 'Run in Lyon Marathon', 42.195, 0, 'Marathon');
 
 INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
 VALUES (9, 3, 6, 'Run in Lyon Semi-Marathon', 21.097, 0, 'Semi-Marathon');
+
+#PARTICIPATIONS
+INSERT INTO participation (dossard, id_adherent, id_epreuve)
+    SELECT r.dossard ,a.id_adherent, r.id_epreuve
+    FROM resultat r
+    INNER JOIN adherent a on (a.nom = r.nom and a.prenom = r.prenom and a.sexe = r.sexe);
