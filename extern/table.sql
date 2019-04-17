@@ -13,7 +13,7 @@ CREATE TABLE user(
         type        Varchar (50) NOT NULL,
         mdp         Varchar (50) NOT NULL,
         pseudo      Varchar (50) NOT NULL,
-	    PRIMARY KEY (id_user)
+	PRIMARY KEY (id_user)
 );
 
 
@@ -22,16 +22,15 @@ CREATE TABLE user(
 #------------------------------------------------------------
 
 CREATE TABLE adherent(
-        id_adherent    Int  AUTO_INCREMENT  NOT NULL,
+        id_adherent    Int NOT NULL,
         nom            Varchar (50) NOT NULL,
-        prenom         Varchar (200) NOT NULL,
-        num_adherent   Int NOT NULL,
-        date_certif_club    Date,
+        prenom         Varchar (50) NOT NULL,
+        date_naissance Date,
         sexe           Varchar (20) NOT NULL,
         adresse        Varchar (200),
+        date_certif_club    Date,
         club           Varchar (200),
-        date_naissance Date,
-	    PRIMARY KEY (id_adherent)
+	PRIMARY KEY (id_adherent)
 );
 
 
@@ -44,7 +43,7 @@ CREATE TABLE course(
         nom            Varchar (100) NOT NULL,
         annee_creation YEAR NOT NULL,
         mois           Int NOT NULL,
-	    PRIMARY KEY (id_course)
+	PRIMARY KEY (id_course)
 ) ;
 
 
@@ -54,8 +53,8 @@ CREATE TABLE course(
 
 CREATE TABLE edition(
         id_edition            Int  AUTO_INCREMENT  NOT NULL,
-        annee                 Int NOT NULL,
         id_course             Int NOT NULL,
+        annee                 Int NOT NULL,
         nb_participants       Int NOT NULL,
         plan                  Varchar (200) NOT NULL,
         adresse_depart        Varchar (200) NOT NULL,
@@ -64,7 +63,7 @@ CREATE TABLE edition(
         date_inscription      Date NOT NULL,
         date_depot_certificat Date NOT NULL,
         date_recup_dossard    Date NOT NULL,
-	    PRIMARY KEY (id_edition)
+	PRIMARY KEY (id_edition)
 );
 
 
@@ -79,7 +78,7 @@ CREATE TABLE tarif(
         age_min                 Int NOT NULL,
         age_max                 Int NOT NULL,
         tarif                   Int NOT NULL,
-	    PRIMARY KEY (id_tarif)
+	PRIMARY KEY (id_tarif)
 );
 
 
@@ -95,7 +94,7 @@ CREATE TABLE epreuve(
         nom          Varchar (200) NOT NULL,
         denivelee    Int NOT NULL,
         type_epreuve Varchar (200) NOT NULL,
-	    PRIMARY KEY (id_epreuve)
+	PRIMARY KEY (id_epreuve)
 );
 
 
@@ -108,8 +107,7 @@ CREATE TABLE participation(
         dossard             Int NOT NULL,
         id_adherent         Int NOT NULL,
         id_epreuve          Int NOT NULL,
-        id_edition          Int NOT NULL,
-	    PRIMARY KEY (id_participation,dossard)
+	PRIMARY KEY (id_participation)
 );
 
 
@@ -119,14 +117,12 @@ CREATE TABLE participation(
 
 CREATE TABLE resultat(
         dossard               Int NOT NULL,
+        id_epreuve            Int NOT NULL,
         rang                  Int,
         nom                   Varchar (200) NOT NULL,
         prenom                Varchar (200) NOT NULL,
         sexe                  Varchar (20) NOT NULL,
-        id_edition            Int NOT NULL,
-        id_epreuve            Int NOT NULL,
-        id_participation      Int NOT NULL,
-	    PRIMARY KEY (dossard)
+	PRIMARY KEY (dossard, id_epreuve)
 );
 
 
@@ -135,43 +131,98 @@ CREATE TABLE resultat(
 #------------------------------------------------------------
 
 CREATE TABLE temps_passage(
-        id_temps              Int  AUTO_INCREMENT  NOT NULL,
-        id_participation      Int NOT NULL,
+        id_epreuve            Int NOT NULL,
         dossard               Int NOT NULL,
         km                    Int NOT NULL,
         temps                 Int NOT NULL,
-	    PRIMARY KEY (id_temps)
+	PRIMARY KEY (id_epreuve, dossard, km)
 );
 
-ALTER TABLE course
-ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition;
-
-ALTER TABLE edition
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve;
-
-ALTER TABLE tarif
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve;
+#------------------------------------------------------------
+# ALTER TABLE
+#------------------------------------------------------------
 
 ALTER TABLE user
-ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES epreuve;
+ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent);
+
+ALTER TABLE edition
+ADD CONSTRAINT id_course FOREIGN KEY (id_course) REFERENCES course(id_course);
+
+ALTER TABLE tarif
+ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition(id_edition);
+
+ALTER TABLE tarif
+ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
 
 ALTER TABLE epreuve
-ADD CONSTRAINT id_tarif FOREIGN KEY (id_tarif) REFERENCES tarif;
+ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition(id_edition);
 
-ALTER TABLE adherent
-ADD CONSTRAINT id_user FOREIGN KEY (id_user) REFERENCES user;
-
-ALTER TABLE participation
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve;
+ALTER TABLE epreuve
+ADD CONSTRAINT id_tarif FOREIGN KEY (id_tarif) REFERENCES tarif(id_tarif);
 
 ALTER TABLE participation
-ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES adherent;
+ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
+
+ALTER TABLE participation
+ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent);
+
+ALTER TABLE resultat
+ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
+
+ALTER TABLE resultat
+ADD CONSTRAINT dossard FOREIGN KEY (dossard) REFERENCES participation(dossard);
 
 ALTER TABLE temps_passage
-ADD CONSTRAINT id_participation FOREIGN KEY (id_participation) REFERENCES participation;
+ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
 
-ALTER TABLE resultat
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve;
+ALTER TABLE temps_passage
+ADD CONSTRAINT dossard FOREIGN KEY (dossard) REFERENCES participation(dossard);
 
-ALTER TABLE resultat
-ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES epreuve;
+#------------------------------------------------------------
+# INSERTIONS
+#------------------------------------------------------------
+
+#COURSES
+INSERT INTO course (id_course, nom, annee_creation, mois)
+VALUES (1, 'Marathon de Paris', 1976, 6);
+
+INSERT INTO course (id_course, nom, annee_creation, mois)
+VALUES (2, 'Run in Lyon', 2010, 5);
+
+#EDITIONS
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (1, 1, 2017, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2017-04-09', 'http://www.schneiderelectricparismarathon.com/fr/', '2017-01-01', '2017-02-01', '2017-04-01');
+
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (2, 1, 2018, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2018-04-08', 'http://www.schneiderelectricparismarathon.com/fr/', '2018-01-01', '2018-02-01', '2018-04-01');
+
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (3, 2, 2018, 32, 'runlyon.jpg', 'Quai Tilsitt, Lyon', '2018-10-07', 'http://www.runinlyon.com/fr', '2018-01-07', '2018-08-01', '2018-10-01');
+
+#EPREUVES
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (1, 1, 1, 'Paris centre by Nike', 10, 0, '10 Km');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (2, 1, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (3, 1, 3, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (4, 2, 1, 'Adidas 10 km Paris', 10, 0, '10 Km');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (5, 2, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (6, 2, 3, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (7, 3, 4, 'Run in Lyon 10 km', 10, 0, '10 Km');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (8, 3, 5, 'Run in Lyon Marathon', 42.195, 0, 'Marathon');
+
+INSERT INTO epreuve (id_epreuve, id_edition, id_tarif, nom, distance, denivelee, type_epreuve)
+VALUES (9, 3, 6, 'Run in Lyon Semi-Marathon', 21.097, 0, 'Semi-Marathon');
