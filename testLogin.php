@@ -41,7 +41,7 @@ if((isset($_POST['pseudoInput'])) && (isset($_POST['inputPw'])))
             if($type == "Admin")
             {
                 //Renvoie sur la page admin
-                header('Location: http://localhost/projet-bdw1/index.php');
+                header('Location: http://localhost/projet-bdw1/courses.php');
             }
             else {
                 //Renvoie sur la page User
