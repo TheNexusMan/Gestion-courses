@@ -177,13 +177,13 @@
     document.getElementById("modifInfoAdherent").onclick = afficheFormAdherent;
     document.getElementById("annulerInfoAdherent").onclick = annulerFormAdherent;
 
-    const nom = document.getElementById('nomAdherent').innerHTML;
-    const prenom = document.getElementById('prenomAdherent').innerHTML;
-    const naissance = document.getElementById('naissanceAdherent').innerHTML;
-    const sexe = document.getElementById('sexeAdherent').innerHTML;
-    const adresse = document.getElementById('adresseAdherent').innerHTML;
-    const dateClub = document.getElementById('dateClubAdherent').innerHTML;
-    const nomClub = document.getElementById('nomClubAdherent').innerHTML;
+    const nom = document.getElementById('nomAdherentInput').value;
+    const prenom = document.getElementById('prenomAdherentInput').value;
+    const naissance = document.getElementById('naissanceAdherentInput').value;
+    const sexe = document.getElementById('sexeAdherentInput').value;
+    const adresse = document.getElementById('adresseAdherentInput').value;
+    const dateClub = document.getElementById('dateClubAdherentInput').value;
+    const nomClub = document.getElementById('nomClubAdherentInput').value;
 
     function afficheFormAdherent()
     {
