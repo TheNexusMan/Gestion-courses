@@ -66,6 +66,12 @@ footer p{
     margin: 0;
 }
 
+/*INDEX*/
+.erreurAuthentification{
+    text-align: center;
+    color: red;
+}
+
 /*ADHERENT*/
 .adherent{
     margin-bottom: 50px;
@@ -98,6 +104,16 @@ footer p{
 
 .writeInfoAdherent{
     display: none;
+}
+
+/*ESPACEPERSO*/
+.blockButton{
+    margin-bottom: 30px;
+}
+
+/*ADHERENTS*/
+.listeEditionAdherent th a{
+    color: black;
 }
 
 /*EDITIONS*/

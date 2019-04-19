@@ -37,7 +37,8 @@
             //printf("Échec de la requête de récupération des informations d'adhérent");
         else {
             //Affichage des informations de l'adhérent
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            while ($nuplet = mysqli_fetch_assoc($resultat))
+            {
                 $nom = $nuplet['nom'];
                 $prenom = $nuplet['prenom'];
                 $dateNaissance = $nuplet['date_naissance'];
@@ -63,13 +64,13 @@
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Nom :</p>
                                                 <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
-                                                <input type='text' id='nomAdherentInput' class='writeInfoAdherent' name='nom' value='$nom'>
+                                                <input type='text' id='nomAdherentInput' class='writeInfoAdherent' name='nom' value='$nom' required>
                                             </div>
                                             <div class='col-4'></div>
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Prenom :</p>
                                                 <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
-                                                <input type='text' id='prenomAdherentInput' class='writeInfoAdherent' name='prenom' value='$prenom'>
+                                                <input type='text' id='prenomAdherentInput' class='writeInfoAdherent' name='prenom' value='$prenom' required>
                                             </div>
                                         </div>
                                         <div class='row ligneInfo'>
@@ -81,7 +82,7 @@
                                             <div class='col-4'></div>
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Sexe :</p>
-                                                <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
+                                                <p id='sexeAdherent' class='readInfoAdherent' required>$sexe</p>
                                                 <select id='sexeAdherentInput' class='writeInfoAdherent' name='sexe'>
                                                     $selectSexe
                                                 </select>
@@ -124,17 +125,23 @@
                             </div>
                         </section>";
             }
+        }
 
-            //Affichage des éditions participées par l'adhérent
-            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps
-                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
-                                NATURAL JOIN epreuve Ep
-                                NATURAL JOIN edition Ed
-                                JOIN COURSE Co ON Ed.id_course = Co.id_course
-                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
-                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
+        //Affichage des éditions participées par l'adhérent
+        $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps
+                    FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
+                            NATURAL JOIN epreuve Ep
+                            NATURAL JOIN edition Ed
+                            JOIN COURSE Co ON Ed.id_course = Co.id_course
+                            JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
 
-            $resultat = mysqli_query($connexion, $requete);
+        $resultat = mysqli_query($connexion, $requete);
+
+        if($resultat == FALSE)
+            print "<script>alert('Échec de la requête de récupération des édition courues par l'adhérent')</script>";
+            //printf("Échec de la requête de récupération des édition courues par l'adhérent");
+        else {
 
             print "<section class='listeEditionAdherent'>
                             <div class='container'>
@@ -149,7 +156,8 @@
                                     </thead>
                                     <tbody>";
 
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            while ($nuplet = mysqli_fetch_assoc($resultat))
+            {
                 $nom = $nuplet['nom'];
                 $annee = $nuplet['annee'];
                 $distance = $nuplet['distance'];
@@ -167,8 +175,9 @@
                         </div>
                     </section>";
         }
+        
+        mysqli_close($connexion);
     }
-    mysqli_close($connexion);
 
     include "includes/footer.php";
 ?>
