@@ -59,16 +59,16 @@
                         <td>$nom</td>
                         <td>$annee_crea</td>
                         <td>$mois</td>";
-            print '<td><div class="d-flex flex-row bd-highlight">';
-            print ' <div class="p-2 bd-highlight"><form method="GET" action="editions.php">';
-            print '<button type="submit" class="btn btn-outline-success" id=" '. $id_course . '" name=" ' .$id_course . '">Edit</button></form></div></div></td>
-                </tr>';
+            print ' <td> <a href="editions.php?idcourse='. $id_course . '">Editions </a></td>  </tr>';
+            
             
                 }
 
 
             print "             </tbody>
-                            </table>";
+                            </table>
+                            </div>
+                           </section>";
     }
 
 
@@ -78,7 +78,8 @@
 
 ?>
 
-
+<section class='listeEditionAdherent'>
+<div class='container'>
 <form method="POST" action="courses.php">
     <div class="form-row">
             <div class="col-md-4 mb-3">
@@ -116,9 +117,9 @@
     </div>
     <button class="btn btn-primary" type="submit">Ajouter Course</button>
 </form>
+</div>
+</section>
 
-                    </div>
-            </section>
 
 
 

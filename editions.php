@@ -8,9 +8,12 @@
     $connexion = mysqli_connect($machine,$user,$mdp, $bd);
 
 
-   
-
+   if(isset($_GET['idcourse']))
+   {
+       $idCourse = $_GET['idcourse'];
+   }
     //créer un bouton pour changer le sexe choisis
+
 
     if(isset($_POST['genderSelect']))
     {
@@ -30,8 +33,7 @@
     {
         
     }
-    $idCourse = 1; //A changer via l'appel dans courses.php
-
+  
     if($chosenSex == "H")
     {
         print "<div class='container'>
