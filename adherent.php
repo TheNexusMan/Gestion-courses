@@ -21,7 +21,8 @@
             $resultat = mysqli_query($connexion, $requete);
 
             if($resultat == FALSE){
-                printf("Échec de la requête de mise à jour");
+                print "<script>alert('Échec de la requête de mise à jour')</script>";
+                //printf("Échec de la requête de mise à jour");
             }
         }
 
@@ -32,7 +33,8 @@
         $resultat = mysqli_query($connexion, $requete);
 
         if($resultat == FALSE)
-            printf("Échec de la requête de récupération des informations d'adhérent");
+            print "<script>alert('Échec de la requête de récupération des informations d'adhérent')</script>";
+            //printf("Échec de la requête de récupération des informations d'adhérent");
         else {
             //Affichage des informations de l'adhérent
             while ($nuplet = mysqli_fetch_assoc($resultat)) {
@@ -43,6 +45,16 @@
                 $adresse = $nuplet['adresse'];
                 $dateClub = $nuplet['date_certif_club'];
                 $nomClub = $nuplet['club'];
+
+                if($sexe == "H")
+                {
+                    $selectSexe = "<option value='H' selected='selected'>H</option>
+                                    <option value='F'>F</option>";
+                }else{
+                    $selectSexe = "<option value='H''>H</option>
+                                    <option value='F' selected='selected'>F</option>";
+                }
+
                 print "<section class='adherent'>
                             <div class='adherentInfos container'>
                                 <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
@@ -64,13 +76,15 @@
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Naissance :</p>
                                                 <p id='naissanceAdherent' class='readInfoAdherent'>$dateNaissance</p>
-                                                <input type='text' id='naissanceAdherentInput' class='writeInfoAdherent' name='naissance' value='$dateNaissance'>
+                                                <input type='date' id='naissanceAdherentInput' class='writeInfoAdherent' name='naissance' value='$dateNaissance'>
                                             </div>
                                             <div class='col-4'></div>
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Sexe :</p>
                                                 <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
-                                                <input type='text' id='sexeAdherentInput' class='writeInfoAdherent' name='sexe' value='$sexe'>
+                                                <select id='sexeAdherentInput' class='writeInfoAdherent' name='sexe'>
+                                                    $selectSexe
+                                                </select>
                                             </div>
                                         </div>
                                         <div class='row ligneInfo'>
@@ -84,7 +98,7 @@
                                             <div class='col-4'>
                                                 <p class='nomInfo'>dateClub :</p>
                                                 <p id='dateClubAdherent' class='readInfoAdherent'>$dateClub</p>
-                                                <input type='text' id='dateClubAdherentInput' class='writeInfoAdherent' name='dateClub' value='$dateClub'>
+                                                <input type='date' id='dateClubAdherentInput' class='writeInfoAdherent' name='dateClub' value='$dateClub'>
                                             </div>
                                             <div class='col-4'></div>
                                             <div class='col-4'>
@@ -94,16 +108,15 @@
                                             </div>
                                         </div>
                                         <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
-                                            <div class='col-8'></div>
-                                            <button type='button' class='col-2'>Modifier</button>
-                                            <div class='col-2'></div>
+                                            
+                                            <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
+                                            
                                         </div>
                                         <div class='row ligneButton writeInfoAdherent writeInfoAdherentFlex' id='modifInfoAdherent'>
-                                            <div class='col-6'>
-                                            </div>
-                                            <button type='submit' class='col-2'>Valider</button>
-                                            <button type='button' id='annulerInfoAdherent' class='col-2'>Annuler</button>
-                                            <div class='col-2'>
+                                            <div class='row mx-auto'>
+                                                <button type='submit' class='btn btn-primary col-5'>Valider</button>
+                                                <div class='col-1'></div>
+                                                <button type='button' id='annulerInfoAdherent' class='btn btn-primary col-5'>Annuler</button>
                                             </div>
                                         </div>
                                     </form>
