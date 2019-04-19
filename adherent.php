@@ -74,8 +74,8 @@
                                         </div>
                                         <div class='row ligneInfo'>
                                             <div class='col-4'>
-                                                <p class='nomInfo'>Naissance :</p>
-                                                <p id='naissanceAdherent' class='readInfoAdherent'>$dateNaissance</p>
+                                                <p class='nomInfo'>Date de naissance :</p>
+                                                <p id='naissanceAdherent' class='readInfoAdherent'>" . date('d/m/Y', strtotime($dateNaissance)) . "</p>
                                                 <input type='date' id='naissanceAdherentInput' class='writeInfoAdherent' name='naissance' value='$dateNaissance'>
                                             </div>
                                             <div class='col-4'></div>
@@ -96,13 +96,13 @@
                                         </div>
                                         <div class='row ligneInfo'>
                                             <div class='col-4'>
-                                                <p class='nomInfo'>dateClub :</p>
-                                                <p id='dateClubAdherent' class='readInfoAdherent'>$dateClub</p>
+                                                <p class='nomInfo'>Date de certification du club :</p>
+                                                <p id='dateClubAdherent' class='readInfoAdherent'>" . date('d/m/Y', strtotime($dateClub)) . "</p>
                                                 <input type='date' id='dateClubAdherentInput' class='writeInfoAdherent' name='dateClub' value='$dateClub'>
                                             </div>
                                             <div class='col-4'></div>
                                             <div class='col-4'>
-                                                <p class='nomInfo'>nomClub :</p>
+                                                <p class='nomInfo'>Nom du club :</p>
                                                 <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
                                                 <input type='text' id='nomClubAdherentInput' class='writeInfoAdherent' name='nomClub' value='$nomClub'>
                                             </div>
