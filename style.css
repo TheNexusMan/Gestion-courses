@@ -19,7 +19,7 @@ body {
 /*HEADER*/
 
 body{
-    margin-top: 200px;
+    margin-top: 150px;
 }
 h2
 {
@@ -35,7 +35,7 @@ header{
     left:0;
     right:0;
     top:0;
-
+    z-index: 1;
 }
 
 .img-fluid
@@ -88,10 +88,19 @@ footer p{
     margin-bottom: 10px;
 }
 
+.ligneButton{
+    margin-top: 50px;
+}
+
 .listeEditionAdherent{
     margin-bottom: 50px;
 }
 
+.writeInfoAdherent{
+    display: none;
+}
+
+/*EDITIONS*/
 .listeEditions{
     margin-bottom: 50px;
 }

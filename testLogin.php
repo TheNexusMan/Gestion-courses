@@ -48,6 +48,8 @@ if((isset($_POST['pseudoInput'])) && (isset($_POST['inputPw'])))
                 header('Location: http://localhost/projet-bdw1/adherent.php');
             }
         }
+
+        mysqli_close($connexion);
    }
 } 
 
