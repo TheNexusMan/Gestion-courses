@@ -18,18 +18,14 @@
             $anneeAdd = $_POST['anneeCrea'];
             $monthAdd = $_POST['month'];
 
-            print $nameAdd ;
-            print $anneeAdd ;
-            print $monthAdd ;
+
 
             $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
                            VALUES('$nameAdd', $anneeAdd , $monthAdd);";
 
 
-            print "          " . $ajoutTable;
 
-
-            mysqli_query($connexion,$ajoutTable);
+            mysqli_query($connexion, $ajoutTable);
 
         }
 

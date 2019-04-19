@@ -50,7 +50,7 @@
     else {
 
 
-        $requete = "SELECT ed.annee, ed.nb_participants, MIN(tmp.temps) AS bestScore, COUNT(DISTINCT adh.club) AS nb_club, AVG(tmp.temps) AS moyenne
+        $requete = "SELECT ed.annee, ed.nb_participants, MIN(tmp.temps) AS bestScore, COUNT(DISTINCT adh.club) AS nb_club, AVG(tmp.temps) AS moyenne, ed.id_course
                     FROM edition ed JOIN epreuve ep ON ed.id_edition = ep.id_edition 
                                     JOIN temps_passage tmp ON tmp.id_epreuve = ep.id_epreuve
                                     JOIN participation pa ON pa.dossard = tmp.dossard
@@ -82,6 +82,7 @@
             $meilleur_temps = $nuplet['bestScore'];
             $nb_club = $nuplet['nb_club'];
             $moyenneTmp = $nuplet['moyenne'];
+            $idCourse = $nuplet['id_course'];
 
             
 
@@ -113,21 +114,87 @@
                 </table>
                 </div>
                 
-        <div class="d-flex flex-row justify-content-center">
         <form method="POST" action="editions.php">
-            <div class="form-group">
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
             <label for="genderSelect">Filtrer par genre :</label>
             <select class="form-control" id="genderSelect" name="genderSelect">
                 <option>H</option>
                 <option>F</option>
             </select>
             </div>
+            </div>
             <button type="submit" class="btn btn-success" name="changeGender">Valider</button>
 
         </form>
         </div>
-
 </section>
+
+<section class="formulaireAjout">
+        <form method="POST" action="editions.php">
+            <div class="form-row">
+                <div class="col-md-2 mb-3">
+                    <label for="anneeEd">Année Edition :</label>
+                    <input type="text" class="form-control" id="anneeEd" name="anneeEd" placeholder="AAAA" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="nbPart">Nombres Participants :</label>
+                    <input type="text" class="form-control" id="nbPart" name="nbPart" placeholder="1234" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="adresseDep">Adresse départ : </label>
+                    <input type="text" class="form-control" id="adresseDep" name="adresseDep" placeholder="124 Rue de machin, 69699 Bidule" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-3 mb-3">
+                    <label for="dateAdd">Date :</label>
+                    <input type="date" class="form-control" id="dateAdd" name="dateAdd" required>
+                </div>
+                <div class="col-md-9 mb-3">
+                    <label for="siteURL">Website : </label>
+                    <input type="text" class="form-control" id="siteURL" name="siteURL" placeholder="https://www.BDW1cTr0Gnial.fr/" required>
+                </div>
+            </div>
+            <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="dateIns">Date Inscription : </label>
+                        <input type="date" class="form-control" id="dateIns" name="dateIns"  required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="dateDepot">Date Depot Certif : </label>
+                        <input type="date" class="form-control" id="dateDepot" name="dateDepot"  required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="dateDossard">Date Recup Dossard : </label>
+                        <input type="date" class="form-control" id="dateDossard" name="dateDossard"  required>
+                    </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <div class="custom-file">
+                            <label class="custom-file-label" for="planAdd">Choisissez un plan... </label>
+                            <input type="file" class="custom-file-input" id="planAdd" name="planAdd" required>
+
+
+                    </div>
+                </div>
+        </div>
+
+
+
+
+
+
+
+        <button class="btn btn-primary" type="submit">Ajouter Edition</button>
+
+
+        </form>
+</section>
+
+
 
 
 
