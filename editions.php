@@ -22,6 +22,14 @@
       //  print $chosenSex . " Valeur par défaut";
     }
 
+    if(isset($_POST['$id_course']))
+    {
+       // $idCourse = $_POST['$id_course'];
+        print $_POST['$id_course'];
+    }else
+    {
+        
+    }
     $idCourse = 1; //A changer via l'appel dans courses.php
 
     if($chosenSex == "H")
