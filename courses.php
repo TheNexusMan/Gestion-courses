@@ -60,8 +60,8 @@
                         <td>$annee_crea</td>
                         <td>$mois</td>";
             print '<td><div class="d-flex flex-row bd-highlight">';
-            print ' <div class="p-2 bd-highlight"><form method="POST" action="editions.php">';
-            print '<button type="submit" class="btn btn-outline-success" id="$edit" name="$edit">Edit</button></form></div></div></td>
+            print ' <div class="p-2 bd-highlight"><form method="GET" action="editions.php">';
+            print '<button type="submit" class="btn btn-outline-success" id=" '. $id_course . '" name=" ' .$id_course . '">Edit</button></form></div></div></td>
                 </tr>';
             
                 }
