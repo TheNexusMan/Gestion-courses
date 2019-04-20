@@ -5,6 +5,13 @@
     $page = basename($_SERVER['PHP_SELF']);
     //Si on est pas sur la page de login (index.php) et que la variable $_SESSION['isConnected'] n'existe pas, on est redirigé vers la page de login
     if($page != "index.php" && !isset($_SESSION['isConnected'])) header('Location: http://localhost/projet-bdw1/index.php');
+
+    if(isset($_POST['logout']))
+    {
+        unset($_SESSION['isConnected']);
+        unset($_SESSION['id_adherent']);
+        header('Location: http://localhost/projet-bdw1/index.php');
+    }
 ?>
 <!DOCTYPE html>
 
@@ -22,22 +29,34 @@
 
     <header>
         <div class="row">
-            <div class="col-3">
-                <div class="p-2 bd-highlight">
-                    <img src="http://localhost/projet-bdw1//data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
-                </div>
+            <div class="col-1"></div>
+            <div class="col-1">
+                <img src="http://localhost/projet-bdw1/data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
             </div>
-            <div class="col-6">
-                <h2>Run 4 your life</h2>
-            </div>           
-                <div class="d-flex flex-row-reverse bd-highlight">
-                    <div class="p-2 bd-highlight">
-                        <button type="button" class="btn btn-outline-success" id="home">Home</button>
-                    </div>
-                    <div class="p-2 bd-highlight">
-                        <button type="button" class="btn btn-outline-success" id="logout">Logout</button>
-                    </div>
-                </div>
+            <div class="col-2"></div>
+            <div class="col-4 divSiteTitre">
+                <h1>Run 4 your life</h1>
             </div>
+
+            <?php
+                if($page != "index.php")
+                {
+                    print '<div class="d-flex flex-row-reverse col-3">
+                        <div class="p-2">
+                            <button type="button" class="btn btn-outline-success" id="home">Accueil</button>
+                        </div>
+                        <form method="POST" action="">
+                            <div class="p-2">
+                                <input type="hidden" name="logout" value="logout">
+                                <button type="submit" class="btn btn-outline-success" id="logout">Déconnexion</button>
+                            </div>
+                        </form>';
+                }else{
+                    print '<div class="col-3"></div>';
+                }
+            ?>
+                
+            </div>
+            <div class="col-1"></div>
         </div>
     </header>

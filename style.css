@@ -3,30 +3,21 @@
 /*Nécessaire pour que le footer soit en bas de la page*/
 * {-moz-box-sizing: border-box; box-sizing: border-box;}
 
-html {
+html{
     height: 100%;
 }
 
-body {
+body{
     position: relative;
     min-height: 100%;
     margin: 0;
+    margin-top: 120px;
     padding: 0;
     padding-bottom: 69px;
     font-family: 'Roboto', sans-serif;
 }
 
 /*HEADER*/
-
-body{
-    margin-top: 150px;
-}
-h2
-{
-    color: white;
-    text-align: center;
-
-}
 header{
     background-color:#343a40;
     padding:15px 0px 15px 0px;
@@ -42,12 +33,18 @@ header{
 {
     height:50px;
     -webkit-filter: invert(100%);
-
 }
 
 .align-right
 {  
     float:right;
+}
+
+.divSiteTitre h1{
+    margin: 7px 0 0 0;
+    color: white;
+    text-align: center;
+    font-size: 2rem;
 }
 
 /*FOOTER*/
@@ -73,6 +70,11 @@ footer p{
 }
 
 /*ADHERENT*/
+.textNouvelAdherent{
+    text-align: center;
+    color: red;
+}
+
 .adherent{
     margin-bottom: 50px;
 }
@@ -104,6 +106,16 @@ footer p{
 
 .writeInfoAdherent{
     display: none;
+}
+
+.listeEditionAdherent h2{
+    text-align: center;
+    font-size: 24px;
+}
+
+.adherent h2{
+    text-align: center;
+    font-size: 24px;
 }
 
 /*ESPACEPERSO*/

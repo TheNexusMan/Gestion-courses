@@ -1,31 +1,76 @@
 <?php
     include "includes/header.php";
 
+    //CONNEXION A LA BASE DE DONNEE
     $user = 'root' ;
     $mdp = '' ;
     $machine = 'localhost' ;
     $bd = 'bdw1' ;
     $connexion = mysqli_connect($machine,$user,$mdp, $bd);
 
-    if(mysqli_connect_errno()) // erreur si > 0
+    if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-        $idUser = $_SESSION['id_adherent'];
+        if(isset($_SESSION['id_adherent']))
+        {
+            $idUser = $_SESSION['id_adherent'];
+        }else{
+            $idUser = $_GET['id_adherent'];
+        }
 
-        if(isset($_POST['nom']))
+        //TEST SI L'ADHERENT EST NOUVEAU
+        $requete = "SELECT *
+                    FROM adherent
+                    WHERE id_adherent = $idUser";
+
+        $resultat = mysqli_query($connexion, $requete);
+
+        if($resultat == FALSE)
+            print "<script>alert(\"Échec de la requête qui test si l'adherent est nouveau\")</script>";
+        else {
+            if(mysqli_num_rows($resultat) != 0)
+            {
+                $nouvelAdherent = 0;
+            }else{
+                $nouvelAdherent = 1;
+            }
+        }
+
+        //AJOUT DES INFORMATIONS DU NOUVEL ADHERENT
+        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']) && $nouvelAdherent)
+        {
+            $naNom = $_POST['nom'];
+            $naPrenom = $_POST['prenom'];
+            $naNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$_POST['naissance']."'");
+            $naSexe = $_POST['sexe'];
+            $naAdresse = $_POST['adresse'];
+            $naDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$_POST['dateClub']."'");
+            $naNomClub = $_POST['nomClub'];
+
+            $requete = "INSERT INTO adherent (id_adherent, nom, prenom, date_naissance, sexe, adresse, date_certif_club, club) VALUES ('$idUser', '$naNom', '$naPrenom', $naNaissance, '$naSexe', '$naAdresse', $naDateClub, '$naNomClub')";
+
+            $resultat = mysqli_query($connexion, $requete);
+
+            if($resultat == FALSE){
+                print "<script>alert('Échec de la requête de modification des informations')</script>";
+            }
+        }
+
+        //MODIFICATION DES INFORMATIONS DE L'ADHERENT
+        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']) && !$nouvelAdherent)
         {
             $requete = 'UPDATE adherent
-                        SET nom = "' . $_POST['nom'] . '", prenom = "' . $_POST['prenom'] . '", date_naissance = "' . $_POST['naissance'] . '", sexe = "' . $_POST['sexe'] . '", adresse = "' . $_POST['adresse'] . '", date_certif_club = "' . $_POST['dateClub'] . '", club = "' . $_POST['nomClub'] . '"
+                        SET nom = "' . $_POST['nom'] . '", prenom = "' . $_POST['prenom'] . '", date_naissance = ' . ($_POST['naissance'] == NULL ? "NULL" : "'".$_POST['naissance']."'") . ', sexe = "' . $_POST['sexe'] . '", adresse = "' . $_POST['adresse'] . '", date_certif_club = ' . ($_POST['dateClub'] == NULL ? "NULL" : "'".$_POST['dateClub']."'") . ', club = "' . $_POST['nomClub'] . '"
                         WHERE id_adherent = ' . $idUser;
 
             $resultat = mysqli_query($connexion, $requete);
 
             if($resultat == FALSE){
-                print "<script>alert('Échec de la requête de mise à jour')</script>";
-                //printf("Échec de la requête de mise à jour");
+                print "<script>alert('Échec de la requête de modification des informations')</script>";
             }
         }
 
+        //RECUPERATION ET AFFICHAGE DES INFORMATIONS DE L'ADHERENT
         $requete = "SELECT *
                     FROM adherent
                     WHERE id_adherent = $idUser";
@@ -34,100 +79,114 @@
 
         if($resultat == FALSE)
             print "<script>alert(\"Échec de la requête de récupération des informations d'adhérent\")</script>";
-            //printf("Échec de la requête de récupération des informations d'adhérent");
         else {
-            //Affichage des informations de l'adhérent
-            while ($nuplet = mysqli_fetch_assoc($resultat))
+            if(mysqli_num_rows($resultat) != 0)
             {
-                $nom = $nuplet['nom'];
-                $prenom = $nuplet['prenom'];
-                $dateNaissance = $nuplet['date_naissance'];
-                $sexe = $nuplet['sexe'];
-                $adresse = $nuplet['adresse'];
-                $dateClub = $nuplet['date_certif_club'];
-                $nomClub = $nuplet['club'];
-
-                if($sexe == "H")
+                while ($nuplet = mysqli_fetch_assoc($resultat))
                 {
-                    $selectSexe = "<option value='H' selected='selected'>H</option>
-                                    <option value='F'>F</option>";
-                }else{
-                    $selectSexe = "<option value='H''>H</option>
-                                    <option value='F' selected='selected'>F</option>";
-                }
+                    $nom = $nuplet['nom'];
+                    $prenom = $nuplet['prenom'];
+                    $dateNaissance = $nuplet['date_naissance'];
+                    $sexe = $nuplet['sexe'];
+                    $adresse = $nuplet['adresse'];
+                    $dateClub = $nuplet['date_certif_club'];
+                    $nomClub = $nuplet['club'];
 
-                print "<section class='adherent'>
-                            <div class='adherentInfos container'>
-                                <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
-                                    <form action='' method='POST'>
-                                        <div class='row ligneInfo'>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Nom :</p>
-                                                <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
-                                                <input type='text' id='nomAdherentInput' class='writeInfoAdherent' name='nom' value='$nom' placeholder='Nom' required>
-                                            </div>
-                                            <div class='col-4'></div>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Prenom :</p>
-                                                <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
-                                                <input type='text' id='prenomAdherentInput' class='writeInfoAdherent' name='prenom' value='$prenom' placeholder='Prenom' required>
-                                            </div>
-                                        </div>
-                                        <div class='row ligneInfo'>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Date de naissance :</p>
-                                                <p id='naissanceAdherent' class='readInfoAdherent'>" . date('d/m/Y', strtotime($dateNaissance)) . "</p>
-                                                <input type='date' id='naissanceAdherentInput' class='writeInfoAdherent' name='naissance' value='$dateNaissance'>
-                                            </div>
-                                            <div class='col-4'></div>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Sexe :</p>
-                                                <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
-                                                <select id='sexeAdherentInput' class='writeInfoAdherent' name='sexe' required>
-                                                    $selectSexe
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class='row ligneInfo'>
-                                            <div class='col-8'>
-                                                <p class='nomInfo'>Adresse :</p>
-                                                <p id='adresseAdherent' class='readInfoAdherent'>$adresse</p>
-                                                <input type='text' id='adresseAdherentInput' class='writeInfoAdherent' name='adresse' value='$adresse' placeholder='Adresse'>
-                                            </div>
-                                        </div>
-                                        <div class='row ligneInfo'>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Date de certification du club :</p>
-                                                <p id='dateClubAdherent' class='readInfoAdherent'>" . date('d/m/Y', strtotime($dateClub)) . "</p>
-                                                <input type='date' id='dateClubAdherentInput' class='writeInfoAdherent' name='dateClub' value='$dateClub'>
-                                            </div>
-                                            <div class='col-4'></div>
-                                            <div class='col-4'>
-                                                <p class='nomInfo'>Nom du club :</p>
-                                                <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
-                                                <input type='text' id='nomClubAdherentInput' class='writeInfoAdherent' name='nomClub' value='$nomClub' placeholder='Nom du club'>
-                                            </div>
-                                        </div>
-                                        <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
-                                            
-                                            <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
-                                            
-                                        </div>
-                                        <div class='row ligneButton writeInfoAdherent writeInfoAdherentFlex' id='modifInfoAdherent'>
-                                            <div class='row mx-auto'>
-                                                <button type='submit' class='btn btn-primary col-5'>Valider</button>
-                                                <div class='col-1'></div>
-                                                <button type='button' id='annulerInfoAdherent' class='btn btn-primary col-5'>Annuler</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </section>";
+                    $nouvelAdherent = 0;
+                }
+            }else{
+                $nom = "";
+                $prenom = "";
+                $dateNaissance = "";
+                $sexe = "F";
+                $adresse = "";
+                $dateClub = "";
+                $nomClub = "";
             }
+
+            if($sexe == "H")
+            {
+                $selectSexe = "<option value='H' selected='selected'>H</option>
+                                <option value='F'>F</option>";
+            }else{
+                $selectSexe = "<option value='H''>H</option>
+                                <option value='F' selected='selected'>F</option>";
+            }
+
+            if($nouvelAdherent) print "<p class='textNouvelAdherent'>Nouveau compte, veuillez renseigner les champs marqués d'une *</p>";
+
+            print "<section class='adherent'>
+                        <h2>Informations personnelles</h2>
+                        <div class='adherentInfos container'>
+                            <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
+                                <form action='' method='POST'>
+                                    <div class='row ligneInfo'>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Nom* :</p>
+                                            <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
+                                            <input type='text' id='nomAdherentInput' class='form-control writeInfoAdherent' name='nom' value='$nom' placeholder='Nom' required>
+                                        </div>
+                                        <div class='col-4'></div>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Prenom* :</p>
+                                            <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
+                                            <input type='text' id='prenomAdherentInput' class='form-control writeInfoAdherent' name='prenom' value='$prenom' placeholder='Prenom' required>
+                                        </div>
+                                    </div>
+                                    <div class='row ligneInfo'>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Date de naissance :</p>
+                                            <p id='naissanceAdherent' class='readInfoAdherent'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
+                                            <input type='date' id='naissanceAdherentInput' class='form-control writeInfoAdherent' name='naissance' value='$dateNaissance'>
+                                        </div>
+                                        <div class='col-4'></div>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Sexe* :</p>
+                                            <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
+                                            <select id='sexeAdherentInput' class='custom-select writeInfoAdherent' name='sexe' required>
+                                                $selectSexe
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class='row ligneInfo'>
+                                        <div class='col-6'>
+                                            <p class='nomInfo'>Adresse :</p>
+                                            <p id='adresseAdherent' class='readInfoAdherent'>$adresse</p>
+                                            <input type='text' id='adresseAdherentInput' class='form-control writeInfoAdherent' name='adresse' value='$adresse' placeholder='Adresse'>
+                                        </div>
+                                    </div>
+                                    <div class='row ligneInfo'>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Date de certification du club :</p>
+                                            <p id='dateClubAdherent' class='readInfoAdherent'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
+                                            <input type='date' id='dateClubAdherentInput' class='form-control writeInfoAdherent' name='dateClub' value='$dateClub'>
+                                        </div>
+                                        <div class='col-4'></div>
+                                        <div class='col-4'>
+                                            <p class='nomInfo'>Nom du club :</p>
+                                            <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
+                                            <input type='text' id='nomClubAdherentInput' class='form-control writeInfoAdherent' name='nomClub' value='$nomClub' placeholder='Nom du club'>
+                                        </div>
+                                    </div>
+                                    <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
+                                        
+                                        <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
+                                        
+                                    </div>
+                                    <div class='row ligneButton writeInfoAdherent writeInfoAdherentFlex' id='modifInfoAdherent'>
+                                        <div class='row mx-auto'>
+                                            <button type='submit' id='btnSbmtInfoAdh' class='btn btn-primary col-5'>Valider</button>
+                                            <div id='separationBouton' class='col-1'></div>
+                                            <button type='button' id='annulerInfoAdherent' class='btn btn-primary col-5'>Annuler</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>";
         }
 
-        //Affichage des éditions participées par l'adhérent
+        //RECUPERATION ET AFFICHAGE DES EDITIONS PARTICIPEES PAR L'ADHERENT
         $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps
                     FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
                             NATURAL JOIN epreuve Ep
@@ -140,10 +199,10 @@
 
         if($resultat == FALSE)
             print "<script>alert(\"Échec de la requête de récupération des édition courues par l'adhérent\")</script>";
-            //printf("Échec de la requête de récupération des édition courues par l'adhérent");
         else {
 
-            print "<section class='listeEditionAdherent'>
+            print "<section id='listeEditionAdherent' class='listeEditionAdherent'>
+                            <h2>Liste des éditions participées</h2>
                             <div class='container'>
                                 <table class='table'>
                                     <thead>
@@ -183,6 +242,7 @@
 ?>
 
 <script>
+    //GESTION DE L'AFFICHAGE DU FORMULAIRE DE MODIFICATION DES INFORMATIONS DE L'ADHERENT
     document.getElementById("modifInfoAdherent").onclick = afficheFormAdherent;
     document.getElementById("annulerInfoAdherent").onclick = annulerFormAdherent;
 
@@ -216,3 +276,15 @@
         document.getElementById('nomClubAdherentInput').value = nomClub;
     }
 </script>
+
+<?php
+    if($nouvelAdherent){
+        print "<script>";
+        print "     afficheFormAdherent();";
+        print "     document.getElementById('annulerInfoAdherent').style.display = 'none';";
+        print "     document.getElementById('separationBouton').style.display = 'none';";
+        print "     document.getElementById('btnSbmtInfoAdh').classList.remove('col-5');";
+        print "     document.getElementById('listeEditionAdherent').style.display = 'none';";
+        print "</script>";
+    }
+?>

@@ -106,12 +106,11 @@
 
         if($resultat == FALSE)
             print "<script>alert('Échec de la requête de récupération des adhérents')</script>";
-            //printf("Échec de la requête de récupération des adhérents");
         else {
 
             print "
             <div class='row mb-4'>
-                <button type=\"button\" class=\"btn btn-primary mx-auto\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
+                <button type=\"button\" class=\"btn btn-primary mx-auto\" data-toggle=\"modal\" data-target=\"#modalAjoutAdherent\">
                     Ajouter un utilisateur
                 </button>
             </div>
@@ -140,7 +139,7 @@
                 $sexe = $nuplet['sexe'];
                 $nomClub = $nuplet['club'];
 
-                print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php'\">
+                print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php?id_adherent=$id'\">
                             <td>$id</td>
                             <td>$nom</td>
                             <td>$prenom</td>
@@ -176,11 +175,11 @@
 ?>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalAjoutAdherent" tabindex="-1" role="dialog" aria-labelledby="modalAjoutAdherent" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Ajouter un adhérent utilisateur</h5>
+        <h5 class="modal-title">Ajouter un adhérent utilisateur</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

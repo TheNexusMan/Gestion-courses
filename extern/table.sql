@@ -25,10 +25,10 @@ CREATE TABLE adherent(
         id_adherent    Int NOT NULL,
         nom            Varchar (50) NOT NULL,
         prenom         Varchar (50) NOT NULL,
-        date_naissance Date NOT NULL,
+        date_naissance Date,
         sexe           Varchar (20) NOT NULL,
         adresse        Varchar (200),
-        date_certif_club    Date NOT NULL,
+        date_certif_club    Date,
         club           Varchar (200),
 	PRIMARY KEY (id_adherent)
 );
