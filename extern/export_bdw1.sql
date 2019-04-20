@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 17 avr. 2019 à 21:01
+-- Généré le :  sam. 20 avr. 2019 à 23:06
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS `adherent` (
   `id_adherent` int(11) NOT NULL,
   `nom` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `prenom` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `date_naissance` date NOT NULL,
+  `date_naissance` date DEFAULT NULL,
   `sexe` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `adresse` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_certif_club` date NOT NULL,
+  `date_certif_club` date DEFAULT NULL,
   `club` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id_adherent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS `adherent` (
 --
 
 INSERT INTO `adherent` (`id_adherent`, `nom`, `prenom`, `date_naissance`, `sexe`, `adresse`, `date_certif_club`, `club`) VALUES
-(2016001, 'Dupont', 'Alice', '1995-01-01', 'F', '28 rue du boulevard Lyon', '2019-01-01', 'ClubLyon'),
 (2016002, 'Dupout', 'Bernard', '1950-01-01', 'H', '2 rue du avenue Lyon', '2018-09-01', 'ClubLyon'),
 (2016003, 'Durand', 'Olivier', '1955-01-01', 'H', '7 rue du avenue Paris', '2017-09-01', 'ClubParis'),
 (2016004, 'Drand', 'Mat', '1975-01-01', 'H', '7 rue du avenue Paris', '2017-09-10', 'ClubParis'),
@@ -87,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 
 INSERT INTO `course` (`id_course`, `nom`, `annee_creation`, `mois`) VALUES
 (1, 'Marathon de Paris', 1976, 6),
-(2, 'Run in Lyon', 2010, 5);
+(2, 'Run in Lyon', 1901, 5);
 
 -- --------------------------------------------------------
 
@@ -169,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `participation` (
   PRIMARY KEY (`id_participation`),
   KEY `id_epreuve` (`id_epreuve`),
   KEY `id_adherent` (`id_adherent`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `participation`
@@ -183,7 +182,6 @@ INSERT INTO `participation` (`id_participation`, `dossard`, `id_adherent`, `id_e
 (5, 2017000040, 2016003, 1),
 (6, 2017000001, 2016008, 2),
 (7, 2017000006, 2018002, 2),
-(8, 2017000007, 2016001, 2),
 (9, 2017000013, 2017006, 2),
 (10, 2017000014, 2017004, 2),
 (11, 2017000018, 2017005, 3),
@@ -212,7 +210,6 @@ INSERT INTO `participation` (`id_participation`, `dossard`, `id_adherent`, `id_e
 (34, 2018000033, 2016007, 7),
 (35, 2018000036, 2016008, 7),
 (36, 2018000039, 2018004, 7),
-(37, 2018000000, 2016001, 8),
 (38, 2018000001, 2017003, 8),
 (39, 2018000004, 2018005, 8),
 (40, 2018000008, 2016005, 8),
@@ -1192,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `pseudo` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_user`),
   KEY `id_adherent` (`id_adherent`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
