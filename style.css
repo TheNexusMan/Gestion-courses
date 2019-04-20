@@ -116,6 +116,19 @@ footer p{
     color: black;
 }
 
+.ligneTabClic{
+    cursor: pointer;
+}
+
+.ligneTabClic:hover{
+    font-weight: bold;
+    background-color: #F4F5F5;
+}
+
+.delete i{
+    color: red;
+}
+
 /*EDITIONS*/
 .listeEditions{
     margin-bottom: 50px;

@@ -33,7 +33,7 @@
         $resultat = mysqli_query($connexion, $requete);
 
         if($resultat == FALSE)
-            print "<script>alert('Échec de la requête de récupération des informations d'adhérent')</script>";
+            print "<script>alert(\"Échec de la requête de récupération des informations d'adhérent\")</script>";
             //printf("Échec de la requête de récupération des informations d'adhérent");
         else {
             //Affichage des informations de l'adhérent
@@ -64,13 +64,13 @@
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Nom :</p>
                                                 <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
-                                                <input type='text' id='nomAdherentInput' class='writeInfoAdherent' name='nom' value='$nom' required>
+                                                <input type='text' id='nomAdherentInput' class='writeInfoAdherent' name='nom' value='$nom' placeholder='Nom' required>
                                             </div>
                                             <div class='col-4'></div>
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Prenom :</p>
                                                 <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
-                                                <input type='text' id='prenomAdherentInput' class='writeInfoAdherent' name='prenom' value='$prenom' required>
+                                                <input type='text' id='prenomAdherentInput' class='writeInfoAdherent' name='prenom' value='$prenom' placeholder='Prenom' required>
                                             </div>
                                         </div>
                                         <div class='row ligneInfo'>
@@ -82,8 +82,8 @@
                                             <div class='col-4'></div>
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Sexe :</p>
-                                                <p id='sexeAdherent' class='readInfoAdherent' required>$sexe</p>
-                                                <select id='sexeAdherentInput' class='writeInfoAdherent' name='sexe'>
+                                                <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
+                                                <select id='sexeAdherentInput' class='writeInfoAdherent' name='sexe' required>
                                                     $selectSexe
                                                 </select>
                                             </div>
@@ -92,7 +92,7 @@
                                             <div class='col-8'>
                                                 <p class='nomInfo'>Adresse :</p>
                                                 <p id='adresseAdherent' class='readInfoAdherent'>$adresse</p>
-                                                <input type='text' id='adresseAdherentInput' class='writeInfoAdherent' name='adresse' value='$adresse'>
+                                                <input type='text' id='adresseAdherentInput' class='writeInfoAdherent' name='adresse' value='$adresse' placeholder='Adresse'>
                                             </div>
                                         </div>
                                         <div class='row ligneInfo'>
@@ -105,7 +105,7 @@
                                             <div class='col-4'>
                                                 <p class='nomInfo'>Nom du club :</p>
                                                 <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
-                                                <input type='text' id='nomClubAdherentInput' class='writeInfoAdherent' name='nomClub' value='$nomClub'>
+                                                <input type='text' id='nomClubAdherentInput' class='writeInfoAdherent' name='nomClub' value='$nomClub' placeholder='Nom du club'>
                                             </div>
                                         </div>
                                         <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
@@ -139,7 +139,7 @@
         $resultat = mysqli_query($connexion, $requete);
 
         if($resultat == FALSE)
-            print "<script>alert('Échec de la requête de récupération des édition courues par l'adhérent')</script>";
+            print "<script>alert(\"Échec de la requête de récupération des édition courues par l'adhérent\")</script>";
             //printf("Échec de la requête de récupération des édition courues par l'adhérent");
         else {
 
