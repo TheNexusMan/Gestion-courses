@@ -11,58 +11,53 @@
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
-        if (isset($_GET['idcourse'])) {
+        if (isset($_GET['idcourse']))
+        {
             $idCourse = $_GET['idcourse'];
-        } else
+        } else if(isset($_POST['idCoursePost']))
         {
             $idCourse = $_POST['idCoursePost'];
-            //print $idCourse;
+        } else{
+            header('Location: http://localhost/projet-bdw1/404.php');
         }
     
     
         if(isset($_POST['anneeEd']))
         {
-            $idCourseAdd = $_POST['idCoursePost'];
-            $anneeEd = $_POST['anneeEd'];
-            $nbParti = $_POST['nbPart'];
-            $adresseDepa = $_POST['adresseDep'];
-            $dateAdd = $_POST['dateAdd'];
-            $site = $_POST['siteURL'];
-            $dateIns = $_POST['dateIns'];
-            $dateDepot = $_POST['dateDepot'];
-            $dateDossard = $_POST['dateDossard'];
-            $plan = $_POST['planAdd'];
+            $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);
+            $nbParti = mysqli_real_escape_string($connexion, $_POST['nbPart']);
+            $adresseDepa = mysqli_real_escape_string($connexion, $_POST['adresseDep']);
+            $dateAdd = mysqli_real_escape_string($connexion, $_POST['dateAdd']);
+            $site = mysqli_real_escape_string($connexion, $_POST['siteURL']);
+            $dateIns = mysqli_real_escape_string($connexion, $_POST['dateIns']);
+            $dateDepot = mysqli_real_escape_string($connexion, $_POST['dateDepot']);
+            $dateDossard = mysqli_real_escape_string($connexion, $_POST['dateDossard']);
+            $plan = mysqli_real_escape_string($connexion, $_POST['planAdd']);
     
             $ajoutTable = "INSERT INTO edition (id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
-                        VALUES ($idCourseAdd, $anneeEd, $nbParti, $plan, $adresseDepa, $dateAdd, $site, $dateIns, $dateDepot, $dateDossard)";
+                        VALUES ('$idCourse', '$anneeEd', '$nbParti', '$plan', '$adresseDepa', '$dateAdd', '$site', '$dateIns', '$dateDepot', '$dateDossard')";
             print $ajoutTable;
-    
             if(mysqli_query($connexion, $ajoutTable) == FALSE)
                 print("<script>alert('Echec de l ajout d edition')</script>");
         }
     
     
         if (isset($_POST['genderSelect'])) {
-            $chosenSex = $_POST['genderSelect'];
+            $chosenSex = mysqli_real_escape_string($connexion, $_POST['genderSelect']);
             //  print $_POST['genderSelect'] . "Valeur apres form";
         } else {
             $chosenSex = "H";
             //  print $chosenSex . " Valeur par défaut";
         }
     
-        if (isset($_POST['$id_course'])) {
-            // $idCourse = $_POST['$id_course'];
-            print $_POST['$id_course'];
-        } else { }
-    
         if ($chosenSex == "H") {
             print "<div class='container'>
-                            Sexe sélectionnée : Hommes
-                        </div>";
+                        Sexe sélectionnée : Hommes
+                    </div>";
         } else {
             print "<div class='container'>
                         Sexe sélectionnée : Femmes
-                        </div>";
+                    </div>";
         }
 
         $requete = "SELECT ed.annee, ed.nb_participants, MIN(tmp.temps) AS bestScore, COUNT(DISTINCT adh.club) AS nb_club, AVG(tmp.temps) AS moyenne, ed.id_course
@@ -73,7 +68,7 @@
                                         JOIN resultat res ON res.id_epreuve = ep.id_epreuve
                         WHERE ed.id_course = $idCourse AND adh.sexe = '$chosenSex'
                         GROUP BY ed.annee";
-        //A definir $idCourse pour savoir quelle course est selectionée
+
         //Permet d'avoir la moyenne de temps en fonction du sexe (H = Homme, F = Femmes)
 
         $resultat = mysqli_query($connexion, $requete);
@@ -100,24 +95,26 @@
             $idCourse = $nuplet['id_course'];
 
             print "<tr>
-                            <td>$annee</td>
-                            <td>$nb_participants</td>
-                            <td>$meilleur_temps min</td>
-                            <td>$nb_club</td>
-                            <td>$moyenneTmp min</td>
-                        </tr>";
+                        <td>$annee</td>
+                        <td>$nb_participants</td>
+                        <td>$meilleur_temps min</td>
+                        <td>$nb_club</td>
+                        <td>$moyenneTmp min</td>
+                    </tr>";
         }
 
         mysqli_close($connexion);
     }
 
 ?>
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
+</section>
+
 <section class="formulaireAjout">
     <div class='container'>
-        <form method="POST" action="editions.php">
+        <form method="POST" action="<?php print "?idcourse=".$idCourse ?>">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="genderSelect">Filtrer par genre :</label>
@@ -132,8 +129,7 @@
     </div>
 </section>
 
-
-<form method="POST" action="editions.php">
+<form method="POST" action="<?php print "?idcourse=".$idCourse ?>">
     <div class='container'>
         <div class="form-row">
             <div class="col-md-2 mb-3">
@@ -184,15 +180,9 @@
         </div>
 
 <?php
-
-        print '<input type="hidden" id="idCoursePost" name="idCoursePost" value="' . $idCourse . '">';
-
-        print '<button class="btn btn-primary" type="submit">Ajouter Edition</button>
+print '<button class="btn btn-primary" type="submit">Ajouter Edition</button>
     </div>
-
-</form>
-</div>
-</section>';
+</form>';
 
 include "includes/footer.php";
 ?>

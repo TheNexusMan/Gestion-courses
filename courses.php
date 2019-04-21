@@ -5,7 +5,7 @@ $user = 'root';
 $mdp = '';
 $machine = 'localhost';
 $bd = 'bdw1';
-$connexion = mysqli_connect($machine, $user, $mdp, $bd);
+$connexion = mysqli_connect($machine , $user , $mdp , $bd);
 
 
 if (mysqli_connect_errno()) // erreur si > 0

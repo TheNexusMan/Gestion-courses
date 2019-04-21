@@ -2,26 +2,26 @@
     include "includes/header.php";
 
     //CONNEXION A LA BASE DE DONNEE
-    $user = 'root' ;
-    $mdp = '' ;
-    $machine = 'localhost' ;
-    $bd = 'bdw1' ;
-    $connexion = mysqli_connect($machine,$user,$mdp, $bd);
+    $user = 'root';
+    $mdp = '';
+    $machine = 'localhost';
+    $bd = 'bdw1';
+    $connexion = mysqli_connect($machine, $user ,$mdp, $bd);
 
     if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
         if(isset($_SESSION['id_adherent']))
         {
-            $idUser = $_SESSION['id_adherent'];
+            $idUser = intval($_SESSION['id_adherent']);
+        }else if(isset($_GET['id_adherent'])){
+            $idUser = intval($_GET['id_adherent']);
         }else{
-            $idUser = $_GET['id_adherent'];
+            header('Location: http://localhost/projet-bdw1/404.php');
         }
 
         //TEST SI L'ADHERENT EST NOUVEAU
-        $requete = "SELECT *
-                    FROM adherent
-                    WHERE id_adherent = $idUser";
+        $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
 
         $resultat = mysqli_query($connexion, $requete);
 
@@ -37,43 +37,39 @@
         }
 
         //AJOUT DES INFORMATIONS DU NOUVEL ADHERENT
-        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']) && $nouvelAdherent)
+        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']))
         {
-            $naNom = $_POST['nom'];
-            $naPrenom = $_POST['prenom'];
+            $naNom = mysqli_real_escape_string($connexion, $_POST['nom']);
+            $naPrenom = mysqli_real_escape_string($connexion, $_POST['prenom']);
             $naNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$_POST['naissance']."'");
-            $naSexe = $_POST['sexe'];
-            $naAdresse = $_POST['adresse'];
+            $naSexe = mysqli_real_escape_string($connexion, $_POST['sexe']);
+            $naAdresse = mysqli_real_escape_string($connexion, $_POST['adresse']);
             $naDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$_POST['dateClub']."'");
-            $naNomClub = $_POST['nomClub'];
+            $naNomClub = mysqli_real_escape_string($connexion, $_POST['nomClub']);
 
-            $requete = "INSERT INTO adherent (id_adherent, nom, prenom, date_naissance, sexe, adresse, date_certif_club, club) VALUES ('$idUser', '$naNom', '$naPrenom', $naNaissance, '$naSexe', '$naAdresse', $naDateClub, '$naNomClub')";
+            if($nouvelAdherent)
+            {
+                $requete = "INSERT INTO adherent (id_adherent, nom, prenom, date_naissance, sexe, adresse, date_certif_club, club)
+                            VALUES ('$idUser', '$naNom', '$naPrenom', $naNaissance, '$naSexe', '$naAdresse', $naDateClub, '$naNomClub')";
 
-            $resultat = mysqli_query($connexion, $requete);
+                $alert = "<script>alert('Échec de la requête de l'ajout des nouvelles informations)</script>";
+            }else{
+                $requete = "UPDATE adherent
+                            SET nom = '$naNom', prenom = '$naPrenom', date_naissance = $naNaissance, sexe = '$naSexe', adresse = '$naAdresse', date_certif_club = $naDateClub, club = '$naNomClub'
+                            WHERE id_adherent = $idUser";
 
-            if($resultat == FALSE){
-                print "<script>alert('Échec de la requête de modification des informations')</script>";
+                $alert = "<script>alert('Échec de la requête de modification des informations')</script>";
             }
-        }
-
-        //MODIFICATION DES INFORMATIONS DE L'ADHERENT
-        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']) && !$nouvelAdherent)
-        {
-            $requete = 'UPDATE adherent
-                        SET nom = "' . $_POST['nom'] . '", prenom = "' . $_POST['prenom'] . '", date_naissance = ' . ($_POST['naissance'] == NULL ? "NULL" : "'".$_POST['naissance']."'") . ', sexe = "' . $_POST['sexe'] . '", adresse = "' . $_POST['adresse'] . '", date_certif_club = ' . ($_POST['dateClub'] == NULL ? "NULL" : "'".$_POST['dateClub']."'") . ', club = "' . $_POST['nomClub'] . '"
-                        WHERE id_adherent = ' . $idUser;
 
             $resultat = mysqli_query($connexion, $requete);
 
             if($resultat == FALSE){
-                print "<script>alert('Échec de la requête de modification des informations')</script>";
+                print $alert;
             }
         }
 
         //RECUPERATION ET AFFICHAGE DES INFORMATIONS DE L'ADHERENT
-        $requete = "SELECT *
-                    FROM adherent
-                    WHERE id_adherent = $idUser";
+        $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
 
         $resultat = mysqli_query($connexion, $requete);
 
@@ -124,20 +120,20 @@
                                         <div class='col-4'>
                                             <p class='nomInfo'>Nom* :</p>
                                             <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
-                                            <input type='text' id='nomAdherentInput' class='form-control writeInfoAdherent' name='nom' value='$nom' placeholder='Nom' required>
+                                            <input type='text' id='nomAdherentInput' class='form-control writeInfoAdherent' name='nom' value=\"$nom\" placeholder='Nom' required>
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Prenom* :</p>
                                             <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
-                                            <input type='text' id='prenomAdherentInput' class='form-control writeInfoAdherent' name='prenom' value='$prenom' placeholder='Prenom' required>
+                                            <input type='text' id='prenomAdherentInput' class='form-control writeInfoAdherent' name='prenom' value=\"$prenom\" placeholder='Prenom' required>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Date de naissance :</p>
                                             <p id='naissanceAdherent' class='readInfoAdherent'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
-                                            <input type='date' id='naissanceAdherentInput' class='form-control writeInfoAdherent' name='naissance' value='$dateNaissance'>
+                                            <input type='date' id='naissanceAdherentInput' class='form-control writeInfoAdherent' name='naissance' value=\"$dateNaissance\">
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
@@ -152,20 +148,20 @@
                                         <div class='col-6'>
                                             <p class='nomInfo'>Adresse :</p>
                                             <p id='adresseAdherent' class='readInfoAdherent'>$adresse</p>
-                                            <input type='text' id='adresseAdherentInput' class='form-control writeInfoAdherent' name='adresse' value='$adresse' placeholder='Adresse'>
+                                            <input type='text' id='adresseAdherentInput' class='form-control writeInfoAdherent' name='adresse' value=\"$adresse\" placeholder='Adresse'>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Date de certification du club :</p>
-                                            <p id='dateClubAdherent' class='readInfoAdherent'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
-                                            <input type='date' id='dateClubAdherentInput' class='form-control writeInfoAdherent' name='dateClub' value='$dateClub'>
+                                            <p id='dateClubAdherent' class='readInfoAdherent'>" . ($dateClub == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
+                                            <input type='date' id='dateClubAdherentInput' class='form-control writeInfoAdherent' name='dateClub' value=\"$dateClub\">
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Nom du club :</p>
                                             <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
-                                            <input type='text' id='nomClubAdherentInput' class='form-control writeInfoAdherent' name='nomClub' value='$nomClub' placeholder='Nom du club'>
+                                            <input type='text' id='nomClubAdherentInput' class='form-control writeInfoAdherent' name='nomClub' value=\"$nomClub\" placeholder='Nom du club'>
                                         </div>
                                     </div>
                                     <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
