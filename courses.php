@@ -24,8 +24,22 @@ else {
 
 
 
+
+
             mysqli_query($connexion, $ajoutTable);
         }
+
+    if ((isset($_GET['idcourse'])))
+    {
+        $toDelete = $_GET['idcourse'];
+
+        $deleteLine = "DELETE FROM course
+                       WHERE id_course = $toDelete";
+
+        //Ajout de supression des editions liées ?
+        
+        mysqli_query($connexion, $deleteLine);
+    }
 
     $requete = "SELECT *
                 FROM course";
@@ -57,7 +71,8 @@ else {
                     <td>$nom</td>
                     <td>$annee_crea</td>
                     <td>$mois</td>";
-        print ' <td> <a href="editions.php?idcourse=' . $id_course . '">Editions </a></td>  </tr>';
+        print ' <td> <a href="editions.php?idcourse=' . $id_course . '">Editions </a> / 
+                     <a href="courses.php?idcourse=' . $id_course . '"> Supprimer </a></td>  </tr>';
     }
 
 

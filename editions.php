@@ -10,8 +10,38 @@ $connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
 if (isset($_GET['idcourse'])) {
     $idCourse = $_GET['idcourse'];
+}  else
+{
+    $idCourse = $_POST['idCoursePost'];
+    print $idCourse;
 }
 //créer un bouton pour changer le sexe choisis
+
+
+
+if(isset($_POST['anneeEd']))
+{
+    $idCourseAdd = $_POST['idCoursePost'];
+    $anneeEd = $_POST['anneeEd'];
+    $nbParti = $_POST['nbPart'];
+    $adresseDepa = $_POST['adresseDep'];
+    $dateAdd = $_POST['dateAdd'];
+    $site = $_POST['siteURL'];
+    $dateIns = $_POST['dateIns'];
+    $dateDepot = $_POST['dateDepot'];
+    $dateDossard = $_POST['dateDossard'];
+    $plan = $_POST['planAdd'];
+
+
+
+
+
+    $ajoutTable = "INSERT INTO edition (id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
+                   VALUES ($idCourseAdd, $anneeEd, $nbParti, $plan, $adresseDepa, $dateAdd, $site, $dateIns, $dateDepot, $dateDossard)";
+
+    mysqli_query($connexion, $ajoutTable);
+}
+
 
 
 if (isset($_POST['genderSelect'])) {
@@ -171,21 +201,21 @@ else {
 
 
 
+<?php
 
+        print '<input type="hidden" id="idCoursePost" name="idCoursePost" value="' . $idCourse . '">';
 
-
-        <button class="btn btn-primary" type="submit">Ajouter Edition</button>
+       print '<button class="btn btn-primary" type="submit">Ajouter Edition</button>
     </div>
 
 </form>
 </div>
-</section>
+</section>';
 
 
 
 
 
-<?php
 
 
 
