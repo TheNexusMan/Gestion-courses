@@ -151,14 +151,25 @@
                 $sexe = $nuplet['sexe'];
                 $nomClub = $nuplet['club'];
 
-                print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php?id_adherent=$id'\">
-                            <td>$id</td>
-                            <td>$nom</td>
-                            <td>$prenom</td>
-                            <td>" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
-                            <td>$sexe</td>
-                            <td>$nomClub</td>
-                            <td class='delete'><a href='?delete_adherent=$id&order=$order&orderSec=$orderSec&sens=$sensGet&clic=0'><i class='fas fa-trash-alt'></i></a></td>
+                print "<tr class='ligneTabClic'>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$id</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$prenom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$sexe</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nomClub</td>
+                            <td class='delete'>
+                                <form method='GET' action='adherents.php' Onsubmit='return attention();'>
+                                    <input name='delete_adherent' type='hidden' value='$id'>
+                                    <input name='order' type='hidden' value='$order'>
+                                    <input name='orderSec' type='hidden' value='$orderSec'>
+                                    <input name='sens' type='hidden' value='$sensGet'>
+                                    <input name='clic' type='hidden' value='0'>
+                                    <button class='btnDeleteAdherent' type='submit'>
+                                        <i class='fas fa-trash-alt'></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>";
             }
 
@@ -184,8 +195,23 @@
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
-    include "includes/footer.php";
 ?>
+
+<script>
+    function attention()
+    {
+        resultat=window.confirm('Voulez-vous vraiment supprimer cet adhérent ?');
+        if (resultat==1)
+        {
+        }
+        else
+        {
+            return false;
+        }
+    }
+</script>
+
+<?php include "includes/footer.php"; ?>
 
 <!-- Modal du formulaire d'ajout d'adhérent -->
 <div class="modal fade" id="modalAjoutAdherent" tabindex="-1" role="dialog" aria-labelledby="modalAjoutAdherent" aria-hidden="true">

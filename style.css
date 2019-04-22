@@ -140,6 +140,11 @@ footer p{
 .delete i{
     color: red;
 }
+.btnDeleteAdherent{
+    background: none;
+    border: none;
+    padding: 0;
+}
 
 /*EDITIONS*/
 .listeEditions{
