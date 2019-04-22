@@ -13,22 +13,22 @@ if (mysqli_connect_errno()) // erreur si > 0
 else {
 
     if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
-            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
-            $anneeAdd = intval($_POST['anneeCrea']);
-            $monthAdd = intval($_POST['month']);
+        $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
+        $anneeAdd = intval($_POST['anneeCrea']);
+        $monthAdd = intval($_POST['month']);
 
-            $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
+        $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
                         VALUES('$nameAdd', $anneeAdd, $monthAdd);";
 
-            if (mysqli_query($connexion, $ajoutTable) == FALSE)
-                print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
-        }
+        if (mysqli_query($connexion, $ajoutTable) == FALSE)
+            print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
+    }
 
     if ((isset($_GET['idcourse']))) {
-            $toDelete = intval($_GET['idcourse']);
+        $toDelete = intval($_GET['idcourse']);
 
 
-            $requete = "SELECT DISTINCT co.id_course, ed.id_edition, ep.id_epreuve
+        $requete = "SELECT DISTINCT co.id_course, ed.id_edition, ep.id_epreuve
                     FROM course co JOIN edition ed ON co.id_course = ed.id_course
                                    JOIN epreuve ep ON ep.id_edition = ed.id_edition
                                    JOIN participation pa ON pa.id_epreuve = ep.id_epreuve
@@ -37,53 +37,53 @@ else {
                                    JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
                     WHERE $toDelete = co.id_course";
 
-            $resultat = mysqli_query($connexion, $requete);
+        $resultat = mysqli_query($connexion, $requete);
 
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
-                    $idCourseRem = $nuplet['id_course'];
-                    $idEdRem = $nuplet['id_edition'];
-                    $idEpRem = $nuplet['id_epreuve'];
+        while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            $idCourseRem = $nuplet['id_course'];
+            $idEdRem = $nuplet['id_edition'];
+            $idEpRem = $nuplet['id_epreuve'];
 
-                    $requete = "DELETE FROM course WHERE id_course = $idCourseRem";
+            $requete = "DELETE FROM course WHERE id_course = $idCourseRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM edition WHERE id_course = $idCourseRem";
+            $requete = "DELETE FROM edition WHERE id_course = $idCourseRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM epreuve WHERE id_edition = $idEdRem";
+            $requete = "DELETE FROM epreuve WHERE id_edition = $idEdRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM participation WHERE id_epreuve = $idEpRem";
+            $requete = "DELETE FROM participation WHERE id_epreuve = $idEpRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM resultat WHERE id_epreuve = $idEpRem";
+            $requete = "DELETE FROM resultat WHERE id_epreuve = $idEpRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM tarif WHERE id_epreuve = $idEpRem";
+            $requete = "DELETE FROM tarif WHERE id_epreuve = $idEpRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
+            $resultatT = mysqli_query($connexion, $requete);
 
-                    $requete = "DELETE FROM temps_passage WHERE id_epreuve = $idEpRem";
+            $requete = "DELETE FROM temps_passage WHERE id_epreuve = $idEpRem";
 
-                    $resultatT = mysqli_query($connexion, $requete);
-                }
-
-
-
-
-
-
-
-            //Ajout de supression des editions liées ?
-
-            if (mysqli_query($connexion, $requete) == FALSE)
-                print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
+            $resultatT = mysqli_query($connexion, $requete);
         }
+
+
+
+
+
+
+
+        //Ajout de supression des editions liées ?
+
+        if (mysqli_query($connexion, $requete) == FALSE)
+            print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
+    }
 
     $requete = "SELECT * FROM course";
 
@@ -103,27 +103,26 @@ else {
                             <th scope='col'>Année création</th>
                             <th scope='col'>Mois</th>
                             <th scope='col'>Action</th>
+                            <th><i class='fas fa-trash-alt'></i></th>
                         </tr>
                     </thead>
                     <tbody>";
 
         while ($nuplet = mysqli_fetch_assoc($resultat)) {
-                $id_course = $nuplet['id_course'];
-                $nom = $nuplet['nom'];
-                $annee_crea = $nuplet['annee_creation'];
-                $mois = $nuplet['mois'];
-                print "<tr>
+            $id_course = $nuplet['id_course'];
+            $nom = $nuplet['nom'];
+            $annee_crea = $nuplet['annee_creation'];
+            $mois = $nuplet['mois'];
+            print "<tr>
                         <td>$id_course</td>
                         <td>$nom</td>
                         <td>$annee_crea</td>
                         <td>$mois</td>
-                        <td>
-                            <a href='editions.php?idcourse=$id_course'>Editions</a>
-                            <span> / </span> 
-                            <a href='courses.php?idcourse=$id_course'>Supprimer</a>
-                        </td>
+                        <td><a href='editions.php?idcourse=$id_course'>Editions</a></td>
+                        <td class='delete'><a href='courses.php?idcourse=$id_course'><i class='fas fa-trash-alt'></i></a></td>
+
                     </tr>";
-            }
+        }
 
         print "             </tbody>
                                 </table>
