@@ -146,6 +146,11 @@ footer p{
     margin-bottom: 50px;
 }
 
-.formulaireAjout{
+.formulaireFiltre{
     margin-bottom: 50px;
+}
+
+/*COURSES*/
+.listeCourses{
+    margin-bottom: 30px;
 }

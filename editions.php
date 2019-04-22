@@ -124,7 +124,7 @@
     </div>
 </div>
 
-<section class="formulaireAjout">
+<section class="formulaireFiltre">
     <div class='container'>
         <form method="POST" action="<?php print "?idcourse=".$idCourse ?>">
             <div class="form-row">

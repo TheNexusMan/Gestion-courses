@@ -61,9 +61,7 @@
                 $alert = "<script>alert('Échec de la requête de modification des informations')</script>";
             }
 
-            $resultat = mysqli_query($connexion, $requete);
-
-            if($resultat == FALSE){
+            if(mysqli_query($connexion, $requete) == FALSE){
                 print $alert;
             }
         }

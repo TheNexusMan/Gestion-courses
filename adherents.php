@@ -40,9 +40,7 @@
 
                 $requete = "INSERT INTO user (id_adherent, type, mdp, pseudo) VALUES ('$id_adherent', 'Adherent', '$mdp', '$pseudo')";
 
-                $resultat = mysqli_query($connexion, $requete);
-
-                if($resultat == FALSE)
+                if(mysqli_query($connexion, $requete) == FALSE)
                     print "<script>alert(\"Échec de la requête de l'ajout de l'adhérent\")</script>";
             }
         }

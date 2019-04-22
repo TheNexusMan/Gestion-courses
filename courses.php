@@ -29,8 +29,7 @@ else {
     {
         $toDelete = intval($_GET['idcourse']);
 
-        $requete = "DELETE FROM course
-                       WHERE id_course = $toDelete";
+        $requete = "DELETE FROM course WHERE id_course = $toDelete";
 
         //Ajout de supression des editions liées ?
         
@@ -38,101 +37,113 @@ else {
             print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
     }
 
-    $requete = "SELECT *
-                FROM course";
-
+    $requete = "SELECT * FROM course";
 
     $resultat = mysqli_query($connexion, $requete);
 
-    print "<section class='listeEditionAdherent'>
-        <div class='container'>
-            <table class='table'>
-                <thead>
-                    <tr>
-                        <th scope='col'>Id</th>
-                        <th scope='col'>Nom</th>
-                        <th scope='col'>Année création</th>
-                        <th scope='col'>Mois</th>
-                        <th scope='col'>Action</th>
-                    </tr>
-                </thead>
-                <tbody>";
+    if($resultat == FALSE)
+        print "<script>alert('Échec de la requête de récupération des courses')</script>";
+    else {
 
-    while ($nuplet = mysqli_fetch_assoc($resultat))
-    {
-        $id_course = $nuplet['id_course'];
-        $nom = $nuplet['nom'];
-        $annee_crea = $nuplet['annee_creation'];
-        $mois = $nuplet['mois'];
-        print "<tr>
-                    <td>$id_course</td>
-                    <td>$nom</td>
-                    <td>$annee_crea</td>
-                    <td>$mois</td>";
-        print ' <td> <a href="editions.php?idcourse=' . $id_course . '">Editions </a> / 
-                     <a href="courses.php?idcourse=' . $id_course . '"> Supprimer </a></td>  </tr>';
+        print "<section class='listeCourses'>
+            <div class='container'>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Id</th>
+                            <th scope='col'>Nom</th>
+                            <th scope='col'>Année création</th>
+                            <th scope='col'>Mois</th>
+                            <th scope='col'>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+
+        while ($nuplet = mysqli_fetch_assoc($resultat))
+        {
+            $id_course = $nuplet['id_course'];
+            $nom = $nuplet['nom'];
+            $annee_crea = $nuplet['annee_creation'];
+            $mois = $nuplet['mois'];
+            print "<tr>
+                        <td>$id_course</td>
+                        <td>$nom</td>
+                        <td>$annee_crea</td>
+                        <td>$mois</td>
+                        <td>
+                            <a href='editions.php?idcourse=$id_course'>Editions</a>
+                            <span> / </span> 
+                            <a href='courses.php?idcourse=$id_course'>Supprimer</a>
+                        </td>
+                    </tr>";
+        }
+
+        print "             </tbody>
+                                </table>
+                                </div>
+                            </section>";
     }
 
-
-    print "             </tbody>
-                            </table>
-                            </div>
-                           </section>";
+    mysqli_close($connexion);
 }
-
-
-
-
-
-
 ?>
 
-<section class='listeEditionAdherent'>
-    <div class='container'>
-        <form method="POST" action="courses.php">
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="nameCourse">Nom Course</label>
-                    <input type="text" class="form-control" id="nameCourse" name="nameCourse" placeholder="Nom" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="anneeCrea"> Année création </label>
-                    <input type="text" class="form-control" id="anneeCrea" name="anneeCrea" placeholder="AAAA" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="month"> Mois </label>
-                    <select class="custom-select" id="month" name="month" required>
-                        <option selected> Mois... </option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Ajouter Course</button>
-        </form>
+<div class="container">
+    <div class='row mb-4'>
+        <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjoutCourse">
+            Ajouter une course
+        </button>
     </div>
-</section>
+</div>
 
+<!-- Modal du formulaire d'ajout d'édition -->
+<div class="modal fade" id="modalAjoutCourse" tabindex="-1" role="dialog" aria-labelledby="modalAjoutCourse" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter une course</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="courses.php">
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="nameCourse">Nom</label>
+                            <input type="text" class="form-control" id="nameCourse" name="nameCourse" placeholder="Nom" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="anneeCrea">Année création </label>
+                            <input type="text" class="form-control" id="anneeCrea" name="anneeCrea" placeholder="AAAA" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="month">Mois</label>
+                            <select class="custom-select" id="month" name="month" required>
+                                <option selected> Mois... </option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button class="btn btn-primary" type="submit">Ajouter Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
-<?php
-mysqli_close($connexion);
-include "includes/footer.php";
-?>
+<?php include "includes/footer.php"; ?>
