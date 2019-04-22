@@ -11,7 +11,7 @@
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
-        //Ajout d'un adhérent utilisateur
+        //Ajout d'un utilisateur
         if(isset($_POST['pseudo']) && isset($_POST['mdp']))
         {
             $pseudo = mysqli_real_escape_string($connexion, $_POST['pseudo']);
@@ -191,26 +191,26 @@
 
 <!-- Modal du formulaire d'ajout d'adhérent -->
 <div class="modal fade" id="modalAjoutAdherent" tabindex="-1" role="dialog" aria-labelledby="modalAjoutAdherent" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Ajouter un adhérent utilisateur</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="adherents.php">
-            <label for="pseudo">Pseudo</label>
-            <input type="text" class="form-control mb-3" name="pseudo" placeholder='Pseudo' required>
-            <label for="mdp">Mot de passe</label>
-            <input type="password" class="form-control" name="mdp" placeholder='Mot de passe' required>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-        </form>
-      </div>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter un utilisateur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="adherents.php">
+                    <label for="pseudo">Pseudo</label>
+                    <input type="text" class="form-control mb-3" name="pseudo" placeholder='Pseudo' required>
+                    <label for="mdp">Mot de passe</label>
+                    <input type="password" class="form-control" name="mdp" placeholder='Mot de passe' required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
