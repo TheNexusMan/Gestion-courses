@@ -1,29 +1,73 @@
 <?php
-    include "includes/header.php";
+include "includes/header.php";
 
-    $user = 'root';
-    $mdp = '';
-    $machine = 'localhost';
-    $bd = 'bdw1';
-    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
+$user = 'root';
+$mdp = '';
+$machine = 'localhost';
+$bd = 'bdw1';
+$connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
-    if (mysqli_connect_errno()) // erreur si > 0
-        printf("Échec de la connexion : %s", mysqli_connect_error());
-    else {
+if (mysqli_connect_errno()) // erreur si > 0
+    printf("Échec de la connexion : %s", mysqli_connect_error());
+else {
 
-        if (isset($_GET['idcourse']))
-        {
+    if (isset($_GET['idcourse'])) {
             $idCourse = $_GET['idcourse'];
-        } else if(isset($_POST['idCoursePost']))
-        {
+        } else if (isset($_POST['idCoursePost'])) {
             $idCourse = $_POST['idCoursePost'];
-        } else{
-            header('Location: http://localhost/projet-bdw1/404.php');
+        } else {
+        header('Location: http://localhost/projet-bdw1/404.php');
+    }
+
+
+    if (isset($_GET['idEdition'])) {
+            $toDelete = intval($_GET['idEdition']);
+
+            $requete = "SELECT DISTINCT ed.id_edition, ep.id_epreuve
+                        FROM  edition ed JOIN epreuve ep ON ep.id_edition = ed.id_edition
+                                         JOIN participation pa ON pa.id_epreuve = ep.id_epreuve
+                                         JOIN resultat re ON ep.id_epreuve = re.id_epreuve
+                                         JOIN tarif ta ON ta.id_epreuve = ep.id_epreuve
+                                         JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
+                    WHERE $toDelete = ed.id_edition";
+
+            $resultat = mysqli_query($connexion, $requete);
+
+            while ($nuplet = mysqli_fetch_assoc($resultat)) {
+                    $idEdRem = $nuplet['id_edition'];
+                    $idEpRem = $nuplet['id_epreuve'];
+
+                    $requete = "DELETE FROM edition WHERE id_edition = $idEdRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+
+                    $requete = "DELETE FROM epreuve WHERE id_edition = $idEdRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+
+                    $requete = "DELETE FROM participation WHERE id_epreuve = $idEpRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+
+                    $requete = "DELETE FROM resultat WHERE id_epreuve = $idEpRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+
+                    $requete = "DELETE FROM tarif WHERE id_epreuve = $idEpRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+
+                    $requete = "DELETE FROM temps_passage WHERE id_epreuve = $idEpRem";
+
+                    $resultatT = mysqli_query($connexion, $requete);
+                }
+
+            if (mysqli_query($connexion, $requete) == FALSE)
+                print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
         }
-    
-    
-        if(isset($_POST['anneeEd']))
-        {
+
+
+    if (isset($_POST['anneeEd'])) {
             $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);
             $nbParti = mysqli_real_escape_string($connexion, $_POST['nbPart']);
             $adresseDepa = mysqli_real_escape_string($connexion, $_POST['adresseDep']);
@@ -33,33 +77,33 @@
             $dateDepot = mysqli_real_escape_string($connexion, $_POST['dateDepot']);
             $dateDossard = mysqli_real_escape_string($connexion, $_POST['dateDossard']);
             $plan = mysqli_real_escape_string($connexion, $_POST['planAdd']);
-    
+
             $resultat = "INSERT INTO edition (id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
                         VALUES ('$idCourse', '$anneeEd', '$nbParti', '$plan', '$adresseDepa', '$dateAdd', '$site', '$dateIns', '$dateDepot', '$dateDossard')";
 
-            if(mysqli_query($connexion, $resultat) == FALSE)
+            if (mysqli_query($connexion, $resultat) == FALSE)
                 print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
         }
 
-        if (isset($_POST['genderSelect'])) {
-            $chosenSex = mysqli_real_escape_string($connexion, $_POST['genderSelect']);
-            //  print $_POST['genderSelect'] . "Valeur apres form";
-        } else {
-            $chosenSex = "H";
-            //  print $chosenSex . " Valeur par défaut";
-        }
-    
-        if ($chosenSex == "H") {
-            print "<div class='container'>
+    if (isset($_POST['genderSelect'])) {
+        $chosenSex = mysqli_real_escape_string($connexion, $_POST['genderSelect']);
+        //  print $_POST['genderSelect'] . "Valeur apres form";
+    } else {
+        $chosenSex = "H";
+        //  print $chosenSex . " Valeur par défaut";
+    }
+
+    if ($chosenSex == "H") {
+        print "<div class='container'>
                         Sexe sélectionnée : Hommes
                     </div>";
-        } else {
-            print "<div class='container'>
+    } else {
+        print "<div class='container'>
                         Sexe sélectionnée : Femmes
                     </div>";
-        }
+    }
 
-        $requete = "SELECT ed.annee, ed.nb_participants, MIN(tmp.temps) AS bestScore, COUNT(DISTINCT adh.club) AS nb_club, AVG(tmp.temps) AS moyenne, ed.id_course
+    $requete = "SELECT ed.annee, ed.nb_participants, MIN(tmp.temps) AS bestScore, COUNT(DISTINCT adh.club) AS nb_club, AVG(tmp.temps) AS moyenne, ed.id_course, ed.id_edition
                         FROM edition ed JOIN epreuve ep ON ed.id_edition = ep.id_edition 
                                         JOIN temps_passage tmp ON tmp.id_epreuve = ep.id_epreuve
                                         JOIN participation pa ON pa.dossard = tmp.dossard
@@ -68,14 +112,14 @@
                         WHERE ed.id_course = $idCourse AND adh.sexe = '$chosenSex'
                         GROUP BY ed.annee";
 
-        //Permet d'avoir la moyenne de temps en fonction du sexe (H = Homme, F = Femmes)
+    //Permet d'avoir la moyenne de temps en fonction du sexe (H = Homme, F = Femmes)
 
-        $resultat = mysqli_query($connexion, $requete);
+    $resultat = mysqli_query($connexion, $requete);
 
-        if($resultat == FALSE)
-            print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
-        else{
-            print "<section class='listeEditions'>
+    if ($resultat == FALSE)
+        print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
+    else {
+        print "<section class='listeEditions'>
             <div class='container'>
                 <table class='table'>
                     <thead>
@@ -85,18 +129,19 @@
                             <th scope='col'>Meilleur temps</th>
                             <th scope='col'>Nombre de club représenté</th>
                             <th scope='col'>Moyenne de temps </th>
+                            <th><i class='fas fa-trash-alt'></i></th>
                         </tr>
                     </thead>
                 <tbody>";
 
-            while ($nuplet = mysqli_fetch_assoc($resultat))
-            {
+        while ($nuplet = mysqli_fetch_assoc($resultat)) {
                 $annee = $nuplet['annee'];
                 $nb_participants = $nuplet['nb_participants'];
                 $meilleur_temps = $nuplet['bestScore'];
                 $nb_club = $nuplet['nb_club'];
                 $moyenneTmp = $nuplet['moyenne'];
                 $idCourse = $nuplet['id_course'];
+                $idEdition = $nuplet['id_edition'];
 
                 print "<tr>
                             <td>$annee</td>
@@ -104,16 +149,18 @@
                             <td>$meilleur_temps min</td>
                             <td>$nb_club</td>
                             <td>$moyenneTmp min</td>
+                            <td class='delete'><a href='?idcourse=$idCourse&idEdition=$idEdition'><i class='fas fa-trash-alt'></i></a></td>
+
                         </tr>";
             }
-        }
-
-        mysqli_close($connexion);
     }
+
+    mysqli_close($connexion);
+}
 ?>
-            </tbody>
-        </table>
-    </div>
+</tbody>
+</table>
+</div>
 </section>
 
 <div class="container">
@@ -126,7 +173,7 @@
 
 <section class="formulaireFiltre">
     <div class='container'>
-        <form method="POST" action="<?php print "?idcourse=".$idCourse ?>">
+        <form method="POST" action="<?php print "?idcourse=" . $idCourse ?>">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="genderSelect">Filtrer par genre :</label>
@@ -154,7 +201,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="editions.php<?php print "?idcourse=".$idCourse ?>">
+                <form method="POST" action="editions.php<?php print "?idcourse=" . $idCourse ?>">
                     <div class='container'>
                         <div class="form-row">
                             <div class="col-md-2 mb-3">

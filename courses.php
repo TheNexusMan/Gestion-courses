@@ -73,12 +73,6 @@ else {
             $resultatT = mysqli_query($connexion, $requete);
         }
 
-
-
-
-
-
-
         //Ajout de supression des editions liées ?
 
         if (mysqli_query($connexion, $requete) == FALSE)
