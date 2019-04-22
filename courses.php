@@ -5,40 +5,37 @@ $user = 'root';
 $mdp = '';
 $machine = 'localhost';
 $bd = 'bdw1';
-$connexion = mysqli_connect($machine , $user , $mdp , $bd);
+$connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
 
 if (mysqli_connect_errno()) // erreur si > 0
     printf("Échec de la connexion : %s", mysqli_connect_error());
 else {
 
-    if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
-            $nameAdd = $_POST['nameCourse'];
-            $anneeAdd = $_POST['anneeCrea'];
-            $monthAdd = $_POST['month'];
+    if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month'])))
+    {
+        $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
+        $anneeAdd = intval($_POST['anneeCrea']);
+        $monthAdd = intval($_POST['month']);
 
+        $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
+                        VALUES('$nameAdd', $anneeAdd, $monthAdd);";
 
-
-            $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
-                           VALUES('$nameAdd', $anneeAdd , $monthAdd);";
-
-
-
-
-
-            mysqli_query($connexion, $ajoutTable);
-        }
+        if(mysqli_query($connexion, $ajoutTable) == FALSE)
+            print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
+    }
 
     if ((isset($_GET['idcourse'])))
     {
-        $toDelete = $_GET['idcourse'];
+        $toDelete = intval($_GET['idcourse']);
 
-        $deleteLine = "DELETE FROM course
+        $requete = "DELETE FROM course
                        WHERE id_course = $toDelete";
 
         //Ajout de supression des editions liées ?
         
-        mysqli_query($connexion, $deleteLine);
+        if(mysqli_query($connexion, $requete) == FALSE)
+            print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
     }
 
     $requete = "SELECT *
@@ -61,7 +58,8 @@ else {
                 </thead>
                 <tbody>";
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
+    while ($nuplet = mysqli_fetch_assoc($resultat))
+    {
         $id_course = $nuplet['id_course'];
         $nom = $nuplet['nom'];
         $annee_crea = $nuplet['annee_creation'];
