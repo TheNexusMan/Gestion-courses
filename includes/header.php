@@ -1,14 +1,6 @@
 <?php
     session_start();
 
-    // On récupère le nom de la page
-    $page = basename($_SERVER['PHP_SELF']);
-
-    // Si l'utilisateur n'est pas sur la page de login (index.php) et que la variable $_SESSION['isConnected'] n'existe pas,
-    // ou qu'un adhérent essait d'accéder à une page administrateur, il est redirigé vers la page de login
-    if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || ($page != "adherent.php" && isset($_SESSION['id_adherent']))))
-        header('Location: http://localhost/projet-bdw1/index.php');
-
     //On réinitialise les variables de connexion en cas de déconnexion
     if(isset($_POST['logout']))
     {
@@ -16,6 +8,14 @@
         unset($_SESSION['id_adherent']);
         header('Location: http://localhost/projet-bdw1/index.php');
     }
+
+    // On récupère le nom de la page
+    $page = basename($_SERVER['PHP_SELF']);
+
+    // Si l'utilisateur n'est pas sur la page de login (index.php) et que la variable $_SESSION['isConnected'] n'existe pas,
+    // ou qu'un adhérent essait d'accéder à une page administrateur, il est redirigé vers la page de login
+    if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || ($page != "adherent.php" && isset($_SESSION['id_adherent']))))
+        header('Location: http://localhost/projet-bdw1/index.php');
 ?>
 <!DOCTYPE html>
 

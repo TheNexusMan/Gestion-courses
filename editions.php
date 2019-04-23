@@ -18,9 +18,8 @@
         {
             $idCourse = $_POST['idCoursePost'];
         } else{
-            header('Location: http://localhost/projet-bdw1/404.php');
+            header('Location: http://localhost/projet-bdw1/index.php');
         }
-    
     
         if(isset($_POST['anneeEd']))
         {

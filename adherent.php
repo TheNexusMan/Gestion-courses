@@ -17,7 +17,7 @@
         }else if(isset($_GET['id_adherent'])){
             $idUser = intval($_GET['id_adherent']);
         }else{
-            header('Location: http://localhost/projet-bdw1/404.php');
+            header('Location: http://localhost/projet-bdw1/index.php');
         }
 
         //TEST SI L'ADHERENT EST NOUVEAU
