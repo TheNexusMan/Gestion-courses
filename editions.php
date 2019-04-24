@@ -1,4 +1,17 @@
 <?php
+    session_start();
+    
+    // Récupération de l'idcourse, redirection si non existante
+    if (isset($_GET['idcourse']))
+    {
+        $idCourse = $_GET['idcourse'];
+    } else if(isset($_POST['idCoursePost']))
+    {
+        $idCourse = $_POST['idCoursePost'];
+    } else{
+        header('Location: http://localhost/projet-bdw1/index.php');
+    }
+
     include "includes/header.php";
 
     $user = 'root';
@@ -10,17 +23,7 @@
     if (mysqli_connect_errno()) // erreur si > 0
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-
-        if (isset($_GET['idcourse']))
-        {
-            $idCourse = $_GET['idcourse'];
-        } else if(isset($_POST['idCoursePost']))
-        {
-            $idCourse = $_POST['idCoursePost'];
-        } else{
-            header('Location: http://localhost/projet-bdw1/index.php');
-        }
-    
+ 
         if(isset($_POST['anneeEd']))
         {
             $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);

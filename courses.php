@@ -1,91 +1,92 @@
 <?php
-include "includes/header.php";
+    session_start();
+    include "includes/header.php";
 
-$user = 'root';
-$mdp = '';
-$machine = 'localhost';
-$bd = 'bdw1';
-$connexion = mysqli_connect($machine, $user, $mdp, $bd);
+    $user = 'root';
+    $mdp = '';
+    $machine = 'localhost';
+    $bd = 'bdw1';
+    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
 
-if (mysqli_connect_errno()) // erreur si > 0
-    printf("Échec de la connexion : %s", mysqli_connect_error());
-else {
-
-    if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month'])))
-    {
-        $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
-        $anneeAdd = intval($_POST['anneeCrea']);
-        $monthAdd = intval($_POST['month']);
-
-        $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
-                        VALUES('$nameAdd', $anneeAdd, $monthAdd);";
-
-        if(mysqli_query($connexion, $ajoutTable) == FALSE)
-            print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
-    }
-
-    if ((isset($_GET['idcourse'])))
-    {
-        $toDelete = intval($_GET['idcourse']);
-
-        $requete = "DELETE FROM course WHERE id_course = $toDelete";
-
-        //Ajout de supression des editions liées ?
-        
-        if(mysqli_query($connexion, $requete) == FALSE)
-            print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
-    }
-
-    $requete = "SELECT * FROM course";
-
-    $resultat = mysqli_query($connexion, $requete);
-
-    if($resultat == FALSE)
-        print "<script>alert('Échec de la requête de récupération des courses')</script>";
+    if (mysqli_connect_errno()) // erreur si > 0
+        printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
-        print "<section class='listeCourses'>
-            <div class='container'>
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th scope='col'>Id</th>
-                            <th scope='col'>Nom</th>
-                            <th scope='col'>Année création</th>
-                            <th scope='col'>Mois</th>
-                            <th scope='col'>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-
-        while ($nuplet = mysqli_fetch_assoc($resultat))
+        if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month'])))
         {
-            $id_course = $nuplet['id_course'];
-            $nom = $nuplet['nom'];
-            $annee_crea = $nuplet['annee_creation'];
-            $mois = $nuplet['mois'];
-            print "<tr>
-                        <td>$id_course</td>
-                        <td>$nom</td>
-                        <td>$annee_crea</td>
-                        <td>$mois</td>
-                        <td>
-                            <a href='editions.php?idcourse=$id_course'>Editions</a>
-                            <span> / </span> 
-                            <a href='courses.php?idcourse=$id_course'>Supprimer</a>
-                        </td>
-                    </tr>";
+            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
+            $anneeAdd = intval($_POST['anneeCrea']);
+            $monthAdd = intval($_POST['month']);
+
+            $ajoutTable = "INSERT INTO course (nom, annee_creation, mois)
+                            VALUES('$nameAdd', $anneeAdd, $monthAdd);";
+
+            if(mysqli_query($connexion, $ajoutTable) == FALSE)
+                print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
         }
 
-        print "             </tbody>
-                                </table>
-                                </div>
-                            </section>";
-    }
+        if ((isset($_GET['idcourse'])))
+        {
+            $toDelete = intval($_GET['idcourse']);
 
-    mysqli_close($connexion);
-}
+            $requete = "DELETE FROM course WHERE id_course = $toDelete";
+
+            //Ajout de supression des editions liées ?
+            
+            if(mysqli_query($connexion, $requete) == FALSE)
+                print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
+        }
+
+        $requete = "SELECT * FROM course";
+
+        $resultat = mysqli_query($connexion, $requete);
+
+        if($resultat == FALSE)
+            print "<script>alert('Échec de la requête de récupération des courses')</script>";
+        else {
+
+            print "<section class='listeCourses'>
+                <div class='container'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th scope='col'>Id</th>
+                                <th scope='col'>Nom</th>
+                                <th scope='col'>Année création</th>
+                                <th scope='col'>Mois</th>
+                                <th scope='col'>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+
+            while ($nuplet = mysqli_fetch_assoc($resultat))
+            {
+                $id_course = $nuplet['id_course'];
+                $nom = $nuplet['nom'];
+                $annee_crea = $nuplet['annee_creation'];
+                $mois = $nuplet['mois'];
+                print "<tr>
+                            <td>$id_course</td>
+                            <td>$nom</td>
+                            <td>$annee_crea</td>
+                            <td>$mois</td>
+                            <td>
+                                <a href='editions.php?idcourse=$id_course'>Editions</a>
+                                <span> / </span> 
+                                <a href='courses.php?idcourse=$id_course'>Supprimer</a>
+                            </td>
+                        </tr>";
+            }
+
+            print "             </tbody>
+                                    </table>
+                                    </div>
+                                </section>";
+        }
+
+        mysqli_close($connexion);
+    }
 ?>
 
 <div class="container">

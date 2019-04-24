@@ -1,4 +1,16 @@
 <?php
+    session_start();
+
+    // Récupération de l'id_adherent, redirection si non existant
+    if(isset($_SESSION['id_adherent']))
+    {
+        $idUser = intval($_SESSION['id_adherent']);
+    }else if(isset($_GET['id_adherent'])){
+        $idUser = intval($_GET['id_adherent']);
+    }else{
+        //header('Location: http://localhost/projet-bdw1/404.php');
+    }
+
     include "includes/header.php";
 
     //CONNEXION A LA BASE DE DONNEE
@@ -11,14 +23,6 @@
     if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-        if(isset($_SESSION['id_adherent']))
-        {
-            $idUser = intval($_SESSION['id_adherent']);
-        }else if(isset($_GET['id_adherent'])){
-            $idUser = intval($_GET['id_adherent']);
-        }else{
-            header('Location: http://localhost/projet-bdw1/index.php');
-        }
 
         //TEST SI L'ADHERENT EST NOUVEAU
         $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
