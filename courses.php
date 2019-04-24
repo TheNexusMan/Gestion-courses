@@ -1,11 +1,12 @@
 <?php
-include "includes/header.php";
+    session_start();
+    include "includes/header.php";
 
-$user = 'root';
-$mdp = '';
-$machine = 'localhost';
-$bd = 'bdw1';
-$connexion = mysqli_connect($machine, $user, $mdp, $bd);
+    $user = 'root';
+    $mdp = '';
+    $machine = 'localhost';
+    $bd = 'bdw1';
+    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
 
 if (mysqli_connect_errno()) // erreur si > 0
@@ -24,7 +25,7 @@ else {
             print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
     }
 
-    if ((isset($_GET['idcourse']))) {
+    if (isset($_GET['idcourse'])) {
         $toDelete = intval($_GET['idcourse']);
 
 
@@ -73,8 +74,6 @@ else {
             $resultatT = mysqli_query($connexion, $requete);
         }
 
-        //Ajout de supression des editions liées ?
-
         if (mysqli_query($connexion, $requete) == FALSE)
             print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
     }
@@ -88,19 +87,20 @@ else {
     else {
 
         print "<section class='listeCourses'>
-            <div class='container'>
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th scope='col'>Id</th>
-                            <th scope='col'>Nom</th>
-                            <th scope='col'>Année création</th>
-                            <th scope='col'>Mois</th>
-                            <th scope='col'>Action</th>
-                            <th><i class='fas fa-trash-alt'></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>";
+                <h2 class='tabeLabel' >Liste des courses</h2>
+                <div class='container'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th scope='col'>Id</th>
+                                <th scope='col'>Nom</th>
+                                <th scope='col'>Année création</th>
+                                <th scope='col'>Mois</th>
+                                <th scope='col'>Action</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
         while ($nuplet = mysqli_fetch_assoc($resultat)) {
             $id_course = $nuplet['id_course'];
@@ -118,10 +118,10 @@ else {
                     </tr>";
         }
 
-        print "             </tbody>
-                                </table>
-                                </div>
-                            </section>";
+        print "     </tbody>
+                </table>
+            </div>
+        </section>";
     }
 
     mysqli_close($connexion);

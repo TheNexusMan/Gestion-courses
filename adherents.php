@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include "includes/header.php";
 
     $user = 'root';
@@ -125,21 +126,22 @@
                     </button>
                 </div>
             </div>
-            <section class='listeEditionAdherent'>
-                            <div class='container'>
-                                <table class='table'>
-                                    <thead>
-                                        <tr>
-                                            <th scope='col'><a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
-                                            <th scope='col'><a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
-                                            <th scope='col'><a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a></th>
-                                            <th scope='col'><a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a></th>
-                                            <th scope='col'><a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a></th>
-                                            <th scope='col'><a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a></th>
-                                            <th><i class='fas fa-trash-alt'></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>";
+            <section class='listeAdherents'>
+                <h2 class='tabeLabel' >Liste des adhérents</h2>
+                <div class='container'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th scope='col'><a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
+                                <th scope='col'><a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
+                                <th scope='col'><a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a></th>
+                                <th scope='col'><a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a></th>
+                                <th scope='col'><a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a></th>
+                                <th scope='col'><a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a></th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
             //Affichage des éditions dans le tableau
             while ($nuplet = mysqli_fetch_assoc($resultat))
@@ -151,14 +153,25 @@
                 $sexe = $nuplet['sexe'];
                 $nomClub = $nuplet['club'];
 
-                print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php?id_adherent=$id'\">
-                            <td>$id</td>
-                            <td>$nom</td>
-                            <td>$prenom</td>
-                            <td>" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
-                            <td>$sexe</td>
-                            <td>$nomClub</td>
-                            <td class='delete'><a href='?delete_adherent=$id&order=$order&orderSec=$orderSec&sens=$sensGet&clic=0'><i class='fas fa-trash-alt'></i></a></td>
+                print "<tr class='ligneTabClic'>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$id</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$prenom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$sexe</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nomClub</td>
+                            <td class='delete'>
+                                <form method='GET' action='adherents.php' Onsubmit='return attention();'>
+                                    <input name='delete_adherent' type='hidden' value='$id'>
+                                    <input name='order' type='hidden' value='$order'>
+                                    <input name='orderSec' type='hidden' value='$orderSec'>
+                                    <input name='sens' type='hidden' value='$sensGet'>
+                                    <input name='clic' type='hidden' value='0'>
+                                    <button class='btnDeleteAdherent' type='submit'>
+                                        <i class='fas fa-trash-alt'></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>";
             }
 
@@ -184,8 +197,23 @@
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
-    include "includes/footer.php";
 ?>
+
+<script>
+    function attention()
+    {
+        resultat=window.confirm('Voulez-vous vraiment supprimer cet adhérent ?');
+        if (resultat==1)
+        {
+        }
+        else
+        {
+            return false;
+        }
+    }
+</script>
+
+<?php include "includes/footer.php"; ?>
 
 <!-- Modal du formulaire d'ajout d'adhérent -->
 <div class="modal fade" id="modalAjoutAdherent" tabindex="-1" role="dialog" aria-labelledby="modalAjoutAdherent" aria-hidden="true">

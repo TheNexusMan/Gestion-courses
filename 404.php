@@ -1,4 +1,7 @@
-<?php include "includes/header.php";?>
+<?php
+    session_start();
+    include "includes/header.php";
+?>
 
 <div class="container">
     <div class="row">

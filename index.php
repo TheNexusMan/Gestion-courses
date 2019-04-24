@@ -1,4 +1,7 @@
-<?php include "includes/header.php" ?>
+<?php
+    session_start();
+    include "includes/header.php"
+?>
 
 <?php
     $goodPseudo = 0; //Variable pour savoir si on re-affiche le pseudo dans le champ (cas du pseudo existant mais mauvais mdp)

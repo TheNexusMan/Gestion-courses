@@ -1,5 +1,18 @@
 <?php
-include "includes/header.php";
+    session_start();
+
+    // Récupération de l'idcourse, redirection si non existante
+    if (isset($_GET['idcourse']))
+    {
+        $idCourse = $_GET['idcourse'];
+    } else if(isset($_POST['idCoursePost']))
+    {
+        $idCourse = $_POST['idCoursePost'];
+    } else{
+        header('Location: http://localhost/projet-bdw1/index.php');
+    }
+
+    include "includes/header.php";
 
 $user = 'root';
 $mdp = '';
@@ -11,79 +24,69 @@ if (mysqli_connect_errno()) // erreur si > 0
     printf("Échec de la connexion : %s", mysqli_connect_error());
 else {
 
-    if (isset($_GET['idcourse'])) {
-            $idCourse = $_GET['idcourse'];
-        } else if (isset($_POST['idCoursePost'])) {
-            $idCourse = $_POST['idCoursePost'];
-        } else {
-        header('Location: http://localhost/projet-bdw1/404.php');
+    if (isset($_GET['idEdition'])) {
+        $toDelete = intval($_GET['idEdition']);
+
+        $requete = "SELECT DISTINCT ed.id_edition, ep.id_epreuve
+                    FROM  edition ed JOIN epreuve ep ON ep.id_edition = ed.id_edition
+                                        JOIN participation pa ON pa.id_epreuve = ep.id_epreuve
+                                        JOIN resultat re ON ep.id_epreuve = re.id_epreuve
+                                        JOIN tarif ta ON ta.id_epreuve = ep.id_epreuve
+                                        JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
+                WHERE $toDelete = ed.id_edition";
+
+        $resultat = mysqli_query($connexion, $requete);
+
+        while ($nuplet = mysqli_fetch_assoc($resultat)) {
+                $idEdRem = $nuplet['id_edition'];
+                $idEpRem = $nuplet['id_epreuve'];
+
+                $requete = "DELETE FROM edition WHERE id_edition = $idEdRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+
+                $requete = "DELETE FROM epreuve WHERE id_edition = $idEdRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+
+                $requete = "DELETE FROM participation WHERE id_epreuve = $idEpRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+
+                $requete = "DELETE FROM resultat WHERE id_epreuve = $idEpRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+
+                $requete = "DELETE FROM tarif WHERE id_epreuve = $idEpRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+
+                $requete = "DELETE FROM temps_passage WHERE id_epreuve = $idEpRem";
+
+                $resultatT = mysqli_query($connexion, $requete);
+            }
+
+        if (mysqli_query($connexion, $requete) == FALSE)
+            print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
     }
 
-
-    if (isset($_GET['idEdition'])) {
-            $toDelete = intval($_GET['idEdition']);
-
-            $requete = "SELECT DISTINCT ed.id_edition, ep.id_epreuve
-                        FROM  edition ed JOIN epreuve ep ON ep.id_edition = ed.id_edition
-                                         JOIN participation pa ON pa.id_epreuve = ep.id_epreuve
-                                         JOIN resultat re ON ep.id_epreuve = re.id_epreuve
-                                         JOIN tarif ta ON ta.id_epreuve = ep.id_epreuve
-                                         JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
-                    WHERE $toDelete = ed.id_edition";
-
-            $resultat = mysqli_query($connexion, $requete);
-
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
-                    $idEdRem = $nuplet['id_edition'];
-                    $idEpRem = $nuplet['id_epreuve'];
-
-                    $requete = "DELETE FROM edition WHERE id_edition = $idEdRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-
-                    $requete = "DELETE FROM epreuve WHERE id_edition = $idEdRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-
-                    $requete = "DELETE FROM participation WHERE id_epreuve = $idEpRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-
-                    $requete = "DELETE FROM resultat WHERE id_epreuve = $idEpRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-
-                    $requete = "DELETE FROM tarif WHERE id_epreuve = $idEpRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-
-                    $requete = "DELETE FROM temps_passage WHERE id_epreuve = $idEpRem";
-
-                    $resultatT = mysqli_query($connexion, $requete);
-                }
-
-            if (mysqli_query($connexion, $requete) == FALSE)
-                print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
-        }
-
-
     if (isset($_POST['anneeEd'])) {
-            $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);
-            $nbParti = mysqli_real_escape_string($connexion, $_POST['nbPart']);
-            $adresseDepa = mysqli_real_escape_string($connexion, $_POST['adresseDep']);
-            $dateAdd = mysqli_real_escape_string($connexion, $_POST['dateAdd']);
-            $site = mysqli_real_escape_string($connexion, $_POST['siteURL']);
-            $dateIns = mysqli_real_escape_string($connexion, $_POST['dateIns']);
-            $dateDepot = mysqli_real_escape_string($connexion, $_POST['dateDepot']);
-            $dateDossard = mysqli_real_escape_string($connexion, $_POST['dateDossard']);
-            $plan = mysqli_real_escape_string($connexion, $_POST['planAdd']);
+        $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);
+        $nbParti = mysqli_real_escape_string($connexion, $_POST['nbPart']);
+        $adresseDepa = mysqli_real_escape_string($connexion, $_POST['adresseDep']);
+        $dateAdd = mysqli_real_escape_string($connexion, $_POST['dateAdd']);
+        $site = mysqli_real_escape_string($connexion, $_POST['siteURL']);
+        $dateIns = mysqli_real_escape_string($connexion, $_POST['dateIns']);
+        $dateDepot = mysqli_real_escape_string($connexion, $_POST['dateDepot']);
+        $dateDossard = mysqli_real_escape_string($connexion, $_POST['dateDossard']);
+        $plan = mysqli_real_escape_string($connexion, $_POST['planAdd']);
 
-            $resultat = "INSERT INTO edition (id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
-                        VALUES ('$idCourse', '$anneeEd', '$nbParti', '$plan', '$adresseDepa', '$dateAdd', '$site', '$dateIns', '$dateDepot', '$dateDossard')";
+        $resultat = "INSERT INTO edition (id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
+                    VALUES ('$idCourse', '$anneeEd', '$nbParti', '$plan', '$adresseDepa', '$dateAdd', '$site', '$dateIns', '$dateDepot', '$dateDossard')";
 
-            if (mysqli_query($connexion, $resultat) == FALSE)
-                print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
-        }
+        if (mysqli_query($connexion, $resultat) == FALSE)
+            print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
+    }
 
     if (isset($_POST['genderSelect'])) {
         $chosenSex = mysqli_real_escape_string($connexion, $_POST['genderSelect']);
@@ -116,23 +119,24 @@ else {
 
     $resultat = mysqli_query($connexion, $requete);
 
-    if ($resultat == FALSE)
-        print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
-    else {
-        print "<section class='listeEditions'>
-            <div class='container'>
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th scope='col'>Annee</th>
-                            <th scope='col'>Nombre de participants Total</th>
-                            <th scope='col'>Meilleur temps</th>
-                            <th scope='col'>Nombre de club représenté</th>
-                            <th scope='col'>Moyenne de temps </th>
-                            <th><i class='fas fa-trash-alt'></i></th>
-                        </tr>
-                    </thead>
-                <tbody>";
+        if($resultat == FALSE)
+            print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
+        else{
+            print "<section class='listeEditions'>
+                        <h2 class='tabeLabel' >Liste des éditions</h2>
+                        <div class='container'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Annee</th>
+                                        <th scope='col'>Nombre de participants Total</th>
+                                        <th scope='col'>Meilleur temps</th>
+                                        <th scope='col'>Nombre de club représenté</th>
+                                        <th scope='col'>Moyenne de temps</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            <tbody>";
 
         while ($nuplet = mysqli_fetch_assoc($resultat)) {
                 $annee = $nuplet['annee'];

@@ -1,4 +1,16 @@
 <?php
+    session_start();
+
+    // Récupération de l'id_adherent, redirection si non existant
+    if(isset($_SESSION['id_adherent']))
+    {
+        $idUser = intval($_SESSION['id_adherent']);
+    }else if(isset($_GET['id_adherent'])){
+        $idUser = intval($_GET['id_adherent']);
+    }else{
+        //header('Location: http://localhost/projet-bdw1/404.php');
+    }
+
     include "includes/header.php";
 
     //CONNEXION A LA BASE DE DONNEE
@@ -11,14 +23,6 @@
     if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-        if(isset($_SESSION['id_adherent']))
-        {
-            $idUser = intval($_SESSION['id_adherent']);
-        }else if(isset($_GET['id_adherent'])){
-            $idUser = intval($_GET['id_adherent']);
-        }else{
-            header('Location: http://localhost/projet-bdw1/404.php');
-        }
 
         //TEST SI L'ADHERENT EST NOUVEAU
         $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
@@ -196,18 +200,18 @@
         else {
 
             print "<section id='listeEditionAdherent' class='listeEditionAdherent'>
-                            <h2>Liste des éditions participées</h2>
-                            <div class='container'>
-                                <table class='table'>
-                                    <thead>
-                                        <tr>
-                                            <th scope='col'>Année</th>
-                                            <th scope='col'>Distance</th>
-                                            <th scope='col'>Nom</th>
-                                            <th scope='col'>Temps</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>";
+                        <h2 class='tabeLabel' >Liste des éditions participées</h2>
+                        <div class='container'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Année</th>
+                                        <th scope='col'>Distance</th>
+                                        <th scope='col'>Nom</th>
+                                        <th scope='col'>Temps</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {
