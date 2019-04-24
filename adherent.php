@@ -13,13 +13,6 @@
 
     include "includes/header.php";
 
-    //CONNEXION A LA BASE DE DONNEE
-    $user = 'root';
-    $mdp = '';
-    $machine = 'localhost';
-    $bd = 'bdw1';
-    $connexion = mysqli_connect($machine, $user ,$mdp, $bd);
-
     if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
@@ -80,18 +73,18 @@
         else {
             if(mysqli_num_rows($resultat) != 0)
             {
-                while ($nuplet = mysqli_fetch_assoc($resultat))
-                {
-                    $nom = $nuplet['nom'];
-                    $prenom = $nuplet['prenom'];
-                    $dateNaissance = $nuplet['date_naissance'];
-                    $sexe = $nuplet['sexe'];
-                    $adresse = $nuplet['adresse'];
-                    $dateClub = $nuplet['date_certif_club'];
-                    $nomClub = $nuplet['club'];
+                $nuplet = mysqli_fetch_assoc($resultat);
 
-                    $nouvelAdherent = 0;
-                }
+                $nom = $nuplet['nom'];
+                $prenom = $nuplet['prenom'];
+                $dateNaissance = $nuplet['date_naissance'];
+                $sexe = $nuplet['sexe'];
+                $adresse = $nuplet['adresse'];
+                $dateClub = $nuplet['date_certif_club'];
+                $nomClub = $nuplet['club'];
+
+                $nouvelAdherent = 0;
+                
             }else{
                 $nom = "";
                 $prenom = "";
@@ -213,7 +206,7 @@
                                 </thead>
                                 <tbody>";
 
-            while ($nuplet = mysqli_fetch_assoc($resultat))
+            while($nuplet = mysqli_fetch_assoc($resultat))
             {
                 $nom = $nuplet['nom'];
                 $annee = $nuplet['annee'];

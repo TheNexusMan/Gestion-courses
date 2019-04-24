@@ -14,12 +14,6 @@
 
     include "includes/header.php";
 
-$user = 'root';
-$mdp = '';
-$machine = 'localhost';
-$bd = 'bdw1';
-$connexion = mysqli_connect($machine, $user, $mdp, $bd);
-
 if (mysqli_connect_errno()) // erreur si > 0
     printf("Échec de la connexion : %s", mysqli_connect_error());
 else {

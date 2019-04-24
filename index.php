@@ -8,13 +8,6 @@
 
     if((isset($_POST['pseudoInput'])) && (isset($_POST['inputPw'])))
     {
-        $user = 'root';
-        $mdp = '';
-        $machine = 'localhost';
-        $bd = 'bdw1';
-
-        $connexion = mysqli_connect($machine, $user, $mdp, $bd); //On se connecte
-
         if(mysqli_connect_errno()) //erreur si > 0
         {
             printf("Echec de la connexion : %s", mysqli_connect_errno());
@@ -35,7 +28,7 @@
                 {
                     $goodPseudo = 1;
 
-                    $requete = "SELECT * FROM user WHERE pseudo = '$pseudo' AND mdp = '$pw'";
+                    $requete = "SELECT id_adherent FROM user WHERE pseudo = '$pseudo' AND mdp = '$pw'";
 
                     $resultat = mysqli_query($connexion, $requete); //Envoie de la requete
 
@@ -46,7 +39,7 @@
                         {
                             $_SESSION['isConnected'] = 1;
 
-                            while($nuplet = mysqli_fetch_assoc($resultat))
+                            $nuplet = mysqli_fetch_assoc($resultat);
                             {
                                 $_SESSION['id_adherent'] = $nuplet['id_adherent'];
                             }

@@ -2,12 +2,6 @@
     session_start();
     include "includes/header.php";
 
-    $user = 'root';
-    $mdp = '';
-    $machine = 'localhost';
-    $bd = 'bdw1';
-    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
-
     if(mysqli_connect_errno()) // erreur si > 0
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
@@ -25,7 +19,7 @@
             if($resultat == FALSE)
                 print "<script>alert(\"Échec de la requête de récupération du dernier id_adherent\")</script>";
             else {
-                while ($nuplet = mysqli_fetch_assoc($resultat))
+                $nuplet = mysqli_fetch_assoc($resultat);
                 {
                     $id_adherent = $nuplet['id_adherent'];
                 }
@@ -69,10 +63,10 @@
                 print "<script>alert(\"Échec de la requête de suppression de l'adherent\")</script>";
         }
 
-        //Récupération des éditions participées par l'adhérent en fonction du trie du tableau :
+        //Récupération des adhérents en fonction du trie du tableau :
 
         //Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
-        if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
+        if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $orderSec = $_GET['orderSec'];
@@ -90,7 +84,7 @@
             }
 
         //Cas où c'est le premier clic sur la colonne (ordre croissant)
-        }else if(isset($_GET['order']))
+        }else if(!empty($_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $sensGet = $_GET['sens'];
@@ -185,7 +179,7 @@
     }
 
     //Ajout des chevrons pour le sens du trie des colonnes
-    if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
+    if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
         {
@@ -193,7 +187,7 @@
         }else{
             print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
         }
-    }else if(isset($_GET['order']))
+    }else if(isset($_GET['order'])) // Si clic sur colonne, on affiche le chevron 
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }

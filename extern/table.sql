@@ -4,33 +4,35 @@
 
 
 #------------------------------------------------------------
-# Table: user
-#------------------------------------------------------------
-
-CREATE TABLE user(
-        id_user     Int  AUTO_INCREMENT  NOT NULL,
-        id_adherent Int,
-        type        Varchar (50) NOT NULL,
-        mdp         Varchar (50) NOT NULL,
-        pseudo      Varchar (50) NOT NULL,
-	PRIMARY KEY (id_user)
-);
-
-
-#------------------------------------------------------------
 # Table: adherent
 #------------------------------------------------------------
 
 CREATE TABLE adherent(
-        id_adherent    Int NOT NULL,
-        nom            Varchar (50) NOT NULL,
-        prenom         Varchar (50) NOT NULL,
-        date_naissance Date,
-        sexe           Varchar (20) NOT NULL,
-        adresse        Varchar (200),
-        date_certif_club    Date,
-        club           Varchar (200),
+    id_adherent    Int NOT NULL,
+    nom            Varchar (50) NOT NULL,
+    prenom         Varchar (50) NOT NULL,
+    date_naissance Date,
+    sexe           Varchar (20) NOT NULL,
+    adresse        Varchar (200),
+    date_certif_club    Date,
+    club           Varchar (200),
 	PRIMARY KEY (id_adherent)
+);
+
+
+#------------------------------------------------------------
+# Table: user
+#------------------------------------------------------------
+
+CREATE TABLE user(
+    id_user     Int  AUTO_INCREMENT  NOT NULL,
+    id_adherent Int,
+    type        Varchar (50) NOT NULL,
+    mdp         Varchar (50) NOT NULL,
+    pseudo      Varchar (50) NOT NULL,
+	PRIMARY KEY (id_user),
+    FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent)
+    ON DELETE CASCADE
 );
 
 
@@ -39,10 +41,10 @@ CREATE TABLE adherent(
 #------------------------------------------------------------
 
 CREATE TABLE course(
-        id_course      Int  AUTO_INCREMENT  NOT NULL,
-        nom            Varchar (100) NOT NULL,
-        annee_creation YEAR NOT NULL,
-        mois           Int NOT NULL,
+    id_course      Int  AUTO_INCREMENT  NOT NULL,
+    nom            Varchar (100) NOT NULL,
+    annee_creation Int NOT NULL,
+    mois           Int NOT NULL,
 	PRIMARY KEY (id_course)
 ) ;
 
@@ -52,32 +54,20 @@ CREATE TABLE course(
 #------------------------------------------------------------
 
 CREATE TABLE edition(
-        id_edition            Int  AUTO_INCREMENT  NOT NULL,
-        id_course             Int NOT NULL,
-        annee                 Int NOT NULL,
-        nb_participants       Int NOT NULL,
-        plan                  Varchar (200) NOT NULL,
-        adresse_depart        Varchar (200) NOT NULL,
-        date                  Date NOT NULL,
-        site_url              Varchar (200) NOT NULL,
-        date_inscription      Date NOT NULL,
-        date_depot_certificat Date NOT NULL,
-        date_recup_dossard    Date NOT NULL,
-	PRIMARY KEY (id_edition)
-);
-
-
-#------------------------------------------------------------
-# Table: tarif
-#------------------------------------------------------------
-
-CREATE TABLE tarif(
-        id_tarif                Int  AUTO_INCREMENT  NOT NULL,
-        id_epreuve              Int NOT NULL,
-        age_min                 Int NOT NULL,
-        age_max                 Int NOT NULL,
-        tarif                   Int NOT NULL,
-	PRIMARY KEY (id_tarif)
+    id_edition            Int  AUTO_INCREMENT  NOT NULL,
+    id_course             Int NOT NULL,
+    annee                 Int NOT NULL,
+    nb_participants       Int NOT NULL,
+    plan                  Varchar (200) NOT NULL,
+    adresse_depart        Varchar (200) NOT NULL,
+    date                  Date NOT NULL,
+    site_url              Varchar (200) NOT NULL,
+    date_inscription      Date NOT NULL,
+    date_depot_certificat Date NOT NULL,
+    date_recup_dossard    Date NOT NULL,
+	PRIMARY KEY (id_edition),
+    FOREIGN KEY (id_course) REFERENCES course(id_course)
+    ON DELETE CASCADE
 );
 
 
@@ -86,13 +76,31 @@ CREATE TABLE tarif(
 #------------------------------------------------------------
 
 CREATE TABLE epreuve(
-        id_epreuve   Int  AUTO_INCREMENT  NOT NULL,
-        id_edition   Int NOT NULL,
-        distance     Int NOT NULL,
-        nom          Varchar (200) NOT NULL,
-        denivelee    Int NOT NULL,
-        type_epreuve Varchar (200) NOT NULL,
-	PRIMARY KEY (id_epreuve)
+    id_epreuve   Int  AUTO_INCREMENT  NOT NULL,
+    id_edition   Int NOT NULL,
+    distance     Int NOT NULL,
+    nom          Varchar (200) NOT NULL,
+    denivelee    Int NOT NULL,
+    type_epreuve Varchar (200) NOT NULL,
+	PRIMARY KEY (id_epreuve),
+    FOREIGN KEY (id_edition) REFERENCES edition(id_edition)
+    ON DELETE CASCADE
+);
+
+
+#------------------------------------------------------------
+# Table: tarif
+#------------------------------------------------------------
+
+CREATE TABLE tarif(
+    id_tarif                Int  AUTO_INCREMENT  NOT NULL,
+    id_epreuve              Int NOT NULL,
+    age_min                 Int NOT NULL,
+    age_max                 Int NOT NULL,
+    tarif                   Int NOT NULL,
+	PRIMARY KEY (id_tarif),
+    FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve)
+    ON DELETE CASCADE
 );
 
 
@@ -101,11 +109,14 @@ CREATE TABLE epreuve(
 #------------------------------------------------------------
 
 CREATE TABLE participation(
-        id_participation    Int AUTO_INCREMENT NOT NULL,
-        dossard             Int NOT NULL,
-        id_adherent         Int NOT NULL,
-        id_epreuve          Int NOT NULL,
-	PRIMARY KEY (id_participation)
+    id_participation    Int AUTO_INCREMENT NOT NULL,
+    dossard             Int NOT NULL,
+    id_adherent         Int NOT NULL,
+    id_epreuve          Int NOT NULL,
+	PRIMARY KEY (id_participation),
+    FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve),
+    FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent)
+    ON DELETE CASCADE
 );
 
 
@@ -114,13 +125,16 @@ CREATE TABLE participation(
 #------------------------------------------------------------
 
 CREATE TABLE resultat(
-        dossard               Int NOT NULL,
-        id_epreuve            Int NOT NULL,
-        rang                  Int,
-        nom                   Varchar (200) NOT NULL,
-        prenom                Varchar (200) NOT NULL,
-        sexe                  Varchar (20) NOT NULL,
-	PRIMARY KEY (dossard, id_epreuve)
+    dossard               Int NOT NULL,
+    id_epreuve            Int NOT NULL,
+    rang                  Int,
+    nom                   Varchar (200) NOT NULL,
+    prenom                Varchar (200) NOT NULL,
+    sexe                  Varchar (20) NOT NULL,
+	PRIMARY KEY (dossard, id_epreuve),
+    FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve),
+    FOREIGN KEY (dossard) REFERENCES participation(dossard)
+    ON DELETE CASCADE
 );
 
 
@@ -129,46 +143,16 @@ CREATE TABLE resultat(
 #------------------------------------------------------------
 
 CREATE TABLE temps_passage(
-        id_epreuve            Int NOT NULL,
-        dossard               Int NOT NULL,
-        km                    Int NOT NULL,
-        temps                 Int NOT NULL,
-	PRIMARY KEY (id_epreuve, dossard, km)
+    id_epreuve            Int NOT NULL,
+    dossard               Int NOT NULL,
+    km                    Int NOT NULL,
+    temps                 Int NOT NULL,
+	PRIMARY KEY (id_epreuve, dossard, km),
+    FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve),
+    FOREIGN KEY (dossard) REFERENCES participation(dossard)
+    ON DELETE CASCADE
 );
 
-#------------------------------------------------------------
-# ALTER TABLE
-#------------------------------------------------------------
-
-ALTER TABLE user
-ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent);
-
-ALTER TABLE edition
-ADD CONSTRAINT id_course FOREIGN KEY (id_course) REFERENCES course(id_course);
-
-ALTER TABLE tarif
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
-
-ALTER TABLE epreuve
-ADD CONSTRAINT id_edition FOREIGN KEY (id_edition) REFERENCES edition(id_edition);
-
-ALTER TABLE participation
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
-
-ALTER TABLE participation
-ADD CONSTRAINT id_adherent FOREIGN KEY (id_adherent) REFERENCES adherent(id_adherent);
-
-ALTER TABLE resultat
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
-
-ALTER TABLE resultat
-ADD CONSTRAINT dossard FOREIGN KEY (dossard) REFERENCES participation(dossard);
-
-ALTER TABLE temps_passage
-ADD CONSTRAINT id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id_epreuve);
-
-ALTER TABLE temps_passage
-ADD CONSTRAINT dossard FOREIGN KEY (dossard) REFERENCES participation(dossard);
 
 #------------------------------------------------------------
 # INSERTIONS
@@ -230,7 +214,7 @@ INSERT INTO user (id_adherent, type, mdp, pseudo)
 VALUES (2017001, 'Adherent', 'SDAZ13', 'Bruno');
 
 INSERT INTO user (type, mdp, pseudo)
-VALUES ('Admin', 'azerty', 'Arnaud');
+VALUES ('Admin', 'aze', 'Arnaud');
 
 INSERT INTO user (type, mdp, pseudo)
 VALUES ('Admin', 'azerty', 'Damien');

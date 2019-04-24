@@ -15,9 +15,15 @@
     {
         header('Location: http://localhost/projet-bdw1/index.php');
     }
-?>
-<!DOCTYPE html>
 
+    $user = 'root';
+    $mdp = '';
+    $machine = 'localhost';
+    $bd = 'bdw1';
+    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
+?>
+
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">

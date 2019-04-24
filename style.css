@@ -171,3 +171,7 @@ footer p{
 .listeCourses{
     margin-bottom: 30px;
 }
+
+.listeCourses th a{
+    color: black;
+}
