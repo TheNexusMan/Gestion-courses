@@ -170,10 +170,44 @@ else {
                                     </div>
                                 </div>
 
+
                             </div>
                         </div>
  
 
+            </section>";
+
+
+     print "<section class='adherent'>
+                    <h2>Tarifs </h2>
+                        <div class='adherentInfos container'>
+                             <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
+                                <div class='row ligneInfo'>";
+    $requete = "SELECT * FROM tarif WHERE id_epreuve = $idEpreuve";
+
+    $resultat = mysqli_query($connexion, $requete);
+
+    while($nuplet = mysqli_fetch_assoc($resultat))
+    {
+        $ageMin = $nuplet['age_min'];
+        $ageMax = $nuplet['age_max'];
+        $tarif = $nuplet['tarif'];
+
+        print " <div class='col-4'>
+                    <p class='nomInfo'>";
+        print $ageMin . "-" . $ageMax . "</p>";
+        print "<p id='tarifEpreuve' class='readInfoEpreuve'> $tarif € </p>
+    </div>
+    <div class='col-4'></div>";
+    }
+
+
+
+
+
+print "                 </div>
+                    </div>                
+                </div>
             </section>";
 
 
@@ -229,4 +263,3 @@ else {
 
 
 include "includes/footer.php";
-?>
