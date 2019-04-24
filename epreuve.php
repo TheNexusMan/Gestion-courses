@@ -21,10 +21,10 @@ if (mysqli_connect_errno()) // erreur si > 0
 else {
 
     if (isset($_GET['id_epreuve'])) {
-            $idEpreuve = $_GET['id_epreuve'];
-        } else {
-            $idEpreuve = 1; //Faire la redirection 404 ?
-        }
+        $idEpreuve = $_GET['id_epreuve'];
+    } else {
+        $idEpreuve = 1; //Faire la redirection 404 ?
+    }
 
     $requete = "SELECT MAX(tmp.km) as KM
                 FROM temps_passage tmp
@@ -32,8 +32,8 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $distEpreuve = $nuplet['KM'];
-        }
+        $distEpreuve = $nuplet['KM'];
+    }
 
 
 
@@ -45,13 +45,13 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $name = $nuplet['nom'];
-            $distance = $nuplet['distance'];
-            $denivelee = $nuplet['denivelee'];
-            $typeEp = $nuplet['type_epreuve'];
-            $tempsMin = $nuplet['Meilleur'];
-            $tempsMax = $nuplet['Nul'];
-        }
+        $name = $nuplet['nom'];
+        $distance = $nuplet['distance'];
+        $denivelee = $nuplet['denivelee'];
+        $typeEp = $nuplet['type_epreuve'];
+        $tempsMin = $nuplet['Meilleur'];
+        $tempsMax = $nuplet['Nul'];
+    }
 
     $requete = "SELECT AVG(tmp.temps) AS tempsH
                 FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
@@ -60,8 +60,8 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $tempsMoyH = $nuplet['tempsH'];
-        }
+        $tempsMoyH = $nuplet['tempsH'];
+    }
 
     $requete = "SELECT AVG(tmp.temps) AS tempsF
                 FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
@@ -70,8 +70,8 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $tempsMoyF = $nuplet['tempsF'];
-        }
+        $tempsMoyF = $nuplet['tempsF'];
+    }
 
     $requete = "SELECT COUNT(DISTINCT adh.club) AS nbClubs, AVG(tmp.temps) AS tmpMoyenAdh
                 FROM temps_passage tmp JOIN participation pa ON tmp.id_epreuve = pa.id_epreuve
@@ -81,9 +81,9 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $nbClubs = $nuplet['nbClubs'];
-            $tempsMoyAdh = $nuplet['tmpMoyenAdh'];
-        }
+        $nbClubs = $nuplet['nbClubs'];
+        $tempsMoyAdh = $nuplet['tmpMoyenAdh'];
+    }
 
     $requete = "SELECT count(re.nom) AS abandons
                 FROM resultat re
@@ -92,8 +92,8 @@ else {
     $resultat = mysqli_query($connexion, $requete);
 
     while ($nuplet = mysqli_fetch_assoc($resultat)) {
-            $nbAbandons = $nuplet['abandons'];
-        }
+        $nbAbandons = $nuplet['abandons'];
+    }
 
 
 
@@ -178,34 +178,35 @@ else {
             </section>";
 
 
-     print "<section class='adherent'>
+    print "<section class='adherent'>
                     <h2>Tarifs </h2>
                         <div class='adherentInfos container'>
                              <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
                                 <div class='row ligneInfo'>";
+
+
     $requete = "SELECT * FROM tarif WHERE id_epreuve = $idEpreuve";
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while($nuplet = mysqli_fetch_assoc($resultat))
-    {
-        $ageMin = $nuplet['age_min'];
-        $ageMax = $nuplet['age_max'];
-        $tarif = $nuplet['tarif'];
+    while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            $ageMin = $nuplet['age_min'];
+            $ageMax = $nuplet['age_max'];
+            $tarif = $nuplet['tarif'];
 
-        print " <div class='col-4'>
+            print " <div class='col-4'>
                     <p class='nomInfo'>";
-        print $ageMin . "-" . $ageMax . "</p>";
-        print "<p id='tarifEpreuve' class='readInfoEpreuve'> $tarif € </p>
+            print $ageMin . "-" . $ageMax . "</p>";
+            print "<p id='tarifEpreuve' class='readInfoEpreuve'> $tarif € </p>
     </div>
     <div class='col-4'></div>";
-    }
+        }
 
 
 
 
 
-print "                 </div>
+    print "                 </div>
                     </div>                
                 </div>
             </section>";
