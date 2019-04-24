@@ -108,7 +108,7 @@ footer p{
     display: none;
 }
 
-.listeEditionAdherent h2{
+.tabeLabel{
     text-align: center;
     font-size: 24px;
 }
@@ -124,7 +124,7 @@ footer p{
 }
 
 /*ADHERENTS*/
-.listeEditionAdherent th a{
+.listeAdherents th a{
     color: black;
 }
 
@@ -137,6 +137,10 @@ footer p{
     background-color: #F4F5F5;
 }
 
+.delete{
+    padding-left: 28px !important;
+}
+
 .delete i{
     color: red;
 }
@@ -144,6 +148,14 @@ footer p{
     background: none;
     border: none;
     padding: 0;
+}
+
+.btnDeleteAdherent:hover{
+    -webkit-transform:scale(1.25); /* Safari and Chrome */
+    -moz-transform:scale(1.25); /* Firefox */
+    -ms-transform:scale(1.25); /* IE 9 */
+    -o-transform:scale(1.25); /* Opera */
+     transform:scale(1.25);
 }
 
 /*EDITIONS*/

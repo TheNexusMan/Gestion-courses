@@ -47,18 +47,19 @@
         else {
 
             print "<section class='listeCourses'>
-                <div class='container'>
-                    <table class='table'>
-                        <thead>
-                            <tr>
-                                <th scope='col'>Id</th>
-                                <th scope='col'>Nom</th>
-                                <th scope='col'>Année création</th>
-                                <th scope='col'>Mois</th>
-                                <th scope='col'>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>";
+                    <h2 class='tabeLabel' >Liste des courses</h2>
+                    <div class='container'>
+                        <table class='table'>
+                            <thead>
+                                <tr>
+                                    <th scope='col'>Id</th>
+                                    <th scope='col'>Nom</th>
+                                    <th scope='col'>Année création</th>
+                                    <th scope='col'>Mois</th>
+                                    <th scope='col'>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {

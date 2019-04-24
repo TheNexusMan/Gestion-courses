@@ -1,6 +1,6 @@
 <?php
     session_start();
-    
+
     // Récupération de l'idcourse, redirection si non existante
     if (isset($_GET['idcourse']))
     {
@@ -78,18 +78,19 @@
             print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
         else{
             print "<section class='listeEditions'>
-            <div class='container'>
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th scope='col'>Annee</th>
-                            <th scope='col'>Nombre de participants Total</th>
-                            <th scope='col'>Meilleur temps</th>
-                            <th scope='col'>Nombre de club représenté</th>
-                            <th scope='col'>Moyenne de temps </th>
-                        </tr>
-                    </thead>
-                <tbody>";
+                        <h2 class='tabeLabel' >Liste des éditions</h2>
+                        <div class='container'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Annee</th>
+                                        <th scope='col'>Nombre de participants Total</th>
+                                        <th scope='col'>Meilleur temps</th>
+                                        <th scope='col'>Nombre de club représenté</th>
+                                        <th scope='col'>Moyenne de temps </th>
+                                    </tr>
+                                </thead>
+                            <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {

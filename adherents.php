@@ -126,21 +126,22 @@
                     </button>
                 </div>
             </div>
-            <section class='listeEditionAdherent'>
-                            <div class='container'>
-                                <table class='table'>
-                                    <thead>
-                                        <tr>
-                                            <th scope='col'><a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
-                                            <th scope='col'><a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
-                                            <th scope='col'><a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a></th>
-                                            <th scope='col'><a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a></th>
-                                            <th scope='col'><a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a></th>
-                                            <th scope='col'><a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a></th>
-                                            <th><i class='fas fa-trash-alt'></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>";
+            <section class='listeAdherents'>
+                <h2 class='tabeLabel' >Liste des adhérents</h2>
+                <div class='container'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th scope='col'><a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
+                                <th scope='col'><a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
+                                <th scope='col'><a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a></th>
+                                <th scope='col'><a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a></th>
+                                <th scope='col'><a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a></th>
+                                <th scope='col'><a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a></th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
             //Affichage des éditions dans le tableau
             while ($nuplet = mysqli_fetch_assoc($resultat))

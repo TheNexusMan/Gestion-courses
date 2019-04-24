@@ -200,18 +200,18 @@
         else {
 
             print "<section id='listeEditionAdherent' class='listeEditionAdherent'>
-                            <h2>Liste des éditions participées</h2>
-                            <div class='container'>
-                                <table class='table'>
-                                    <thead>
-                                        <tr>
-                                            <th scope='col'>Année</th>
-                                            <th scope='col'>Distance</th>
-                                            <th scope='col'>Nom</th>
-                                            <th scope='col'>Temps</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>";
+                        <h2 class='tabeLabel' >Liste des éditions participées</h2>
+                        <div class='container'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Année</th>
+                                        <th scope='col'>Distance</th>
+                                        <th scope='col'>Nom</th>
+                                        <th scope='col'>Temps</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {
