@@ -196,7 +196,7 @@ else {
 
             print " <div class='col-4'>
                     <p class='nomInfo'>";
-            print $ageMin . "-" . $ageMax . "</p>";
+            print $ageMin . "-" . $ageMax . " Ans</p>";
             print "<p id='tarifEpreuve' class='readInfoEpreuve'> $tarif € </p>
     </div>
     <div class='col-4'></div>";
