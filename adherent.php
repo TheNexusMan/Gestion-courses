@@ -174,17 +174,72 @@
                                 </form>
                             </div>
                         </div>
+                        <div id='ancreTri'></div>
                     </section>";
         }
 
-        //RECUPERATION ET AFFICHAGE DES EDITIONS PARTICIPEES PAR L'ADHERENT
-        $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
-                    FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
-                            NATURAL JOIN epreuve Ep
-                            NATURAL JOIN edition Ed
-                            JOIN COURSE Co ON Ed.id_course = Co.id_course
-                            JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
-                                FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
+        // Récupération et affichage des éditions participées par l'adhérent
+        // Récupération des éditions en fonction du trie du tableau
+
+        // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
+        if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
+        {
+            $order = mysqli_real_escape_string($connexion, $_GET['order']);
+            $orderSec = $_GET['orderSec'];
+            $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
+
+            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
+                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
+                                NATURAL JOIN epreuve Ep
+                                NATURAL JOIN edition Ed
+                                JOIN COURSE Co ON Ed.id_course = Co.id_course
+                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard
+                        ORDER BY $order $sensGet";
+
+            if($sensGet == "DESC" && $_GET['clic'])
+            {
+                $sens = "ASC";
+            }else if($_GET['clic']){
+                $sens = "DESC";
+            }else{
+                $sens = $sensGet;
+            }
+
+        // Cas où c'est le premier clic sur la colonne (ordre croissant)
+        }else if(!empty($_GET['order']))
+        {
+            $order = mysqli_real_escape_string($connexion, $_GET['order']);
+            $sensGet = $_GET['sens'];
+            $orderSec = $_GET['orderSec'];
+
+            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
+                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
+                                NATURAL JOIN epreuve Ep
+                                NATURAL JOIN edition Ed
+                                JOIN COURSE Co ON Ed.id_course = Co.id_course
+                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard
+                        ORDER BY $order";
+
+            if($_GET['clic']){
+                $sens = "DESC";
+            }else{
+                $sens = $sensGet;
+            }
+        }else{
+            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
+                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
+                                NATURAL JOIN epreuve Ep
+                                NATURAL JOIN edition Ed
+                                JOIN COURSE Co ON Ed.id_course = Co.id_course
+                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
+            $order = "";
+            $orderSec = "";
+            $sensGet = "";
+            $sens = "ASC";
+        }
 
         $resultat = mysqli_query($connexion, $requete);
 
@@ -199,10 +254,18 @@
                                 <table class='table table-bordered table-hover text-center'>
                                     <thead class='thead-dark'>
                                         <tr>
-                                            <th scope='col'>Année</th>
-                                            <th scope='col'>Distance</th>
-                                            <th scope='col'>Nom</th>
-                                            <th scope='col'>Temps</th>
+                                            <th id='anneeCol' scope='col'>
+                                                <a href='?id_adherent=$idUser&order=annee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Année</a>
+                                            </th>
+                                            <th id='distanceCol' scope='col'>
+                                                <a href='?id_adherent=$idUser&order=distance&orderSec=$order&sens=$sens&clic=1#ancreTri'>Distance</a>
+                                            </th>
+                                            <th id='nomCol' scope='col'>
+                                                <a href='?id_adherent=$idUser&order=nom&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nom</a>
+                                            </th>
+                                            <th id='tempsCol' scope='col'>
+                                                <a href='?id_adherent=$idUser&order=temps&orderSec=$order&sens=$sens&clic=1#ancreTri'>Temps</a>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>";
@@ -230,6 +293,20 @@
         }
         
         mysqli_close($connexion);
+    }
+
+    // Ajout des chevrons pour le sens du trie des colonnes
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    {
+        if($_GET['sens'] == "DESC")
+        {
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
+        }else{
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+        }
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
+    {
+        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
 
     include "includes/footer.php";

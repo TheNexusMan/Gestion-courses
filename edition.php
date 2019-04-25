@@ -273,7 +273,7 @@
                 if($_SESSION['typeUtilisateur'] == "Admin")
                 {
                     print "<td>
-                                <form method='GET' action='edition.php' Onsubmit='return attention();'>
+                                <form method='GET' action='edition.php#ancreTri' Onsubmit='return attention();'>
                                     <input name='idedition' type='hidden' value='$idEdition'>
                                     <input name='delete_epreuve' type='hidden' value='$id_epreuve'>
                                     <input name='order' type='hidden' value='$order'>

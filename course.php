@@ -166,6 +166,7 @@
                                 </form>
                             </div>
                         </div>
+                        <div id='ancreTri'></div>
                     </section>";
         }
         
@@ -232,10 +233,10 @@
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th id='anneeCol' scope='col'>
-                                                    <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1'>Année</a>
+                                                    <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Année</a>
                                                 </th>
                                                 <th id='nb_participantsCol' scope='col'>
-                                                    <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1'>Nombre de participants</a>
+                                                    <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nombre de participants</a>
                                                 </th>
                                                 ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
                                             </tr>
@@ -253,7 +254,7 @@
                 if($_SESSION['typeUtilisateur'] == "Admin")
                 {
                     print "<td>
-                                <form method='GET' action='course.php' Onsubmit='return attention();'>
+                                <form method='GET' action='course.php#ancreTri' Onsubmit='return attention();'>
                                     <input name='idcourse' type='hidden' value='$idCourse'>
                                     <input name='delete_edition' type='hidden' value='$idEdition'>
                                     <input name='order' type='hidden' value='$order'>
