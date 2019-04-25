@@ -31,27 +31,26 @@ else {
                 WHERE tmp.id_epreuve = $idEpreuve";
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $distEpreuve = $nuplet['KM'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $distEpreuve = $nuplet['KM'];
 
 
 
 
     $requete = "SELECT ep.nom, ep.distance, ep.denivelee, ep.type_epreuve, MIN(tmp.temps) AS Meilleur, MAX(tmp.temps) AS Nul 
                 FROM epreuve ep JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
-                WHERE ep.id_epreuve = $idEpreuve AND tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve "; //Modifier 1 via le post/GET, Distance km devra etre recup par une autre requete
+                WHERE ep.id_epreuve = $idEpreuve AND tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve"; //Modifier 1 via le post/GET, Distance km devra etre recup par une autre requete
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $name = $nuplet['nom'];
-        $distance = $nuplet['distance'];
-        $denivelee = $nuplet['denivelee'];
-        $typeEp = $nuplet['type_epreuve'];
-        $tempsMin = $nuplet['Meilleur'];
-        $tempsMax = $nuplet['Nul'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $name = $nuplet['nom'];
+    $distance = $nuplet['distance'];
+    $denivelee = $nuplet['denivelee'];
+    $typeEp = $nuplet['type_epreuve'];
+    $tempsMin = $nuplet['Meilleur'];
+    $tempsMax = $nuplet['Nul'];
+
 
     $requete = "SELECT AVG(tmp.temps) AS tempsH
                 FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
@@ -59,9 +58,9 @@ else {
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $tempsMoyH = $nuplet['tempsH'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $tempsMoyH = $nuplet['tempsH'];
+    
 
     $requete = "SELECT AVG(tmp.temps) AS tempsF
                 FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
@@ -69,9 +68,8 @@ else {
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $tempsMoyF = $nuplet['tempsF'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $tempsMoyF = $nuplet['tempsF'];
 
     $requete = "SELECT COUNT(DISTINCT adh.club) AS nbClubs, AVG(tmp.temps) AS tmpMoyenAdh
                 FROM temps_passage tmp JOIN participation pa ON tmp.id_epreuve = pa.id_epreuve
@@ -80,20 +78,20 @@ else {
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $nbClubs = $nuplet['nbClubs'];
-        $tempsMoyAdh = $nuplet['tmpMoyenAdh'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $nbClubs = $nuplet['nbClubs'];
+    $tempsMoyAdh = $nuplet['tmpMoyenAdh'];
+    
 
-    $requete = "SELECT count(re.nom) AS abandons
+    $requete = "SELECT COUNT(re.nom) AS abandons
                 FROM resultat re
                 WHERE re.rang IS NULL AND re.id_epreuve = $idEpreuve";
 
     $resultat = mysqli_query($connexion, $requete);
 
-    while ($nuplet = mysqli_fetch_assoc($resultat)) {
-        $nbAbandons = $nuplet['abandons'];
-    }
+    $nuplet = mysqli_fetch_assoc($resultat);
+    $nbAbandons = $nuplet['abandons'];
+    
 
 
 
