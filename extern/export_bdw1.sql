@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 24 avr. 2019 à 23:49
+-- Généré le :  jeu. 25 avr. 2019 à 16:02
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   `nom` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `annee_creation` int(11) NOT NULL,
   `mois` int(11) NOT NULL,
+  `site_url` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_course`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -85,9 +86,9 @@ CREATE TABLE IF NOT EXISTS `course` (
 -- Déchargement des données de la table `course`
 --
 
-INSERT INTO `course` (`id_course`, `nom`, `annee_creation`, `mois`) VALUES
-(1, 'Marathon de Paris', 1976, 6),
-(2, 'Run in Lyon', 2010, 5);
+INSERT INTO `course` (`id_course`, `nom`, `annee_creation`, `mois`, `site_url`) VALUES
+(1, 'Marathon de Paris', 1976, 6, 'http://www.schneiderelectricparismarathon.com/fr/'),
+(2, 'Run in Lyon', 2010, 5, 'http://www.runinlyon.com/fr');
 
 -- --------------------------------------------------------
 
@@ -101,10 +102,7 @@ CREATE TABLE IF NOT EXISTS `edition` (
   `id_course` int(11) NOT NULL,
   `annee` int(11) NOT NULL,
   `nb_participants` int(11) NOT NULL,
-  `plan` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `adresse_depart` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,
-  `site_url` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `date_inscription` date NOT NULL,
   `date_depot_certificat` date NOT NULL,
   `date_recup_dossard` date NOT NULL,
@@ -116,10 +114,10 @@ CREATE TABLE IF NOT EXISTS `edition` (
 -- Déchargement des données de la table `edition`
 --
 
-INSERT INTO `edition` (`id_edition`, `id_course`, `annee`, `nb_participants`, `plan`, `adresse_depart`, `date`, `site_url`, `date_inscription`, `date_depot_certificat`, `date_recup_dossard`) VALUES
-(1, 1, 2017, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2017-04-09', 'http://www.schneiderelectricparismarathon.com/fr/', '2017-01-01', '2017-02-01', '2017-04-01'),
-(2, 1, 2018, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2018-04-08', 'http://www.schneiderelectricparismarathon.com/fr/', '2018-01-01', '2018-02-01', '2018-04-01'),
-(3, 2, 2018, 32, 'runlyon.jpg', 'Quai Tilsitt, Lyon', '2018-10-07', 'http://www.runinlyon.com/fr', '2018-01-07', '2018-08-01', '2018-10-01');
+INSERT INTO `edition` (`id_edition`, `id_course`, `annee`, `nb_participants`, `date`, `date_inscription`, `date_depot_certificat`, `date_recup_dossard`) VALUES
+(1, 1, 2017, 45, '2017-04-09', '2017-01-01', '2017-02-01', '2017-04-01'),
+(2, 1, 2018, 45, '2018-04-08', '2018-01-01', '2018-02-01', '2018-04-01'),
+(3, 2, 2018, 32, '2018-10-07', '2018-01-07', '2018-08-01', '2018-10-01');
 
 -- --------------------------------------------------------
 
@@ -131,10 +129,12 @@ DROP TABLE IF EXISTS `epreuve`;
 CREATE TABLE IF NOT EXISTS `epreuve` (
   `id_epreuve` int(11) NOT NULL AUTO_INCREMENT,
   `id_edition` int(11) NOT NULL,
-  `distance` int(11) NOT NULL,
   `nom` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `distance` int(11) NOT NULL,
+  `adresse_depart` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `denivelee` int(11) NOT NULL,
   `type_epreuve` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `plan` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_epreuve`),
   KEY `id_edition` (`id_edition`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -143,16 +143,16 @@ CREATE TABLE IF NOT EXISTS `epreuve` (
 -- Déchargement des données de la table `epreuve`
 --
 
-INSERT INTO `epreuve` (`id_epreuve`, `id_edition`, `distance`, `nom`, `denivelee`, `type_epreuve`) VALUES
-(1, 1, 10, 'Paris centre by Nike', 0, '10 Km'),
-(2, 1, 42, 'Marathon de Paris', 0, 'Marathon'),
-(3, 1, 21, 'Semi-Marathon de Paris', 0, 'Semi-Marathon'),
-(4, 2, 10, 'Adidas 10 km Paris', 0, '10 Km'),
-(5, 2, 42, 'Marathon de Paris', 0, 'Marathon'),
-(6, 2, 21, 'Semi-Marathon de Paris', 0, 'Semi-Marathon'),
-(7, 3, 10, 'Run in Lyon 10 km', 0, '10 Km'),
-(8, 3, 42, 'Run in Lyon Marathon', 0, 'Marathon'),
-(9, 3, 21, 'Run in Lyon Semi-Marathon', 0, 'Semi-Marathon');
+INSERT INTO `epreuve` (`id_epreuve`, `id_edition`, `nom`, `distance`, `adresse_depart`, `denivelee`, `type_epreuve`, `plan`) VALUES
+(1, 1, 'Paris centre by Nike', 10, 'Avenue des Champs-Elysées, Paris', 0, '10 Km', 'mpplan.jpg'),
+(2, 1, 'Marathon de Paris', 42, 'Avenue des Champs-Elysées, Paris', 0, 'Marathon', 'mpplan.jpg'),
+(3, 1, 'Semi-Marathon de Paris', 21, 'Avenue des Champs-Elysées, Paris', 0, 'Semi-Marathon', 'mpplan.jpg'),
+(4, 2, 'Adidas 10 km Paris', 10, 'Quai Tilsitt, Lyon', 0, '10 Km', 'mpplan.jpg'),
+(5, 2, 'Marathon de Paris', 42, 'Quai Tilsitt, Lyon', 0, 'Marathon', 'mpplan.jpg'),
+(6, 2, 'Semi-Marathon de Paris', 21, 'Quai Tilsitt, Lyon', 0, 'Semi-Marathon', 'mpplan.jpg'),
+(7, 3, 'Run in Lyon 10 km', 10, 'Quai Tilsitt, Lyon', 0, '10 Km', 'runlyon.jpg'),
+(8, 3, 'Run in Lyon Marathon', 42, 'Quai Tilsitt, Lyon', 0, 'Marathon', 'runlyon.jpg'),
+(9, 3, 'Run in Lyon Semi-Marathon', 21, 'Quai Tilsitt, Lyon', 0, 'Semi-Marathon', 'runlyon.jpg');
 
 -- --------------------------------------------------------
 

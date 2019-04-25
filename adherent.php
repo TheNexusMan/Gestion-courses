@@ -8,7 +8,7 @@
     }else if(isset($_GET['id_adherent'])){
         $idUser = intval($_GET['id_adherent']);
     }else{
-        //header('Location: http://localhost/projet-bdw1/404.php');
+        header('Location: http://localhost/projet-bdw1/index.php');
     }
 
     include "includes/header.php";
@@ -17,7 +17,7 @@
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
-        //TEST SI L'ADHERENT EST NOUVEAU
+        // Test si l'adhérent est nouveau
         $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
 
         $resultat = mysqli_query($connexion, $requete);
@@ -33,26 +33,26 @@
             }
         }
 
-        //AJOUT DES INFORMATIONS DU NOUVEL ADHERENT
+        // Modification des informations de l'adhérent ou ajout des informations du nouvel adhérent
         if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe']))
         {
-            $naNom = mysqli_real_escape_string($connexion, $_POST['nom']);
-            $naPrenom = mysqli_real_escape_string($connexion, $_POST['prenom']);
-            $naNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$_POST['naissance']."'");
-            $naSexe = mysqli_real_escape_string($connexion, $_POST['sexe']);
-            $naAdresse = mysqli_real_escape_string($connexion, $_POST['adresse']);
-            $naDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$_POST['dateClub']."'");
-            $naNomClub = mysqli_real_escape_string($connexion, $_POST['nomClub']);
+            $modNom = mysqli_real_escape_string($connexion, $_POST['nom']);
+            $modPrenom = mysqli_real_escape_string($connexion, $_POST['prenom']);
+            $modNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$_POST['naissance']."'");
+            $modSexe = mysqli_real_escape_string($connexion, $_POST['sexe']);
+            $modAdresse = mysqli_real_escape_string($connexion, $_POST['adresse']);
+            $modDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$_POST['dateClub']."'");
+            $modNomClub = mysqli_real_escape_string($connexion, $_POST['nomClub']);
 
             if($nouvelAdherent)
             {
                 $requete = "INSERT INTO adherent (id_adherent, nom, prenom, date_naissance, sexe, adresse, date_certif_club, club)
-                            VALUES ('$idUser', '$naNom', '$naPrenom', $naNaissance, '$naSexe', '$naAdresse', $naDateClub, '$naNomClub')";
+                            VALUES ('$idUser', '$modNom', '$modPrenom', $modNaissance, '$modSexe', '$modAdresse', $modDateClub, '$modNomClub')";
 
                 $alert = "<script>alert('Échec de la requête de l'ajout des nouvelles informations)</script>";
             }else{
                 $requete = "UPDATE adherent
-                            SET nom = '$naNom', prenom = '$naPrenom', date_naissance = $naNaissance, sexe = '$naSexe', adresse = '$naAdresse', date_certif_club = $naDateClub, club = '$naNomClub'
+                            SET nom = '$modNom', prenom = '$modPrenom', date_naissance = $modNaissance, sexe = '$modSexe', adresse = '$modAdresse', date_certif_club = $modDateClub, club = '$modNomClub'
                             WHERE id_adherent = $idUser";
 
                 $alert = "<script>alert('Échec de la requête de modification des informations')</script>";
@@ -63,7 +63,7 @@
             }
         }
 
-        //RECUPERATION ET AFFICHAGE DES INFORMATIONS DE L'ADHERENT
+        // Récupération et affichage des informations de l'adhérent
         $requete = "SELECT * FROM adherent WHERE id_adherent = $idUser";
 
         $resultat = mysqli_query($connexion, $requete);
@@ -160,9 +160,7 @@
                                         </div>
                                     </div>
                                     <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
-                                        
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
-                                        
                                     </div>
                                     <div class='row ligneButton writeInfoAdherent writeInfoAdherentFlex' id='modifInfoAdherent'>
                                         <div class='row mx-auto'>
@@ -193,7 +191,7 @@
         else {
 
             print "<section id='listeEditionAdherent' class='listeEditionAdherent'>
-                        <h2 class='tabeLabel' >Liste des éditions participées</h2>
+                        <h2 class='tabeLabel'>Liste des éditions participées</h2>
                         <div class='container'>
                             <table class='table'>
                                 <thead>
@@ -233,7 +231,8 @@
 ?>
 
 <script>
-    //GESTION DE L'AFFICHAGE DU FORMULAIRE DE MODIFICATION DES INFORMATIONS DE L'ADHERENT
+    // Gestion de l'affichage du formulaire de modification des informations de l'adhérent
+
     document.getElementById("modifInfoAdherent").onclick = afficheFormAdherent;
     document.getElementById("annulerInfoAdherent").onclick = annulerFormAdherent;
 

@@ -2,22 +2,12 @@
     session_start();
     include "includes/header.php";
 
-    if (mysqli_connect_errno()) // erreur si > 0
+    if (mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
         mysqli_set_charset($connexion, 'utf8');
 
-        if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
-            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
-            $anneeAdd = intval($_POST['anneeCrea']);
-            $monthAdd = intval($_POST['month']);
-
-            $requete = "INSERT INTO course (nom, annee_creation, mois) VALUES('$nameAdd', $anneeAdd, $monthAdd);";
-            print $requete;
-            if (mysqli_query($connexion, $requete) == FALSE)
-                print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
-        }
-
+        // Suppression d'une course
         if (isset($_GET['delete_course'])) {
             $idCourseToDel = intval($_GET['delete_course']);
 
@@ -66,16 +56,29 @@
                 print "<script>alert(\"Échec de la requête de suppression de la course\")</script>";
         }
 
-        //Récupération des courses en fonction du trie du tableau :
+        // Ajout d'une nouvelle course
+        if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
+            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
+            $anneeAdd = intval($_POST['anneeCrea']);
+            $monthAdd = intval($_POST['month']);
+            $site = mysqli_real_escape_string($connexion, $_POST['siteURL']);
 
-        //Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
+            $requete = "INSERT INTO course (nom, annee_creation, mois, site_url) VALUES('$nameAdd', $anneeAdd, $monthAdd, '$site');";
+            print $requete;
+            if (mysqli_query($connexion, $requete) == FALSE)
+                print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
+        }
+
+        // Récupération des courses en fonction du trie du tableau :
+
+        // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT * FROM course ORDER BY " . $order . " " . $sensGet;
+            $requete = "SELECT * FROM course ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -86,14 +89,14 @@
                 $sens = $sensGet;
             }
 
-        //Cas où c'est le premier clic sur la colonne (ordre croissant)
+        // Cas où c'est le premier clic sur la colonne (ordre croissant)
         }else if(!empty($_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT * FROM course ORDER BY " . $order;
+            $requete = "SELECT * FROM course ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -115,15 +118,23 @@
         else {
 
             print "<section class='listeCourses'>
-                    <h2 class='tabeLabel' >Liste des courses</h2>
+                    <h2 class='tabeLabel'>Liste des courses</h2>
                     <div class='container'>
                         <table class='table'>
                             <thead>
                                 <tr>
-                                    <th id='id_courseCol' scope='col'><a href='?order=id_course&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
-                                    <th id='nomCol' scope='col'><a href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
-                                    <th id='annee_creationCol' scope='col'><a href='?order=annee_creation&orderSec=$order&sens=$sens&clic=1'>Année création</a></th>
-                                    <th id='moisCol' scope='col'><a href='?order=mois&orderSec=$order&sens=$sens&clic=1'>Mois</a></th>
+                                    <th id='id_courseCol' scope='col'>
+                                        <a href='?order=id_course&orderSec=$order&sens=$sens&clic=1'>Id</a>
+                                    </th>
+                                    <th id='nomCol' scope='col'>
+                                        <a href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a>
+                                    </th>
+                                    <th id='annee_creationCol' scope='col'>
+                                        <a href='?order=annee_creation&orderSec=$order&sens=$sens&clic=1'>Année création</a>
+                                    </th>
+                                    <th id='moisCol' scope='col'>
+                                        <a href='?order=mois&orderSec=$order&sens=$sens&clic=1'>Mois</a>
+                                    </th>
                                     <th scope='col'>Action</th>
                                 </tr>
                             </thead>
@@ -134,11 +145,12 @@
                 $nom = $nuplet['nom'];
                 $annee_crea = $nuplet['annee_creation'];
                 $mois = $nuplet['mois'];
+
                 print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='editions.php?idcourse=$id_course'\">$id_course</td>
-                            <td onclick=\"location.href='editions.php?idcourse=$id_course'\">$nom</td>
-                            <td onclick=\"location.href='editions.php?idcourse=$id_course'\">$annee_crea</td>
-                            <td onclick=\"location.href='editions.php?idcourse=$id_course'\">$mois</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$id_course</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$nom</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$annee_crea</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$mois</td>
                             <td class='delete'>
                                 <form method='GET' action='courses.php' Onsubmit='return attention();'>
                                     <input name='delete_course' type='hidden' value='$id_course'>
@@ -146,7 +158,7 @@
                                     <input name='orderSec' type='hidden' value='$orderSec'>
                                     <input name='sens' type='hidden' value='$sensGet'>
                                     <input name='clic' type='hidden' value='0'>
-                                    <button class='btnDeleteAdherent' type='submit'>
+                                    <button class='btnDelete' type='submit'>
                                         <i class='fas fa-trash-alt'></i>
                                     </button>
                                 </form>
@@ -163,7 +175,7 @@
         mysqli_close($connexion);
     }
 
-    //Ajout des chevrons pour le sens du trie des colonnes
+    // Ajout des chevrons pour le sens du trie des colonnes
     if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
@@ -178,6 +190,7 @@
     }
 ?>
 
+<!-- Bouton d'ajout de course -->
 <div class="container">
     <div class='row mb-4'>
         <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjoutCourse">
@@ -205,7 +218,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="anneeCrea">Année création </label>
-                            <input type="text" class="form-control" id="anneeCrea" name="anneeCrea" placeholder="AAAA" required>
+                            <input type="text" class="form-control" id="anneeCrea" name="anneeCrea" maxlength="4" placeholder="AAAA" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="month">Mois</label>
@@ -226,6 +239,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="siteURL">Website : </label>
+                            <input type="text" class="form-control" id="siteURL" name="siteURL" placeholder="https://www.sitedelacourse.fr/" required>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -237,6 +256,7 @@
 </div>
 
 <script>
+    // Fonction de confirmation de suppression d'une course
     function attention()
     {
         resultat=window.confirm('Voulez-vous vraiment supprimer cette course ?');

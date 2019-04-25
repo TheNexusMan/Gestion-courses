@@ -2,11 +2,11 @@
     session_start();
     include "includes/header.php";
 
-    if(mysqli_connect_errno()) // erreur si > 0
+    if(mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
-        //Ajout d'un utilisateur
+        // Ajout d'un utilisateur
         if(isset($_POST['pseudo']) && isset($_POST['mdp']))
         {
             $pseudo = mysqli_real_escape_string($connexion, $_POST['pseudo']);
@@ -40,7 +40,7 @@
             }
         }
 
-        //Suppression d'un adhérent
+        // Suppression d'un adhérent
         if(isset($_GET['delete_adherent']))
         {
             $deleteAdherent = intval($_GET['delete_adherent']);
@@ -63,16 +63,16 @@
                 print "<script>alert(\"Échec de la requête de suppression de l'adherent\")</script>";
         }
 
-        //Récupération des adhérents en fonction du trie du tableau :
+        // Récupération des adhérents en fonction du trie du tableau :
 
-        //Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
+        // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT * FROM adherent ORDER BY " . $order . " " . $sensGet;
+            $requete = "SELECT * FROM adherent ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -83,14 +83,14 @@
                 $sens = $sensGet;
             }
 
-        //Cas où c'est le premier clic sur la colonne (ordre croissant)
+        // Cas où c'est le premier clic sur la colonne (ordre croissant)
         }else if(!empty($_GET['order']))
         {
             $order = mysqli_real_escape_string($connexion, $_GET['order']);
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT * FROM adherent ORDER BY " . $order;
+            $requete = "SELECT * FROM adherent ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -111,7 +111,7 @@
             print "<script>alert('Échec de la requête de récupération des adhérents')</script>";
         else {
 
-            //Affichage de l'entête du tableau
+            // Affichage de l'entête du tableau
             print "
             <div class='container'>
                 <div class='row mb-4'>
@@ -121,23 +121,35 @@
                 </div>
             </div>
             <section class='listeAdherents'>
-                <h2 class='tabeLabel' >Liste des adhérents</h2>
+                <h2 class='tabeLabel'>Liste des adhérents</h2>
                 <div class='container'>
                     <table class='table'>
                         <thead>
                             <tr>
-                                <th scope='col'><a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a></th>
-                                <th scope='col'><a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a></th>
-                                <th scope='col'><a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a></th>
-                                <th scope='col'><a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a></th>
-                                <th scope='col'><a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a></th>
-                                <th scope='col'><a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a></th>
+                                <th scope='col'>
+                                    <a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a>
+                                </th>
+                                <th scope='col'>
+                                    <a id='nomCol' href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a>
+                                </th>
+                                <th scope='col'>
+                                    <a id='prenomCol' href='?order=prenom&orderSec=$order&sens=$sens&clic=1'>Prénom</a>
+                                </th>
+                                <th scope='col'>
+                                    <a id='date_naissanceCol' href='?order=date_naissance&orderSec=$order&sens=$sens&clic=1'>Date de naissance</a>
+                                </th>
+                                <th scope='col'>
+                                    <a id='sexeCol' href='?order=sexe&orderSec=$order&sens=$sens&clic=1s'>Sexe</a>
+                                </th>
+                                <th scope='col'>
+                                    <a id='clubCol' href='?order=club&orderSec=$order&sens=$sens&clic=1'>Club</a>
+                                </th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>";
 
-            //Affichage des éditions dans le tableau
+            // Affichage des éditions dans le tableau
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {
                 $id = $nuplet['id_adherent'];
@@ -161,7 +173,7 @@
                                     <input name='orderSec' type='hidden' value='$orderSec'>
                                     <input name='sens' type='hidden' value='$sensGet'>
                                     <input name='clic' type='hidden' value='0'>
-                                    <button class='btnDeleteAdherent' type='submit'>
+                                    <button class='btnDelete' type='submit'>
                                         <i class='fas fa-trash-alt'></i>
                                     </button>
                                 </form>
@@ -178,7 +190,7 @@
         mysqli_close($connexion);
     }
 
-    //Ajout des chevrons pour le sens du trie des colonnes
+    // Ajout des chevrons pour le sens du trie des colonnes
     if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
@@ -194,6 +206,7 @@
 ?>
 
 <script>
+    // Fonction de confirmation de suppression d'un adhérent
     function attention()
     {
         resultat=window.confirm('Voulez-vous vraiment supprimer cet adhérent ?');

@@ -45,6 +45,7 @@ CREATE TABLE course(
     nom            Varchar (100) NOT NULL,
     annee_creation Int NOT NULL,
     mois           Int NOT NULL,
+    site_url       Varchar (200) NOT NULL,
 	PRIMARY KEY (id_course)
 ) ;
 
@@ -58,10 +59,7 @@ CREATE TABLE edition(
     id_course             Int NOT NULL,
     annee                 Int NOT NULL,
     nb_participants       Int NOT NULL,
-    plan                  Varchar (200) NOT NULL,
-    adresse_depart        Varchar (200) NOT NULL,
     date                  Date NOT NULL,
-    site_url              Varchar (200) NOT NULL,
     date_inscription      Date NOT NULL,
     date_depot_certificat Date NOT NULL,
     date_recup_dossard    Date NOT NULL,
@@ -78,10 +76,12 @@ CREATE TABLE edition(
 CREATE TABLE epreuve(
     id_epreuve   Int  AUTO_INCREMENT  NOT NULL,
     id_edition   Int NOT NULL,
-    distance     Int NOT NULL,
     nom          Varchar (200) NOT NULL,
+    distance     Int NOT NULL,
+    adresse_depart      Varchar (200) NOT NULL,
     denivelee    Int NOT NULL,
     type_epreuve Varchar (200) NOT NULL,
+    plan         Varchar (200) NOT NULL,
 	PRIMARY KEY (id_epreuve),
     FOREIGN KEY (id_edition) REFERENCES edition(id_edition)
     ON DELETE CASCADE
@@ -159,49 +159,49 @@ CREATE TABLE temps_passage(
 #------------------------------------------------------------
 
 #COURSES
-INSERT INTO course (id_course, nom, annee_creation, mois)
-VALUES (1, 'Marathon de Paris', 1976, 6);
+INSERT INTO course (id_course, nom, annee_creation, mois, site_url)
+VALUES (1, 'Marathon de Paris', 1976, 6, 'http://www.schneiderelectricparismarathon.com/fr/');
 
-INSERT INTO course (id_course, nom, annee_creation, mois)
-VALUES (2, 'Run in Lyon', 2010, 5);
+INSERT INTO course (id_course, nom, annee_creation, mois, site_url)
+VALUES (2, 'Run in Lyon', 2010, 5, 'http://www.runinlyon.com/fr');
 
 #EDITIONS
-INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
-VALUES (1, 1, 2017, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2017-04-09', 'http://www.schneiderelectricparismarathon.com/fr/', '2017-01-01', '2017-02-01', '2017-04-01');
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, date, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (1, 1, 2017, 45, '2017-04-09', '2017-01-01', '2017-02-01', '2017-04-01');
 
-INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
-VALUES (2, 1, 2018, 45, 'mpplan.jpg', 'Avenue des Champs-Elysées, Paris', '2018-04-08', 'http://www.schneiderelectricparismarathon.com/fr/', '2018-01-01', '2018-02-01', '2018-04-01');
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, date, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (2, 1, 2018, 45, '2018-04-08', '2018-01-01', '2018-02-01', '2018-04-01');
 
-INSERT INTO edition (id_edition, id_course, annee, nb_participants, plan, adresse_depart, date, site_url, date_inscription, date_depot_certificat, date_recup_dossard)
-VALUES (3, 2, 2018, 32, 'runlyon.jpg', 'Quai Tilsitt, Lyon', '2018-10-07', 'http://www.runinlyon.com/fr', '2018-01-07', '2018-08-01', '2018-10-01');
+INSERT INTO edition (id_edition, id_course, annee, nb_participants, date, date_inscription, date_depot_certificat, date_recup_dossard)
+VALUES (3, 2, 2018, 32, '2018-10-07', '2018-01-07', '2018-08-01', '2018-10-01');
 
 #EPREUVES
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (1, 1, 'Paris centre by Nike', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (1, 1, 'Paris centre by Nike', 'Avenue des Champs-Elysées, Paris', 10, 0, '10 Km', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (2, 1, 'Marathon de Paris', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (2, 1, 'Marathon de Paris', 'Avenue des Champs-Elysées, Paris', 42.195, 0, 'Marathon', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (3, 1, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (3, 1, 'Semi-Marathon de Paris', 'Avenue des Champs-Elysées, Paris', 21.097, 0, 'Semi-Marathon', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (4, 2, 'Adidas 10 km Paris', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (4, 2, 'Adidas 10 km Paris', 'Quai Tilsitt, Lyon', 10, 0, '10 Km', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (5, 2, 'Marathon de Paris', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (5, 2, 'Marathon de Paris', 'Quai Tilsitt, Lyon', 42.195, 0, 'Marathon', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (6, 2, 'Semi-Marathon de Paris', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (6, 2, 'Semi-Marathon de Paris', 'Quai Tilsitt, Lyon', 21.097, 0, 'Semi-Marathon', 'mpplan.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (7, 3, 'Run in Lyon 10 km', 10, 0, '10 Km');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (7, 3, 'Run in Lyon 10 km', 'Quai Tilsitt, Lyon', 10, 0, '10 Km', 'runlyon.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (8, 3, 'Run in Lyon Marathon', 42.195, 0, 'Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (8, 3, 'Run in Lyon Marathon', 'Quai Tilsitt, Lyon', 42.195, 0, 'Marathon', 'runlyon.jpg');
 
-INSERT INTO epreuve (id_epreuve, id_edition, nom, distance, denivelee, type_epreuve)
-VALUES (9, 3, 'Run in Lyon Semi-Marathon', 21.097, 0, 'Semi-Marathon');
+INSERT INTO epreuve (id_epreuve, id_edition, nom, adresse_depart, distance, denivelee, type_epreuve, plan)
+VALUES (9, 3, 'Run in Lyon Semi-Marathon', 'Quai Tilsitt, Lyon', 21.097, 0, 'Semi-Marathon', 'runlyon.jpg');
 
 #USERS
 INSERT INTO user (id_adherent, type, mdp, pseudo)
