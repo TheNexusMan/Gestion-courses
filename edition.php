@@ -237,25 +237,26 @@
                 print "<section class='liste'>
                             <h2 class='tableLabel'>Liste des épreuves</h2>
                             <div class='container'>
-                                <table class='table col-10 mx-auto table-bordered table-hover text-center'>
-                                    <thead class='thead-dark'>
-                                        <tr>
-                                            <th id='nomCol' scope='col'>
-                                                <a href='?idedition=$idEdition&order=nom&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nom</a>
-                                            </th>
-                                            <th id='distanceCol' scope='col'>
-                                                <a href='?idedition=$idEdition&order=distance&orderSec=$order&sens=$sens&clic=1#ancreTri'>Distance</a>
-                                            </th>
-                                            <th id='deniveleeCol' scope='col'>
-                                                <a href='?idedition=$idEdition&order=denivelee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Dénivelée</a>
-                                            </th>
-                                            <th id='type_epreuveCol' scope='col'>
-                                                <a href='?idedition=$idEdition&order=type_epreuve&orderSec=$order&sens=$sens&clic=1#ancreTri'>Type</a>
-                                            </th>
-                                            ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
-                                        </tr>
-                                    </thead>
-                                <tbody>";
+                                <div class='table-responsive'>
+                                    <table class='table col-10 mx-auto table-bordered table-hover text-center'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <th id='nomCol' scope='col'>
+                                                    <a href='?idedition=$idEdition&order=nom&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nom</a>
+                                                </th>
+                                                <th id='distanceCol' scope='col'>
+                                                    <a href='?idedition=$idEdition&order=distance&orderSec=$order&sens=$sens&clic=1#ancreTri'>Distance</a>
+                                                </th>
+                                                <th id='deniveleeCol' scope='col'>
+                                                    <a href='?idedition=$idEdition&order=denivelee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Dénivelée</a>
+                                                </th>
+                                                <th id='type_epreuveCol' scope='col'>
+                                                    <a href='?idedition=$idEdition&order=type_epreuve&orderSec=$order&sens=$sens&clic=1#ancreTri'>Type</a>
+                                                </th>
+                                                ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
+                                            </tr>
+                                        </thead>
+                                    <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat)) {
                 $id_epreuve = $nuplet['id_epreuve'];
@@ -306,8 +307,9 @@
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
 ?>
-            </tbody>
-        </table>    
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

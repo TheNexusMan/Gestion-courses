@@ -227,19 +227,20 @@
                 print "<section class='liste'>
                             <h2 class='tableLabel'>Liste des éditions</h2>
                             <div class='container'>
-                                <table class='table col-6 mx-auto table-bordered table-hover text-center'>
-                                    <thead class='thead-dark'>
-                                        <tr>
-                                            <th id='anneeCol' scope='col'>
-                                                <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1'>Année</a>
-                                            </th>
-                                            <th id='nb_participantsCol' scope='col'>
-                                                <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1'>Nombre de participants</a>
-                                            </th>
-                                            ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
-                                        </tr>
-                                    </thead>
-                                <tbody>";
+                                <div class='table-responsive'>
+                                    <table class='table col-6 mx-auto table-bordered table-hover text-center'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <th id='anneeCol' scope='col'>
+                                                    <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1'>Année</a>
+                                                </th>
+                                                <th id='nb_participantsCol' scope='col'>
+                                                    <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1'>Nombre de participants</a>
+                                                </th>
+                                                ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
+                                            </tr>
+                                        </thead>
+                                    <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat)) {
                 $annee = $nuplet['annee'];
@@ -286,8 +287,9 @@
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
 ?>
-            </tbody>
-        </table>    
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

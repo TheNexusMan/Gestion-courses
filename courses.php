@@ -122,25 +122,26 @@
             print "<section class='liste'>
                     <h2 class='tableLabel'>Liste des courses</h2>
                     <div class='container'>
-                        <table class='table table-bordered table-hover text-center'>
-                            <thead class='thead-dark'>
-                                <tr>
-                                    <th id='id_courseCol' scope='col'>
-                                        <a href='?order=id_course&orderSec=$order&sens=$sens&clic=1'>Id</a>
-                                    </th>
-                                    <th id='nomCol' scope='col'>
-                                        <a href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a>
-                                    </th>
-                                    <th id='annee_creationCol' scope='col'>
-                                        <a href='?order=annee_creation&orderSec=$order&sens=$sens&clic=1'>Année création</a>
-                                    </th>
-                                    <th id='moisCol' scope='col'>
-                                        <a href='?order=mois&orderSec=$order&sens=$sens&clic=1'>Mois</a>
-                                    </th>
-                                    <th scope='col'>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>";
+                        <div class='table-responsive'>
+                            <table class='table table-bordered table-hover text-center'>
+                                <thead class='thead-dark'>
+                                    <tr>
+                                        <th id='id_courseCol' scope='col'>
+                                            <a href='?order=id_course&orderSec=$order&sens=$sens&clic=1'>Id</a>
+                                        </th>
+                                        <th id='nomCol' scope='col'>
+                                            <a href='?order=nom&orderSec=$order&sens=$sens&clic=1'>Nom</a>
+                                        </th>
+                                        <th id='annee_creationCol' scope='col'>
+                                            <a href='?order=annee_creation&orderSec=$order&sens=$sens&clic=1'>Année création</a>
+                                        </th>
+                                        <th id='moisCol' scope='col'>
+                                            <a href='?order=mois&orderSec=$order&sens=$sens&clic=1'>Mois</a>
+                                        </th>
+                                        <th scope='col'>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat)) {
                 $id_course = $nuplet['id_course'];
@@ -168,8 +169,9 @@
                         </tr>";
             }
 
-            print "     </tbody>
-                    </table>
+            print "         </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>";
         }
