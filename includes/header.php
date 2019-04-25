@@ -11,7 +11,7 @@
 
     // Si l'utilisateur n'est pas sur la page de login (index.php) et que la variable $_SESSION['isConnected'] n'existe pas,
     // ou qu'un adhérent essait d'accéder à une page administrateur, il est redirigé vers la page de login
-    if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || ($page != "adherent.php" && isset($_SESSION['id_adherent']))))
+    if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || (($page == "adherents.php" || $page == "espaceperso.php") && isset($_SESSION['id_adherent']))))
     {
         header('Location: http://localhost/projet-bdw1/index.php');
     }

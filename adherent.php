@@ -178,7 +178,7 @@
         }
 
         //RECUPERATION ET AFFICHAGE DES EDITIONS PARTICIPEES PAR L'ADHERENT
-        $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps
+        $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
                     FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
                             NATURAL JOIN epreuve Ep
                             NATURAL JOIN edition Ed
@@ -195,33 +195,36 @@
             print "<section id='liste' class='liste'>
                         <h2 class='tableLabel'>Liste des éditions participées</h2>
                         <div class='container'>
-                            <table class='table'>
-                                <thead>
-                                    <tr>
-                                        <th scope='col'>Année</th>
-                                        <th scope='col'>Distance</th>
-                                        <th scope='col'>Nom</th>
-                                        <th scope='col'>Temps</th>
-                                    </tr>
-                                </thead>
-                                <tbody>";
+                            <div class='table-responsive'>
+                                <table class='table table-bordered table-hover text-center'>
+                                    <thead class='thead-dark'>
+                                        <tr>
+                                            <th scope='col'>Année</th>
+                                            <th scope='col'>Distance</th>
+                                            <th scope='col'>Nom</th>
+                                            <th scope='col'>Temps</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
 
             while($nuplet = mysqli_fetch_assoc($resultat))
             {
+                $id_edition = $nuplet['id_edition'];
                 $nom = $nuplet['nom'];
                 $annee = $nuplet['annee'];
                 $distance = $nuplet['distance'];
                 $temps = $nuplet['temps'];
-                print "<tr>
-                            <td>$annee</td>
-                            <td>$distance Km</td>
-                            <td>$nom</td>
-                            <td>$temps min</td>
+                print "<tr class='ligneTabClic'>
+                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$annee</td>
+                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$distance Km</td>
+                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$nom</td>
+                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$temps min</td>
                         </tr>";
             }
 
-            print "             </tbody>
-                            </table>
+            print "                 </tbody>
+                                </table>
+                            </div>
                         </div>
                     </section>";
         }

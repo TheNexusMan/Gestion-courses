@@ -123,8 +123,8 @@
             <section class='liste'>
                 <h2 class='tableLabel'>Liste des adhérents</h2>
                 <div class='container'>
-                    <table class='table'>
-                        <thead>
+                    <table class='table table-bordered table-hover text-center'>
+                        <thead class='thead-dark'>
                             <tr>
                                 <th scope='col'>
                                     <a id='id_adherentCol' href='?order=id_adherent&orderSec=$order&sens=$sens&clic=1'>Id</a>
@@ -160,13 +160,13 @@
                 $nomClub = $nuplet['club'];
 
                 print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$id</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nom</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$prenom</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$sexe</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\">$nomClub</td>
-                            <td class='delete'>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>$id</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>$nom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>$prenom</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>" . date('d/m/Y', strtotime($dateNaissance)) . "</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>".($sexe == 'H' ? 'Homme' : 'Femme')."</td>
+                            <td onclick=\"location.href='adherent.php?id_adherent=$id'\" class='text-left'>$nomClub</td>
+                            <td>
                                 <form method='GET' action='adherents.php' Onsubmit='return attention();'>
                                     <input name='delete_adherent' type='hidden' value='$id'>
                                     <input name='order' type='hidden' value='$order'>

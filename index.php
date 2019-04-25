@@ -28,7 +28,7 @@
                 {
                     $goodPseudo = 1;
 
-                    $requete = "SELECT id_adherent FROM user WHERE pseudo = '$pseudo' AND mdp = '$pw'";
+                    $requete = "SELECT * FROM user WHERE pseudo = '$pseudo' AND mdp = '$pw'";
 
                     $resultat = mysqli_query($connexion, $requete); //Envoie de la requete
 
@@ -42,6 +42,7 @@
                             $nuplet = mysqli_fetch_assoc($resultat);
                             {
                                 $_SESSION['id_adherent'] = $nuplet['id_adherent'];
+                                $_SESSION['typeUtilisateur'] = $nuplet['type'];
                             }
                         } else{
                             print "<div class='erreurAuthentification'>
@@ -61,16 +62,18 @@
     }
 
     //Test si l'utilisateur est connecté et l'oriente sur son espace en fonction de son type (adhérent ou admin)
-    if(isset($_SESSION['isConnected']) && isset($_SESSION['id_adherent']))
+    if(isset($_SESSION['isConnected']))
     {
-        //Renvoie sur la page User
-        header('Location: http://localhost/projet-bdw1/adherent.php');
+        if($_SESSION['isConnected'] && $_SESSION['typeUtilisateur'] == "Adherent")
+        {
+            //Renvoie sur la page User
+            header('Location: http://localhost/projet-bdw1/adherent.php');
+        }
+        else if($_SESSION['isConnected'] && $_SESSION['typeUtilisateur'] == "Admin"){
+            //Renvoie sur la page admin
+            header('Location: http://localhost/projet-bdw1/espaceperso.php');
+        }
     }
-    else if(isset($_SESSION['isConnected']) && !isset($_SESSION['id_adherent'])){
-        //Renvoie sur la page admin
-        header('Location: http://localhost/projet-bdw1/espaceperso.php');
-    }
-
 ?>
 
 <!-- Le formulaire de login -->

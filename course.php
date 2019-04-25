@@ -16,7 +16,8 @@
     else {
 
         // Suppression d'une édition
-        if (isset($_GET['delete_edition'])) {
+        if (isset($_GET['delete_edition']) && $_SESSION['typeUtilisateur'] == "Admin")
+        {
             $editionToDelete = intval($_GET['delete_edition']);
 
             mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
@@ -52,7 +53,8 @@
         }
 
         // Ajout d'une nouvelle édition
-        if (isset($_POST['anneeEd'])) {
+        if (isset($_POST['anneeEd']) && $_SESSION['typeUtilisateur'] == "Admin")
+        {
             $anneeEd = mysqli_real_escape_string($connexion, $_POST['anneeEd']);
             $nbParti = mysqli_real_escape_string($connexion, $_POST['nbPart']);
             $dateAdd = mysqli_real_escape_string($connexion, $_POST['dateAdd']);
@@ -68,7 +70,7 @@
         }
 
         // Modification des informations de la course
-        if(isset($_POST['anneeCreation']) && isset($_POST['mois']) && isset($_POST['site']))
+        if(isset($_POST['anneeCreation']) && isset($_POST['mois']) && isset($_POST['site']) && $_SESSION['typeUtilisateur'] == "Admin")
         {
             $modAnneeCreation = intval($_POST['anneeCreation']);
             $modMois = intval($_POST['mois']);
@@ -109,7 +111,12 @@
                 }
             }
 
-            print "<section class='sectionInfos'>
+            print "<div class='container'>
+                        <div class='nomCourse row'>
+                            <h1 class='mx-auto mb-4'>$nom</h1>
+                        </div>
+                    </div>
+                    <section class='sectionInfos'>
                         <h2>Informations de la course</h2>
                         <div class='info container'>
                             <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
@@ -140,11 +147,16 @@
                                             <p class='readInfo'>$site</p>
                                             <input type='text' id='siteInput' class='form-control writeInfo' name='site' value=\"$site\" placeholder='https://www.sitedelacourse.fr/' required>
                                         </div>
-                                    </div>
-                                    <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
+                                    </div>";
+
+            if($_SESSION['typeUtilisateur'] == "Admin")
+            {
+                print "             <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
-                                    </div>
-                                    <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
+                                    </div>";
+            }
+            
+            print "                 <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
                                             <button type='submit' class='btn btn-primary col-5'>Valider</button>
                                             <div class='col-1'></div>
@@ -215,16 +227,16 @@
                 print "<section class='liste'>
                             <h2 class='tableLabel'>Liste des éditions</h2>
                             <div class='container'>
-                                <table class='table col-6 mx-auto'>
-                                    <thead>
+                                <table class='table col-6 mx-auto table-bordered table-hover text-center'>
+                                    <thead class='thead-dark'>
                                         <tr>
                                             <th id='anneeCol' scope='col'>
-                                                <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1'>Annee</a>
+                                                <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1'>Année</a>
                                             </th>
                                             <th id='nb_participantsCol' scope='col'>
                                                 <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1'>Nombre de participants</a>
                                             </th>
-                                            <th>Action</th>
+                                            ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
                                         </tr>
                                     </thead>
                                 <tbody>";
@@ -235,9 +247,11 @@
                 $idEdition = $nuplet['id_edition'];
 
                 print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\">$annee</td>
-                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\">$nb_participants</td>
-                            <td class='delete'>
+                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\" class='text-left'>$annee</td>
+                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\" class='text-left'>$nb_participants</td>";
+                if($_SESSION['typeUtilisateur'] == "Admin")
+                {
+                    print "<td>
                                 <form method='GET' action='course.php' Onsubmit='return attention();'>
                                     <input name='idcourse' type='hidden' value='$idCourse'>
                                     <input name='delete_edition' type='hidden' value='$idEdition'>
@@ -251,6 +265,7 @@
                                 </form>
                             </td>
                         </tr>";
+                }
             }
         }
 
@@ -276,16 +291,20 @@
     </div>
 </section>
 
-<!-- Bouton d'ajout de course -->
-<div class="container">
-    <div class='row mb-4'>
-        <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjoutEdition">
-            Ajouter une édition
-        </button>
-    </div>
-</div>
-
-<?php include "includes/footer.php"; ?>
+<?php
+    // Bouton d'ajout d'épreuve
+    if($_SESSION['typeUtilisateur'] == "Admin")
+    {
+        print "<div class='container'>
+                    <div class='row mb-4'>
+                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjoutEdition'>
+                            Ajouter une édition
+                        </button>
+                    </div>
+                </div>";
+    }
+    include "includes/footer.php";
+?>
 
 <!-- Modal du formulaire d'ajout d'édition -->
 <div class="modal fade" id="modalAjoutEdition" tabindex="-1" role="dialog" aria-labelledby="modalAjoutEdition" aria-hidden="true">

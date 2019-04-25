@@ -16,7 +16,7 @@
     else {
 
         // Suppression d'une épreuve
-        if (isset($_GET['delete_epreuve'])) {
+        if (isset($_GET['delete_epreuve']) && $_SESSION['typeUtilisateur'] == "Admin") {
             $epreuveToDelete = intval($_GET['delete_epreuve']);
 
             mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
@@ -41,7 +41,7 @@
         }
 
         // Ajout d'une nouvelle épreuve
-        if (isset($_POST['nom'])) {
+        if (isset($_POST['nom']) && $_SESSION['typeUtilisateur'] == "Admin") {
             $nom = mysqli_real_escape_string($connexion, $_POST['nom']);
             $distance = intval($_POST['distance']);
             $adresseDepart = mysqli_real_escape_string($connexion, $_POST['adresse_depart']);
@@ -57,7 +57,7 @@
         }
 
         // Modification des informations de l'édition
-        if(isset($_POST['annee']) && isset($_POST['nb_participants']) && isset($_POST['date']))
+        if(isset($_POST['annee']) && isset($_POST['nb_participants']) && isset($_POST['date']) && $_SESSION['typeUtilisateur'] == "Admin")
         {
             $modAnnee = intval($_POST['annee']);
             $modNbParticipants = intval($_POST['nb_participants']);
@@ -89,6 +89,7 @@
         else {
             $nuplet = mysqli_fetch_assoc($resultat);
 
+            $id_course = $nuplet['id_course'];
             $annee = $nuplet['annee'];
             $nbParticipants = $nuplet['nb_participants'];
             $date = $nuplet['date'];
@@ -96,7 +97,24 @@
             $dateDepotCertificat = $nuplet['date_depot_certificat'];
             $dateRecupDossard = $nuplet['date_recup_dossard'];
 
-            print "<section class='sectionInfos'>
+            $requete = "SELECT nom FROM course WHERE id_course = $id_course";
+
+            $resultat = mysqli_query($connexion, $requete);
+            if($resultat == FALSE)
+            {
+                print "<script>alert(\"Échec de la requête de récupération du nom de la course'\")</script>";
+                $nomCourse = "Course";
+            } else {
+                $nuplet = mysqli_fetch_assoc($resultat);
+                $nomCourse = $nuplet['nom'];
+            }
+
+            print "<div class='container'>
+                        <div class='nomCourse row'>
+                            <h1 class='mx-auto mb-4'><a href='course.php?idcourse=$id_course'>$nomCourse</a> - $annee</h1>
+                        </div>
+                    </div>
+                    <section class='sectionInfos'>
                         <h2>Informations de l'édition</h2>
                         <div class='info container'>
                             <div id='infosBloc' class='infosBloc container mx-auto col-10 mw-50'>
@@ -116,33 +134,38 @@
                                         <div class='col-1'></div>
                                         <div class='col-3'>
                                             <p class='nomInfo'>Date :</p>
-                                            <p class='readInfo'>$date</p>
-                                            <input type='text' id='dateInput' class='form-control writeInfo' name='date' value=\"$date\" required>
+                                            <p class='readInfo'>".date('d/m/Y', strtotime($date))."</p>
+                                            <input type='date' id='dateInput' class='form-control writeInfo' name='date' value=\"$date\" required>
                                         </div>
                                     </div>
                                     <div class='form-row ligneInfo'>
                                         <div class='col-3'>
                                             <p class='nomInfo'>Date d'inscription :</p>
-                                            <p class='readInfo'>$dateInscription</p>
-                                            <input type='text' id='dateInscriptionInput' class='form-control writeInfo' name='date_inscription' value=\"$dateInscription\" required>
+                                            <p class='readInfo'>".date('d/m/Y', strtotime($dateInscription))."</p>
+                                            <input type='date' id='dateInscriptionInput' class='form-control writeInfo' name='date_inscription' value=\"$dateInscription\" required>
                                         </div>
                                         <div class='col-1'></div>
                                         <div class='col-3'>
                                             <p class='nomInfo'>Date dépôt des certificats :</p>
-                                            <p class='readInfo'>$dateDepotCertificat</p>
-                                            <input type='text' id='dateDepotCertificatInput' class='form-control writeInfo' name='date_depot_certificat' value=\"$dateDepotCertificat\" required>
+                                            <p class='readInfo'>".date('d/m/Y', strtotime($dateDepotCertificat))."</p>
+                                            <input type='date' id='dateDepotCertificatInput' class='form-control writeInfo' name='date_depot_certificat' value=\"$dateDepotCertificat\" required>
                                         </div>
                                         <div class='col-1'></div>
                                         <div class='col-3'>
                                             <p class='nomInfo'>Date récupération des dossard :</p>
-                                            <p class='readInfo'>$dateRecupDossard</p>
-                                            <input type='text' id='dateRecupDossardInput' class='form-control writeInfo' name='date_recup_dossard' value=\"$dateRecupDossard\" required>
+                                            <p class='readInfo'>".date('d/m/Y', strtotime($dateRecupDossard))."</p>
+                                            <input type='date' id='dateRecupDossardInput' class='form-control writeInfo' name='date_recup_dossard' value=\"$dateRecupDossard\" required>
                                         </div>
-                                    </div>
-                                    <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
+                                    </div>";
+
+            if($_SESSION['typeUtilisateur'] == "Admin")
+            {
+                print "             <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
-                                    </div>
-                                    <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
+                                    </div>";
+            }
+                                    
+            print "                 <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
                                             <button type='submit' class='btn btn-primary col-5'>Valider</button>
                                             <div class='col-1'></div>
@@ -214,8 +237,8 @@
                 print "<section class='liste'>
                             <h2 class='tableLabel'>Liste des épreuves</h2>
                             <div class='container'>
-                                <table class='table col-10 mx-auto'>
-                                    <thead>
+                                <table class='table col-10 mx-auto table-bordered table-hover text-center'>
+                                    <thead class='thead-dark'>
                                         <tr>
                                             <th id='nomCol' scope='col'>
                                                 <a href='?idedition=$idEdition&order=nom&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nom</a>
@@ -229,7 +252,7 @@
                                             <th id='type_epreuveCol' scope='col'>
                                                 <a href='?idedition=$idEdition&order=type_epreuve&orderSec=$order&sens=$sens&clic=1#ancreTri'>Type</a>
                                             </th>
-                                            <th>Action</th>
+                                            ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
                                         </tr>
                                     </thead>
                                 <tbody>";
@@ -242,11 +265,13 @@
                 $type_epreuve = $nuplet['type_epreuve'];
 
                 print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\">$nom</td>
-                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\">$distance</td>
-                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\">$denivelee</td>
-                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\">$type_epreuve</td>
-                            <td class='delete'>
+                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\" class='text-left'>$nom</td>
+                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\" class='text-left'>$distance</td>
+                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\" class='text-left'>$denivelee</td>
+                            <td onclick=\"location.href='epreuve.php?idedition=$id_epreuve'\" class='text-left'>$type_epreuve</td>";
+                if($_SESSION['typeUtilisateur'] == "Admin")
+                {
+                    print "<td>
                                 <form method='GET' action='edition.php' Onsubmit='return attention();'>
                                     <input name='idedition' type='hidden' value='$idEdition'>
                                     <input name='delete_epreuve' type='hidden' value='$id_epreuve'>
@@ -260,6 +285,7 @@
                                 </form>
                             </td>
                         </tr>";
+                }
             }
         }
 
@@ -285,16 +311,21 @@
     </div>
 </section>
 
-<!-- Bouton d'ajout de course -->
-<div class="container">
-    <div class='row mb-4'>
-        <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjoutEdition">
-            Ajouter une épreuve
-        </button>
-    </div>
-</div>
+<?php
+    // Bouton d'ajout d'épreuve
+    if($_SESSION['typeUtilisateur'] == "Admin")
+    {
+        print "<div class='container'>
+                    <div class='row mb-4'>
+                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjoutEdition'>
+                            Ajouter une épreuve
+                        </button>
+                    </div>
+                </div>";
+    }
 
-<?php include "includes/footer.php"; ?>
+    include "includes/footer.php";
+?>
 
 <!-- Modal du formulaire d'ajout d'épreuve -->
 <div class="modal fade" id="modalAjoutEdition" tabindex="-1" role="dialog" aria-labelledby="modalAjoutEdition" aria-hidden="true">

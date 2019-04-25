@@ -8,7 +8,8 @@
         mysqli_set_charset($connexion, 'utf8');
 
         // Suppression d'une course
-        if (isset($_GET['delete_course'])) {
+        if (isset($_GET['delete_course']) && $_SESSION['typeUtilisateur'] == "Admin")
+        {
             $idCourseToDel = intval($_GET['delete_course']);
 
             mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
@@ -57,7 +58,8 @@
         }
 
         // Ajout d'une nouvelle course
-        if ((isset($_POST['nom'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
+        if ((isset($_POST['nom'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month'])) && $_SESSION['typeUtilisateur'] == "Admin")
+        {
             $nameAdd = mysqli_real_escape_string($connexion, $_POST['nom']);
             $anneeAdd = intval($_POST['anneeCrea']);
             $monthAdd = intval($_POST['month']);
@@ -120,8 +122,8 @@
             print "<section class='liste'>
                     <h2 class='tableLabel'>Liste des courses</h2>
                     <div class='container'>
-                        <table class='table'>
-                            <thead>
+                        <table class='table table-bordered table-hover text-center'>
+                            <thead class='thead-dark'>
                                 <tr>
                                     <th id='id_courseCol' scope='col'>
                                         <a href='?order=id_course&orderSec=$order&sens=$sens&clic=1'>Id</a>
@@ -147,11 +149,11 @@
                 $mois = $nuplet['mois'];
 
                 print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$id_course</td>
-                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$nom</td>
-                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$annee_crea</td>
-                            <td onclick=\"location.href='course.php?idcourse=$id_course'\">$mois</td>
-                            <td class='delete'>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\" class='text-left'>$id_course</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\" class='text-left'>$nom</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\" class='text-left'>$annee_crea</td>
+                            <td onclick=\"location.href='course.php?idcourse=$id_course'\" class='text-left'>$mois</td>
+                            <td>
                                 <form method='GET' action='courses.php' Onsubmit='return attention();'>
                                     <input name='delete_course' type='hidden' value='$id_course'>
                                     <input name='order' type='hidden' value='$order'>

@@ -27,6 +27,10 @@ body{
 }
 
 /*BLOC D'INFORMATIONS*/
+.nomCourse a{
+    color: black;
+}
+
 .infosBloc{
     border: 1px solid #E6E7E6;
     padding: 20px;
@@ -64,21 +68,17 @@ body{
 }
 
 .liste th a{
-    color: black;
+    color: #fff;
 }
 
 .ligneTabClic{
     cursor: pointer;
 }
 
-.ligneTabClic:hover{
+/*.ligneTabClic:hover{
     font-weight: bold;
     background-color: #F4F5F5;
-}
-
-.delete{
-    padding-left: 28px !important;
-}
+}*/
 
 .btnDelete{
     background: none;
