@@ -57,14 +57,14 @@
         }
 
         // Ajout d'une nouvelle course
-        if ((isset($_POST['nameCourse'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
-            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nameCourse']);
+        if ((isset($_POST['nom'])) && (isset($_POST['anneeCrea'])) && (isset($_POST['month']))) {
+            $nameAdd = mysqli_real_escape_string($connexion, $_POST['nom']);
             $anneeAdd = intval($_POST['anneeCrea']);
             $monthAdd = intval($_POST['month']);
             $site = mysqli_real_escape_string($connexion, $_POST['siteURL']);
 
             $requete = "INSERT INTO course (nom, annee_creation, mois, site_url) VALUES('$nameAdd', $anneeAdd, $monthAdd, '$site');";
-            print $requete;
+
             if (mysqli_query($connexion, $requete) == FALSE)
                 print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
         }
@@ -117,8 +117,8 @@
             print "<script>alert('Échec de la requête de récupération des courses')</script>";
         else {
 
-            print "<section class='listeCourses'>
-                    <h2 class='tabeLabel'>Liste des courses</h2>
+            print "<section class='liste'>
+                    <h2 class='tableLabel'>Liste des courses</h2>
                     <div class='container'>
                         <table class='table'>
                             <thead>
@@ -176,7 +176,7 @@
     }
 
     // Ajout des chevrons pour le sens du trie des colonnes
-    if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
         {
@@ -184,7 +184,7 @@
         }else{
             print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
         }
-    }else if(isset($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
@@ -193,14 +193,14 @@
 <!-- Bouton d'ajout de course -->
 <div class="container">
     <div class='row mb-4'>
-        <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjoutCourse">
+        <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#modalAjout">
             Ajouter une course
         </button>
     </div>
 </div>
 
 <!-- Modal du formulaire d'ajout d'édition -->
-<div class="modal fade" id="modalAjoutCourse" tabindex="-1" role="dialog" aria-labelledby="modalAjoutCourse" aria-hidden="true">
+<div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="modalAjout" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -210,11 +210,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="courses.php">
+                <form method="POST" action="courses.php<?php print "?order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
-                            <label for="nameCourse">Nom</label>
-                            <input type="text" class="form-control" id="nameCourse" name="nameCourse" placeholder="Nom" required>
+                            <label for="nom">Nom</label>
+                            <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="anneeCrea">Année création </label>

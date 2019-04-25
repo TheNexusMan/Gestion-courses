@@ -38,10 +38,12 @@
         {
             $modNom = mysqli_real_escape_string($connexion, $_POST['nom']);
             $modPrenom = mysqli_real_escape_string($connexion, $_POST['prenom']);
-            $modNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$_POST['naissance']."'");
+            $modNaissance = mysqli_real_escape_string($connexion, $_POST['naissance']);
+            $modNaissance = ($_POST['naissance'] == NULL ? 'NULL' : "'".$modNaissance."'");
             $modSexe = mysqli_real_escape_string($connexion, $_POST['sexe']);
             $modAdresse = mysqli_real_escape_string($connexion, $_POST['adresse']);
-            $modDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$_POST['dateClub']."'");
+            $modDateClub = mysqli_real_escape_string($connexion, $_POST['dateClub']);
+            $modDateClub = ($_POST['dateClub'] == NULL ? 'NULL' : "'".$modDateClub."'");
             $modNomClub = mysqli_real_escape_string($connexion, $_POST['nomClub']);
 
             if($nouvelAdherent)
@@ -97,44 +99,44 @@
 
             if($sexe == "H")
             {
-                $selectSexe = "<option value='H' selected='selected'>H</option>
-                                <option value='F'>F</option>";
+                $selectSexe = "<option value='H' selected='selected'>Homme</option>
+                                <option value='F'>Femme</option>";
             }else{
-                $selectSexe = "<option value='H''>H</option>
-                                <option value='F' selected='selected'>F</option>";
+                $selectSexe = "<option value='H''>Homme</option>
+                                <option value='Femme' selected='selected'>Femme</option>";
             }
 
             if($nouvelAdherent) print "<p class='textNouvelAdherent'>Nouveau compte, veuillez renseigner les champs marqués d'une *</p>";
 
-            print "<section class='adherent'>
+            print "<section class='sectionInfos'>
                         <h2>Informations personnelles</h2>
-                        <div class='adherentInfos container'>
-                            <div id='adherentInfosBloc' class='adherentInfosBloc container mx-auto col-8 mw-50'>
+                        <div class='info container'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
                                 <form action='' method='POST'>
                                     <div class='row ligneInfo'>
                                         <div class='col-4'>
-                                            <p class='nomInfo'>Nom* :</p>
-                                            <p id='nomAdherent' class='readInfoAdherent'>$nom</p>
-                                            <input type='text' id='nomAdherentInput' class='form-control writeInfoAdherent' name='nom' value=\"$nom\" placeholder='Nom' required>
+                                            <p class='nomInfo'>Nom :</p>
+                                            <p class='readInfo'>$nom</p>
+                                            <input type='text' id='nomInput' class='form-control writeInfo' name='nom' value=\"$nom\" placeholder='Nom' required>
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
-                                            <p class='nomInfo'>Prenom* :</p>
-                                            <p id='prenomAdherent' class='readInfoAdherent'>$prenom</p>
-                                            <input type='text' id='prenomAdherentInput' class='form-control writeInfoAdherent' name='prenom' value=\"$prenom\" placeholder='Prenom' required>
+                                            <p class='nomInfo'>Prénom :</p>
+                                            <p class='readInfo'>$prenom</p>
+                                            <input type='text' id='prenomInput' class='form-control writeInfo' name='prenom' value=\"$prenom\" placeholder='Prenom' required>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Date de naissance :</p>
-                                            <p id='naissanceAdherent' class='readInfoAdherent'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
-                                            <input type='date' id='naissanceAdherentInput' class='form-control writeInfoAdherent' name='naissance' value=\"$dateNaissance\">
+                                            <p class='readInfo'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
+                                            <input type='date' id='naissanceInput' class='form-control writeInfo' name='naissance' value=\"$dateNaissance\">
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
-                                            <p class='nomInfo'>Sexe* :</p>
-                                            <p id='sexeAdherent' class='readInfoAdherent'>$sexe</p>
-                                            <select id='sexeAdherentInput' class='custom-select writeInfoAdherent' name='sexe' required>
+                                            <p class='nomInfo'>Sexe :</p>
+                                            <p class='readInfo'>" . ($sexe == 'H' ? 'Homme' : 'Femme') . "</p>
+                                            <select id='sexeInput' class='custom-select writeInfo' name='sexe' required>
                                                 $selectSexe
                                             </select>
                                         </div>
@@ -142,31 +144,31 @@
                                     <div class='row ligneInfo'>
                                         <div class='col-6'>
                                             <p class='nomInfo'>Adresse :</p>
-                                            <p id='adresseAdherent' class='readInfoAdherent'>$adresse</p>
-                                            <input type='text' id='adresseAdherentInput' class='form-control writeInfoAdherent' name='adresse' value=\"$adresse\" placeholder='Adresse'>
+                                            <p class='readInfo'>$adresse</p>
+                                            <input type='text' id='adresseInput' class='form-control writeInfo' name='adresse' value=\"$adresse\" placeholder='Adresse'>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Date de certification du club :</p>
-                                            <p id='dateClubAdherent' class='readInfoAdherent'>" . ($dateClub == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
-                                            <input type='date' id='dateClubAdherentInput' class='form-control writeInfoAdherent' name='dateClub' value=\"$dateClub\">
+                                            <p class='readInfo'>" . ($dateClub == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
+                                            <input type='date' id='dateClubInput' class='form-control writeInfo' name='dateClub' value=\"$dateClub\">
                                         </div>
                                         <div class='col-4'></div>
                                         <div class='col-4'>
                                             <p class='nomInfo'>Nom du club :</p>
-                                            <p id='nomClubAdherent' class='readInfoAdherent'>$nomClub</p>
-                                            <input type='text' id='nomClubAdherentInput' class='form-control writeInfoAdherent' name='nomClub' value=\"$nomClub\" placeholder='Nom du club'>
+                                            <p class='readInfo'>$nomClub</p>
+                                            <input type='text' id='nomClubInput' class='form-control writeInfo' name='nomClub' value=\"$nomClub\" placeholder='Nom du club'>
                                         </div>
                                     </div>
-                                    <div class='row ligneButton readInfoAdherent readInfoAdherentFlex' id='modifInfoAdherent'>
+                                    <div class='row ligneButton readInfo readInfoFlex' id='modifInfo'>
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
                                     </div>
-                                    <div class='row ligneButton writeInfoAdherent writeInfoAdherentFlex' id='modifInfoAdherent'>
+                                    <div class='row ligneButton writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
                                             <button type='submit' id='btnSbmtInfoAdh' class='btn btn-primary col-5'>Valider</button>
                                             <div id='separationBouton' class='col-1'></div>
-                                            <button type='button' id='annulerInfoAdherent' class='btn btn-primary col-5'>Annuler</button>
+                                            <button type='button' id='annulerInfo' class='btn btn-primary col-5'>Annuler</button>
                                         </div>
                                     </div>
                                 </form>
@@ -190,8 +192,8 @@
             print "<script>alert(\"Échec de la requête de récupération des édition courues par l'adhérent\")</script>";
         else {
 
-            print "<section id='listeEditionAdherent' class='listeEditionAdherent'>
-                        <h2 class='tabeLabel'>Liste des éditions participées</h2>
+            print "<section id='liste' class='liste'>
+                        <h2 class='tableLabel'>Liste des éditions participées</h2>
                         <div class='container'>
                             <table class='table'>
                                 <thead>
@@ -233,48 +235,48 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de l'adhérent
 
-    document.getElementById("modifInfoAdherent").onclick = afficheFormAdherent;
-    document.getElementById("annulerInfoAdherent").onclick = annulerFormAdherent;
+    document.getElementById("modifInfo").onclick = afficheForm;
+    document.getElementById("annulerInfo").onclick = annulerForm;
 
-    const nom = document.getElementById('nomAdherentInput').value;
-    const prenom = document.getElementById('prenomAdherentInput').value;
-    const naissance = document.getElementById('naissanceAdherentInput').value;
-    const sexe = document.getElementById('sexeAdherentInput').value;
-    const adresse = document.getElementById('adresseAdherentInput').value;
-    const dateClub = document.getElementById('dateClubAdherentInput').value;
-    const nomClub = document.getElementById('nomClubAdherentInput').value;
+    const nom = document.getElementById('nomInput').value;
+    const prenom = document.getElementById('prenomInput').value;
+    const naissance = document.getElementById('naissanceInput').value;
+    const sexe = document.getElementById('sexeInput').value;
+    const adresse = document.getElementById('adresseInput').value;
+    const dateClub = document.getElementById('dateClubInput').value;
+    const nomClub = document.getElementById('nomClubInput').value;
 
-    function afficheFormAdherent()
+    function afficheForm()
     {
-        Array.from(document.getElementsByClassName('writeInfoAdherent')).forEach(n => n.style.display = "inline-block");
-        Array.from(document.getElementsByClassName('writeInfoAdherentFlex')).forEach(n => n.style.display = "flex");
-        Array.from(document.getElementsByClassName('readInfoAdherent')).forEach(n => n.style.display = "none");
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "inline-block");
+        Array.from(document.getElementsByClassName('writeInfoFlex')).forEach(n => n.style.display = "flex");
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "none");
     }
 
-    function annulerFormAdherent()
+    function annulerForm()
     {
-        Array.from(document.getElementsByClassName('writeInfoAdherent')).forEach(n => n.style.display = "none");
-        Array.from(document.getElementsByClassName('readInfoAdherent')).forEach(n => n.style.display = "inline-block");
-        Array.from(document.getElementsByClassName('readInfoAdherentFlex')).forEach(n => n.style.display = "flex");
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "none");
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "inline-block");
+        Array.from(document.getElementsByClassName('readInfoFlex')).forEach(n => n.style.display = "flex");
 
-        document.getElementById('nomAdherentInput').value = nom;
-        document.getElementById('prenomAdherentInput').value = prenom;
-        document.getElementById('naissanceAdherentInput').value = naissance;
-        document.getElementById('sexeAdherentInput').value = sexe;
-        document.getElementById('adresseAdherentInput').value = adresse;
-        document.getElementById('dateClubAdherentInput').value = dateClub;
-        document.getElementById('nomClubAdherentInput').value = nomClub;
+        document.getElementById('nomInput').value = nom;
+        document.getElementById('prenomInput').value = prenom;
+        document.getElementById('naissanceInput').value = naissance;
+        document.getElementById('sexeInput').value = sexe;
+        document.getElementById('adresseInput').value = adresse;
+        document.getElementById('dateClubInput').value = dateClub;
+        document.getElementById('nomClubInput').value = nomClub;
     }
 </script>
 
 <?php
     if($nouvelAdherent){
         print "<script>";
-        print "     afficheFormAdherent();";
-        print "     document.getElementById('annulerInfoAdherent').style.display = 'none';";
+        print "     afficheForm();";
+        print "     document.getElementById('annulerInfo').style.display = 'none';";
         print "     document.getElementById('separationBouton').style.display = 'none';";
         print "     document.getElementById('btnSbmtInfoAdh').classList.remove('col-5');";
-        print "     document.getElementById('listeEditionAdherent').style.display = 'none';";
+        print "     document.getElementById('liste').style.display = 'none';";
         print "</script>";
     }
 ?>

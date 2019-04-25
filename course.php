@@ -5,9 +5,6 @@
     if (isset($_GET['idcourse']))
     {
         $idCourse = intval($_GET['idcourse']);
-    } else if(isset($_POST['idCoursePost']))
-    {
-        $idCourse = intval($_POST['idCoursePost']);
     } else{
         header('Location: http://localhost/projet-bdw1/index.php');
     }
@@ -19,8 +16,8 @@
     else {
 
         // Suppression d'une édition
-        if (isset($_GET['delete_dition'])) {
-            $editionToDelete = intval($_GET['delete_dition']);
+        if (isset($_GET['delete_edition'])) {
+            $editionToDelete = intval($_GET['delete_edition']);
 
             mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
 
@@ -67,7 +64,7 @@
                         VALUES ('$idCourse', '$anneeEd', '$nbParti', '$dateAdd', '$dateIns', '$dateDepot', '$dateDossard')";
 
             if (mysqli_query($connexion, $resultat) == FALSE)
-                print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
+                print "<script>alert(\"Échec de l'ajout de l'edition\")</script>";
         }
 
         // Modification des informations de la course
@@ -112,10 +109,10 @@
                 }
             }
 
-            print "<section class='course'>
+            print "<section class='sectionInfos'>
                         <h2>Informations de la course</h2>
-                        <div class='courseInfos container'>
-                            <div id='courseInfosBloc' class='courseInfosBloc container mx-auto col-8 mw-50'>
+                        <div class='info container'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
                                 <form action='' method='POST'>
                                     <div class='form-row ligneInfo'>
                                         <div class='col-4'>
@@ -125,14 +122,14 @@
                                         <div class='col-1'></div>
                                         <div class='col-3'>
                                             <p class='nomInfo'>Année de création :</p>
-                                            <p class='readInfoCourse'>$annee_creation</p>
-                                            <input type='text' id='anneeCreationCourseInput' class='form-control writeInfoCourse' name='anneeCreation' value=\"$annee_creation\" maxlength='4' placeholder='AAAA' required>
+                                            <p class='readInfo'>$annee_creation</p>
+                                            <input type='text' id='anneeCreationInput' class='form-control writeInfo' name='anneeCreation' value=\"$annee_creation\" maxlength='4' placeholder='AAAA' required>
                                         </div>
                                         <div class='col-2'></div>
                                         <div class='col-2'>
                                             <p class='nomInfo'>Mois :</p>
-                                            <p class='readInfoCourse'>$mois</p>
-                                            <select id='moisCourseInput' class='custom-select writeInfoCourse' name='mois' required>
+                                            <p class='readInfo'>$mois</p>
+                                            <select id='moisInput' class='custom-select writeInfo' name='mois' required>
                                                 $selectMois
                                             </select>
                                         </div>
@@ -140,18 +137,18 @@
                                     <div class='form-row ligneInfo'>
                                         <div class='col-12'>
                                             <p class='nomInfo'>Site :</p>
-                                            <p class='readInfoCourse'>$site</p>
-                                            <input type='text' id='siteCourseInput' class='form-control writeInfoCourse' name='site' value=\"$site\" placeholder='https://www.sitedelacourse.fr/' required>
+                                            <p class='readInfo'>$site</p>
+                                            <input type='text' id='siteInput' class='form-control writeInfo' name='site' value=\"$site\" placeholder='https://www.sitedelacourse.fr/' required>
                                         </div>
                                     </div>
-                                    <div class='row ligneButtonCourse readInfoCourse readInfoCourseFlex' id='modifInfoCourse'>
+                                    <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
                                     </div>
-                                    <div class='row ligneButtonCourse writeInfoCourse writeInfoCourseFlex' id='modifInfoCourse'>
+                                    <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
                                             <button type='submit' class='btn btn-primary col-5'>Valider</button>
                                             <div class='col-1'></div>
-                                            <button type='button' id='annulerInfoCourse' class='btn btn-primary col-5'>Annuler</button>
+                                            <button type='button' id='annulerInfo' class='btn btn-primary col-5'>Annuler</button>
                                         </div>
                                     </div>
                                 </form>
@@ -213,10 +210,10 @@
         $resultat = mysqli_query($connexion, $requete);
 
             if($resultat == FALSE)
-                print "<script>alert(\"Échec de l'ajout d'edition\")</script>";
+                print "<script>alert(\"Échec de l'ajout de l'édition\")</script>";
             else{
-                print "<section class='listeEditions'>
-                            <h2 class='tabeLabel'>Liste des éditions</h2>
+                print "<section class='liste'>
+                            <h2 class='tableLabel'>Liste des éditions</h2>
                             <div class='container'>
                                 <table class='table col-6 mx-auto'>
                                     <thead>
@@ -237,13 +234,13 @@
                 $nb_participants = $nuplet['nb_participants'];
                 $idEdition = $nuplet['id_edition'];
 
-                print "<tr>
-                            <td>$annee</td>
-                            <td>$nb_participants</td>
+                print "<tr class='ligneTabClic'>
+                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\">$annee</td>
+                            <td onclick=\"location.href='edition.php?idedition=$idEdition'\">$nb_participants</td>
                             <td class='delete'>
                                 <form method='GET' action='course.php' Onsubmit='return attention();'>
                                     <input name='idcourse' type='hidden' value='$idCourse'>
-                                    <input name='delete_dition' type='hidden' value='$idEdition'>
+                                    <input name='delete_edition' type='hidden' value='$idEdition'>
                                     <input name='order' type='hidden' value='$order'>
                                     <input name='orderSec' type='hidden' value='$orderSec'>
                                     <input name='sens' type='hidden' value='$sensGet'>
@@ -261,7 +258,7 @@
     }
 
     // Ajout des chevrons pour le sens du trie des colonnes
-    if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
         {
@@ -269,7 +266,7 @@
         }else{
             print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
         }
-    }else if(isset($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
@@ -301,7 +298,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="course.php<?php print "?idcourse=" . $idCourse ?>">
+                <form method="POST" action="course.php<?php print "?idcourse=$idCourse&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class='container'>
                         <div class="form-row">
                             <div class="col-md-2 mb-3">
@@ -309,7 +306,7 @@
                                 <input type="text" class="form-control" id="anneeEd" name="anneeEd" maxlength="4" placeholder="AAAA" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="nbPart">Nombres de participants :</label>
+                                <label for="nbPart">Nombre de participants :</label>
                                 <input type="text" class="form-control" id="nbPart" name="nbPart" placeholder="1234" required>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -319,15 +316,15 @@
                         </div>
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
-                                <label for="dateIns">Date Inscription : </label>
+                                <label for="dateIns">Date inscription : </label>
                                 <input type="date" class="form-control" id="dateIns" name="dateIns" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="dateDepot">Date Depot Certif : </label>
+                                <label for="dateDepot">Date dépôt des certificats : </label>
                                 <input type="date" class="form-control" id="dateDepot" name="dateDepot" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="dateDossard">Date Recup Dossard : </label>
+                                <label for="dateDossard">Date récupération des dossards : </label>
                                 <input type="date" class="form-control" id="dateDossard" name="dateDossard" required>
                             </div>
                         </div>
@@ -335,7 +332,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button class="btn btn-primary" type="submit">Ajouter Edition</button>
+                <button class="btn btn-primary" type="submit">Ajouter édition</button>
                 </form>
             </div>
         </div>
@@ -343,31 +340,31 @@
 </div>
 
 <script>
-    // Gestion de l'affichage du formulaire de modification des informations de l'adhérent
+    // Gestion de l'affichage du formulaire de modification des informations de la course
 
-    document.getElementById("modifInfoCourse").onclick = afficheFormCourse;
-    document.getElementById("annulerInfoCourse").onclick = annulerFormCourse;
+    document.getElementById("modifInfo").onclick = afficheForm;
+    document.getElementById("annulerInfo").onclick = annulerForm;
 
-    const anneeCreation = document.getElementById('anneeCreationCourseInput').value;
-    const mois = document.getElementById('moisCourseInput').value;
-    const site = document.getElementById('siteCourseInput').value;
+    const anneeCreation = document.getElementById('anneeCreationInput').value;
+    const mois = document.getElementById('moisInput').value;
+    const site = document.getElementById('siteInput').value;
 
-    function afficheFormCourse()
+    function afficheForm()
     {
-        Array.from(document.getElementsByClassName('writeInfoCourse')).forEach(n => n.style.display = "inline-block");
-        Array.from(document.getElementsByClassName('writeInfoCourseFlex')).forEach(n => n.style.display = "flex");
-        Array.from(document.getElementsByClassName('readInfoCourse')).forEach(n => n.style.display = "none");
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "inline-block");
+        Array.from(document.getElementsByClassName('writeInfoFlex')).forEach(n => n.style.display = "flex");
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "none");
     }
 
-    function annulerFormCourse()
+    function annulerForm()
     {
-        Array.from(document.getElementsByClassName('writeInfoCourse')).forEach(n => n.style.display = "none");
-        Array.from(document.getElementsByClassName('readInfoCourse')).forEach(n => n.style.display = "inline-block");
-        Array.from(document.getElementsByClassName('readInfoCourseFlex')).forEach(n => n.style.display = "flex");
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "none");
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "inline-block");
+        Array.from(document.getElementsByClassName('readInfoFlex')).forEach(n => n.style.display = "flex");
 
-        document.getElementById('anneeCreationCourseInput').value = anneeCreation;
-        document.getElementById('moisCourseInput').value = mois;
-        document.getElementById('siteCourseInput').value = site;
+        document.getElementById('anneeCreationInput').value = anneeCreation;
+        document.getElementById('moisInput').value = mois;
+        document.getElementById('siteInput').value = site;
     }
 
     // Fonction de confirmation de suppression d'une édition

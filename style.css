@@ -17,6 +17,84 @@ body{
     font-family: 'Roboto', sans-serif;
 }
 
+.sectionInfos{
+    margin-bottom: 50px;
+}
+
+.sectionInfos h2{
+    text-align: center;
+    font-size: 24px;
+}
+
+/*BLOC D'INFORMATIONS*/
+.infosBloc{
+    border: 1px solid #E6E7E6;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.info p{
+    margin: 0;
+}
+
+.nomInfo{
+    font-weight: bold;
+}
+
+.ligneInfo{
+    margin-bottom: 10px;
+}
+
+.ligneButton{
+    margin-top: 50px;
+}
+
+.writeInfo{
+    display: none;
+}
+
+/*TABLEAUX*/
+.liste{
+    margin-bottom: 30px;
+}
+
+.tableLabel{
+    text-align: center;
+    font-size: 24px;
+}
+
+.liste th a{
+    color: black;
+}
+
+.ligneTabClic{
+    cursor: pointer;
+}
+
+.ligneTabClic:hover{
+    font-weight: bold;
+    background-color: #F4F5F5;
+}
+
+.delete{
+    padding-left: 28px !important;
+}
+
+.btnDelete{
+    background: none;
+    border: none;
+    padding: 0;
+    color: red;
+}
+
+.btnDelete:hover{
+    -webkit-transform:scale(1.25); /* Safari and Chrome */
+    -moz-transform:scale(1.25); /* Firefox */
+    -ms-transform:scale(1.25); /* IE 9 */
+    -o-transform:scale(1.25); /* Opera */
+     transform:scale(1.25);
+}
+
 /*HEADER*/
 header{
     background-color:#343a40;
@@ -75,135 +153,12 @@ footer p{
     color: red;
 }
 
-.adherent{
-    margin-bottom: 50px;
-}
-
-.adherentInfosBloc{
-    border: 1px solid #E6E7E6;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.adherentInfos p{
-    margin: 0;
-}
-
-.nomInfo{
-    font-weight: bold;
-}
-
-.ligneInfo{
-    margin-bottom: 10px;
-}
-
-.ligneButton{
-    margin-top: 50px;
-}
-
-.listeEditionAdherent{
-    margin-bottom: 50px;
-}
-
-.writeInfoAdherent{
-    display: none;
-}
-
-.tabeLabel{
-    text-align: center;
-    font-size: 24px;
-}
-
-.adherent h2{
-    text-align: center;
-    font-size: 24px;
-}
-
 /*ESPACEPERSO*/
 .blockButton{
     margin-bottom: 30px;
 }
 
-/*ADHERENTS*/
-.listeAdherents th a{
-    color: black;
-}
-
-.ligneTabClic{
-    cursor: pointer;
-}
-
-.ligneTabClic:hover{
-    font-weight: bold;
-    background-color: #F4F5F5;
-}
-
-.delete{
-    padding-left: 28px !important;
-}
-
-.delete i{
-    color: red;
-}
-.btnDelete{
-    background: none;
-    border: none;
-    padding: 0;
-}
-
-.btnDelete:hover{
-    -webkit-transform:scale(1.25); /* Safari and Chrome */
-    -moz-transform:scale(1.25); /* Firefox */
-    -ms-transform:scale(1.25); /* IE 9 */
-    -o-transform:scale(1.25); /* Opera */
-     transform:scale(1.25);
-}
-
-/*COURSES*/
-.listeCourses{
-    margin-bottom: 30px;
-}
-
-.listeCourses th a{
-    color: black;
-}
-
 /*EDITIONS*/
-.listeEditions{
-    margin-bottom: 50px;
-}
-
-.listeEditions th a{
-    color: black;
-}
-
-.course{
-    margin-bottom: 50px;
-}
-
-.courseInfosBloc{
-    border: 1px solid #E6E7E6;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.courseInfos p{
-    margin: 0;
-}
-
-.listeEditionCourse{
-    margin-bottom: 50px;
-}
-
-.writeInfoCourse{
-    display: none;
-}
-
-.course h2{
-    text-align: center;
-    font-size: 24px;
-}
-
 .ligneButtonCourse{
     margin-top: 25px;
 }

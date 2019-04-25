@@ -6,6 +6,29 @@
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
 
+        // Suppression d'un adhérent
+        if(isset($_GET['delete_adherent']))
+        {
+            $deleteAdherent = intval($_GET['delete_adherent']);
+
+            mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
+
+            $requete = "DELETE FROM adherent WHERE id_adherent = $deleteAdherent";
+
+            $resultat = mysqli_query($connexion, $requete);
+
+            $requete = "DELETE FROM participation WHERE id_adherent = $deleteAdherent";
+
+            $resultat = mysqli_query($connexion, $requete);
+
+            $requete = "DELETE FROM user WHERE id_adherent = $deleteAdherent";
+
+            $resultat = mysqli_query($connexion, $requete);
+
+            if(!mysqli_commit($connexion))
+                print "<script>alert(\"Échec de la requête de suppression de l'adherent\")</script>";
+        }
+
         // Ajout d'un utilisateur
         if(isset($_POST['pseudo']) && isset($_POST['mdp']))
         {
@@ -38,29 +61,6 @@
                 if(mysqli_query($connexion, $requete) == FALSE)
                     print "<script>alert(\"Échec de la requête de l'ajout de l'adhérent\")</script>";
             }
-        }
-
-        // Suppression d'un adhérent
-        if(isset($_GET['delete_adherent']))
-        {
-            $deleteAdherent = intval($_GET['delete_adherent']);
-
-            mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
-
-            $requete = "DELETE FROM adherent WHERE id_adherent = $deleteAdherent";
-
-            $resultat = mysqli_query($connexion, $requete);
-
-            $requete = "DELETE FROM participation WHERE id_adherent = $deleteAdherent";
-
-            $resultat = mysqli_query($connexion, $requete);
-
-            $requete = "DELETE FROM user WHERE id_adherent = $deleteAdherent";
-
-            $resultat = mysqli_query($connexion, $requete);
-
-            if(!mysqli_commit($connexion))
-                print "<script>alert(\"Échec de la requête de suppression de l'adherent\")</script>";
         }
 
         // Récupération des adhérents en fonction du trie du tableau :
@@ -115,13 +115,13 @@
             print "
             <div class='container'>
                 <div class='row mb-4'>
-                    <button type=\"button\" class=\"btn btn-primary mx-auto\" data-toggle=\"modal\" data-target=\"#modalAjoutAdherent\">
+                    <button type=\"button\" class=\"btn btn-primary mx-auto\" data-toggle=\"modal\" data-target=\"#modalAjout\">
                         Ajouter un utilisateur
                     </button>
                 </div>
             </div>
-            <section class='listeAdherents'>
-                <h2 class='tabeLabel'>Liste des adhérents</h2>
+            <section class='liste'>
+                <h2 class='tableLabel'>Liste des adhérents</h2>
                 <div class='container'>
                     <table class='table'>
                         <thead>
@@ -191,7 +191,7 @@
     }
 
     // Ajout des chevrons pour le sens du trie des colonnes
-    if(isset($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
     {
         if($_GET['sens'] == "DESC")
         {
@@ -199,7 +199,7 @@
         }else{
             print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
         }
-    }else if(isset($_GET['order'])) // Si clic sur colonne, on affiche le chevron 
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron 
     {
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
@@ -223,7 +223,7 @@
 <?php include "includes/footer.php"; ?>
 
 <!-- Modal du formulaire d'ajout d'adhérent -->
-<div class="modal fade" id="modalAjoutAdherent" tabindex="-1" role="dialog" aria-labelledby="modalAjoutAdherent" aria-hidden="true">
+<div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="modalAjout" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -233,7 +233,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="adherents.php">
+                <form method="POST" action="adherents.php<?php print "?order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <label for="pseudo">Pseudo</label>
                     <input type="text" class="form-control mb-3" name="pseudo" placeholder='Pseudo' required>
                     <label for="mdp">Mot de passe</label>

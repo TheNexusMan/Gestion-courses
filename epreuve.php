@@ -28,7 +28,7 @@ $requete = "SELECT res.nom, res.prenom, res.rang, res.sexe, tmp.temps, adr.club
     if ($resultat == FALSE)
         print "<script>alert(\"BITEUH\")</script>";
     else {
-        print "<section class='listeEditions'>
+        print "<section class='liste'>
             <div class='container'>
                 <table class='table'>
                     <thead>
