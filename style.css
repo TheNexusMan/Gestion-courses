@@ -34,6 +34,7 @@ body{
     border: 1px solid #E6E7E6;
     padding: 20px;
     border-radius: 10px;
+    word-wrap: break-word; 
 }
 
 .info p{
@@ -199,6 +200,21 @@ footer p{
 }
 
 /*RESPONSIVE*/
+@media screen and (max-width: 768px)
+{
+    .ligneInfo{
+        margin: 0;
+    }
+
+    .info .nomInfo{
+        margin-top: 15px;
+    }
+
+    .ligneButton button, .ligneButtonCourse button{
+        margin-top: 20px;
+    }
+}
+
 @media screen and (max-width: 440px)
 {
     .titreBloc h1{
@@ -229,5 +245,12 @@ footer p{
         float: none;
         text-align: center;
         margin: 0;
+    }
+}
+
+@media screen and (max-width: 510px)
+{
+    body{
+        padding-bottom: 100px;
     }
 }

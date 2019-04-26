@@ -111,30 +111,30 @@
             print "<section class='sectionInfos'>
                         <h2>Informations personnelles</h2>
                         <div class='info container'>
-                            <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                 <form action='' method='POST'>
                                     <div class='row ligneInfo'>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Nom :</p>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Nom</p>
                                             <p class='readInfo'>$nom</p>
                                             <input type='text' id='nomInput' class='form-control writeInfo' name='nom' value=\"$nom\" placeholder='Nom' required>
                                         </div>
-                                        <div class='col-4'></div>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Prénom :</p>
+                                        <div class='col-md-4'></div>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Prénom</p>
                                             <p class='readInfo'>$prenom</p>
                                             <input type='text' id='prenomInput' class='form-control writeInfo' name='prenom' value=\"$prenom\" placeholder='Prenom' required>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Date de naissance :</p>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Date de naissance</p>
                                             <p class='readInfo'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
                                             <input type='date' id='naissanceInput' class='form-control writeInfo' name='naissance' value=\"$dateNaissance\">
                                         </div>
-                                        <div class='col-4'></div>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Sexe :</p>
+                                        <div class='col-md-4'></div>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Sexe</p>
                                             <p class='readInfo'>" . ($sexe == 'H' ? 'Homme' : 'Femme') . "</p>
                                             <select id='sexeInput' class='custom-select writeInfo' name='sexe' required>
                                                 $selectSexe
@@ -142,21 +142,21 @@
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
-                                        <div class='col-6'>
-                                            <p class='nomInfo'>Adresse :</p>
+                                        <div class='col-md-6'>
+                                            <p class='nomInfo'>Adresse</p>
                                             <p class='readInfo'>$adresse</p>
                                             <input type='text' id='adresseInput' class='form-control writeInfo' name='adresse' value=\"$adresse\" placeholder='Adresse'>
                                         </div>
                                     </div>
                                     <div class='row ligneInfo'>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Date de certification du club :</p>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Date de certification du club</p>
                                             <p class='readInfo'>" . ($dateClub == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
                                             <input type='date' id='dateClubInput' class='form-control writeInfo' name='dateClub' value=\"$dateClub\">
                                         </div>
-                                        <div class='col-4'></div>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Nom du club :</p>
+                                        <div class='col-md-4'></div>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Nom du club</p>
                                             <p class='readInfo'>$nomClub</p>
                                             <input type='text' id='nomClubInput' class='form-control writeInfo' name='nomClub' value=\"$nomClub\" placeholder='Nom du club'>
                                         </div>
@@ -166,9 +166,9 @@
                                     </div>
                                     <div class='row ligneButton writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
-                                            <button type='submit' id='btnSbmtInfoAdh' class='btn btn-primary col-5'>Valider</button>
-                                            <div id='separationBouton' class='col-1'></div>
-                                            <button type='button' id='annulerInfo' class='btn btn-primary col-5'>Annuler</button>
+                                            <button type='submit' id='btnSbmtInfoAdh' class='btn btn-primary col-md-5'>Valider</button>
+                                            <div id='separationBouton' class='col-md-1'></div>
+                                            <button type='button' id='annulerInfo' class='btn btn-primary col-md-5'>Annuler</button>
                                         </div>
                                     </div>
                                 </form>
@@ -355,7 +355,7 @@
         print "     afficheForm();";
         print "     document.getElementById('annulerInfo').style.display = 'none';";
         print "     document.getElementById('separationBouton').style.display = 'none';";
-        print "     document.getElementById('btnSbmtInfoAdh').classList.remove('col-5');";
+        print "     document.getElementById('btnSbmtInfoAdh').classList.remove('col-md-5');";
         print "     document.getElementById('liste').style.display = 'none';";
         print "</script>";
     }

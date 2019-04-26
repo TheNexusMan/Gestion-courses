@@ -116,43 +116,43 @@
                     </div>
                     <section class='sectionInfos'>
                         <h2>Informations de l'édition</h2>
-                        <div class='info container'>
-                            <div id='infosBloc' class='infosBloc container mx-auto col-10 mw-50'>
+                        <div class='info container col-12'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                 <form action='' method='POST'>
                                     <div class='form-row ligneInfo'>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Année :</p>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Année</p>
                                             <p class='readInfo'>$annee</p>
                                             <input type='text' id='anneeInput' class='form-control writeInfo' name='annee' value=\"$annee\" maxlength='4' placeholder='AAAA' required>
                                         </div>
-                                        <div class='col-1'></div>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Nombre de participants :</p>
+                                        <div class='col-md-1'></div>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Nombre de participants</p>
                                             <p class='readInfo'>$nbParticipants</p>
                                             <input type='text' id='nbParticipantsInput' class='form-control writeInfo' name='nb_participants' value=\"$nbParticipants\" placeholder='1234' required>
                                         </div>
-                                        <div class='col-1'></div>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Date :</p>
+                                        <div class='col-md-1'></div>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Date</p>
                                             <p class='readInfo'>".date('d/m/Y', strtotime($date))."</p>
                                             <input type='date' id='dateInput' class='form-control writeInfo' name='date' value=\"$date\" required>
                                         </div>
                                     </div>
                                     <div class='form-row ligneInfo'>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Date d'inscription :</p>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Date d'inscription</p>
                                             <p class='readInfo'>".date('d/m/Y', strtotime($dateInscription))."</p>
                                             <input type='date' id='dateInscriptionInput' class='form-control writeInfo' name='date_inscription' value=\"$dateInscription\" required>
                                         </div>
-                                        <div class='col-1'></div>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Date dépôt des certificats :</p>
+                                        <div class='col-md-1'></div>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Date dépôt des certificats</p>
                                             <p class='readInfo'>".date('d/m/Y', strtotime($dateDepotCertificat))."</p>
                                             <input type='date' id='dateDepotCertificatInput' class='form-control writeInfo' name='date_depot_certificat' value=\"$dateDepotCertificat\" required>
                                         </div>
-                                        <div class='col-1'></div>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Date récupération des dossard :</p>
+                                        <div class='col-md-1'></div>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Date récupération des dossard</p>
                                             <p class='readInfo'>".date('d/m/Y', strtotime($dateRecupDossard))."</p>
                                             <input type='date' id='dateRecupDossardInput' class='form-control writeInfo' name='date_recup_dossard' value=\"$dateRecupDossard\" required>
                                         </div>
@@ -167,9 +167,9 @@
                                     
             print "                 <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
-                                            <button type='submit' class='btn btn-primary col-5'>Valider</button>
-                                            <div class='col-1'></div>
-                                            <button type='button' id='annulerInfo' class='btn btn-primary col-5'>Annuler</button>
+                                            <button type='submit' class='btn btn-primary col-md-5'>Valider</button>
+                                            <div class='col-md-1'></div>
+                                            <button type='button' id='annulerInfo' class='btn btn-primary col-md-5'>Annuler</button>
                                         </div>
                                     </div>
                                 </form>
@@ -238,7 +238,7 @@
                             <h2 class='tableLabel'>Liste des épreuves</h2>
                             <div class='container'>
                                 <div class='table-responsive'>
-                                    <table class='table col-10 mx-auto table-bordered table-hover text-center'>
+                                    <table class='table col-md-10 mx-auto table-bordered table-hover text-center'>
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th id='nomCol' scope='col'>
@@ -343,33 +343,33 @@
                 <form method="POST" action="edition.php<?php print "?idedition=$idEdition&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class='container'>
                         <div class="form-row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-md-6 mb-3">
                                 <label for="nom">Nom :</label>
                                 <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-md-6 mb-3">
                                 <label for="typeEpreuve">Type :</label>
                                 <input type="text" class="form-control" id="typeEpreuve" name="type_epreuve" placeholder="Type d'épreuve" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-md-6 mb-3">
                                 <label for="distance">Distance : </label>
                                 <input type="text" class="form-control" id="distance" name="distance" placeholder="1234" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-md-6 mb-3">
                                 <label for="denivelee">Dénivelée : </label>
                                 <input type="text" class="form-control" id="denivelee" name="denivelee" placeholder="1234" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-md-12 mb-3">
                                 <label for="adresse">Adresse de départ : </label>
                                 <input type="text" class="form-control" id="adresse" name="adresse_depart" placeholder="Adresse de départ" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-md-12 mb-3">
                                 <div class="custom-file">
                                     <label class="custom-file-label" for="plan">Choisissez un plan... </label>
                                     <input type="file" class="custom-file-input" id="plan" name="plan" required>

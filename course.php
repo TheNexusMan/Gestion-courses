@@ -119,22 +119,22 @@
                     <section class='sectionInfos'>
                         <h2>Informations de la course</h2>
                         <div class='info container'>
-                            <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                 <form action='' method='POST'>
                                     <div class='form-row ligneInfo'>
-                                        <div class='col-4'>
-                                            <p class='nomInfo'>Nom :</p>
+                                        <div class='col-md-4'>
+                                            <p class='nomInfo'>Nom</p>
                                             <p>$nom</p>
                                         </div>
-                                        <div class='col-1'></div>
-                                        <div class='col-3'>
-                                            <p class='nomInfo'>Année de création :</p>
+                                        <div class='col-md-1'></div>
+                                        <div class='col-md-3'>
+                                            <p class='nomInfo'>Année de création</p>
                                             <p class='readInfo'>$annee_creation</p>
                                             <input type='text' id='anneeCreationInput' class='form-control writeInfo' name='anneeCreation' value=\"$annee_creation\" maxlength='4' placeholder='AAAA' required>
                                         </div>
-                                        <div class='col-2'></div>
-                                        <div class='col-2'>
-                                            <p class='nomInfo'>Mois :</p>
+                                        <div class='col-md-2'></div>
+                                        <div class='col-md-2'>
+                                            <p class='nomInfo'>Mois</p>
                                             <p class='readInfo'>$mois</p>
                                             <select id='moisInput' class='custom-select writeInfo' name='mois' required>
                                                 $selectMois
@@ -142,9 +142,9 @@
                                         </div>
                                     </div>
                                     <div class='form-row ligneInfo'>
-                                        <div class='col-12'>
-                                            <p class='nomInfo'>Site :</p>
-                                            <p class='readInfo'>$site</p>
+                                        <div class='col-md-12'>
+                                            <p class='nomInfo'>Site</p>
+                                            <a href='$site' target='_blank' class='readInfo'>$site</a>
                                             <input type='text' id='siteInput' class='form-control writeInfo' name='site' value=\"$site\" placeholder='https://www.sitedelacourse.fr/' required>
                                         </div>
                                     </div>";
@@ -158,9 +158,9 @@
             
             print "                 <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
-                                            <button type='submit' class='btn btn-primary col-5'>Valider</button>
-                                            <div class='col-1'></div>
-                                            <button type='button' id='annulerInfo' class='btn btn-primary col-5'>Annuler</button>
+                                            <button type='submit' class='btn btn-primary col-md-5'>Valider</button>
+                                            <div class='col-md-1'></div>
+                                            <button type='button' id='annulerInfo' class='btn btn-primary col-md-5'>Annuler</button>
                                         </div>
                                     </div>
                                 </form>
@@ -229,7 +229,7 @@
                             <h2 class='tableLabel'>Liste des éditions</h2>
                             <div class='container'>
                                 <div class='table-responsive'>
-                                    <table class='table col-6 mx-auto table-bordered table-hover text-center'>
+                                    <table class='table col-md-6 mx-auto table-bordered table-hover text-center'>
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th id='anneeCol' scope='col'>
@@ -323,29 +323,29 @@
                 <form method="POST" action="course.php<?php print "?idcourse=$idCourse&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class='container'>
                         <div class="form-row">
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-md-2 mb-3">
                                 <label for="anneeEd">Année édition :</label>
                                 <input type="text" class="form-control" id="anneeEd" name="anneeEd" maxlength="4" placeholder="AAAA" required>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-md-4 mb-3">
                                 <label for="nbPart">Nombre de participants :</label>
                                 <input type="text" class="form-control" id="nbPart" name="nbPart" placeholder="1234" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-md-6 mb-3">
                                 <label for="dateAdd">Date :</label>
                                 <input type="date" class="form-control" id="dateAdd" name="dateAdd" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-md-4 mb-3">
                                 <label for="dateIns">Date inscription : </label>
                                 <input type="date" class="form-control" id="dateIns" name="dateIns" required>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-md-4 mb-3">
                                 <label for="dateDepot">Date dépôt des certificats : </label>
                                 <input type="date" class="form-control" id="dateDepot" name="dateDepot" required>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-md-4 mb-3">
                                 <label for="dateDossard">Date récupération des dossards : </label>
                                 <input type="date" class="form-control" id="dateDossard" name="dateDossard" required>
                             </div>
