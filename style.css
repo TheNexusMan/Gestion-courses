@@ -37,7 +37,7 @@ body{
     word-wrap: break-word; 
 }
 
-.info p{
+.infos p{
     margin: 0;
 }
 
@@ -45,7 +45,7 @@ body{
     font-weight: bold;
 }
 
-.ligneInfo{
+.ligneInfos{
     margin-bottom: 10px;
 }
 
@@ -202,11 +202,11 @@ footer p{
 /*RESPONSIVE*/
 @media screen and (max-width: 768px)
 {
-    .ligneInfo{
+    .ligneInfos{
         margin: 0;
     }
 
-    .info .nomInfo{
+    .infos .nomInfo{
         margin-top: 15px;
     }
 

@@ -63,7 +63,8 @@
             }
         }
 
-        // Récupération des adhérents en fonction du trie du tableau :
+        // Récupération des adhérents en fonction du trie du tableau
+        $requete = "SELECT * FROM adherent";
 
         // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
@@ -72,7 +73,7 @@
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT * FROM adherent ORDER BY $order $sensGet";
+            $requete .= " ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -90,7 +91,7 @@
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT * FROM adherent ORDER BY $order";
+            $requete .= " ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -98,7 +99,6 @@
                 $sens = $sensGet;
             }
         }else{
-            $requete = "SELECT * FROM adherent";
             $order = "";
             $orderSec = "";
             $sensGet = "";
@@ -192,37 +192,8 @@
         mysqli_close($connexion);
     }
 
-    // Ajout des chevrons pour le sens du trie des colonnes
-    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
-    {
-        if($_GET['sens'] == "DESC")
-        {
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
-        }else{
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-        }
-    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron 
-    {
-        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-    }
+    include "includes/footer.php";
 ?>
-
-<script>
-    // Fonction de confirmation de suppression d'un adhérent
-    function attention()
-    {
-        resultat=window.confirm('Voulez-vous vraiment supprimer cet adhérent ?');
-        if (resultat==1)
-        {
-        }
-        else
-        {
-            return false;
-        }
-    }
-</script>
-
-<?php include "includes/footer.php"; ?>
 
 <!-- Modal du formulaire d'ajout d'adhérent -->
 <div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="modalAjout" aria-hidden="true">
@@ -249,3 +220,33 @@
         </div>
     </div>
 </div>
+
+<?php
+    // Ajout des chevrons pour le sens du trie des colonnes
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    {
+        if($_GET['sens'] == "DESC")
+        {
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
+        }else{
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+        }
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron 
+    {
+        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+    }
+?>
+<script>
+    // Fonction de confirmation de suppression d'un adhérent
+    function attention()
+    {
+        resultat=window.confirm('Voulez-vous vraiment supprimer cet adhérent ?');
+        if (resultat==1)
+        {
+        }
+        else
+        {
+            return false;
+        }
+    }
+</script>

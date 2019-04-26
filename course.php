@@ -118,10 +118,10 @@
                     </div>
                     <section class='sectionInfos'>
                         <h2>Informations de la course</h2>
-                        <div class='info container'>
+                        <div class='infos container'>
                             <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                 <form action='' method='POST'>
-                                    <div class='form-row ligneInfo'>
+                                    <div class='form-row ligneInfos'>
                                         <div class='col-md-4'>
                                             <p class='nomInfo'>Nom</p>
                                             <p>$nom</p>
@@ -141,7 +141,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class='form-row ligneInfo'>
+                                    <div class='form-row ligneInfos'>
                                         <div class='col-md-12'>
                                             <p class='nomInfo'>Site</p>
                                             <a href='$site' target='_blank' class='readInfo'>$site</a>
@@ -170,7 +170,10 @@
                     </section>";
         }
         
-        // Récupération des éditions en fonction du trie du tableau :
+        // Récupération des éditions en fonction du trie du tableau
+        $requete = "SELECT ed.annee, ed.nb_participants, ed.id_edition
+                    FROM edition ed
+                    WHERE ed.id_course = $idCourse";
 
         // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
@@ -179,10 +182,7 @@
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT ed.annee, ed.nb_participants, ed.id_edition
-                        FROM edition ed
-                        WHERE ed.id_course = $idCourse
-                        ORDER BY $order $sensGet";
+            $requete .= " ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -200,10 +200,7 @@
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT ed.annee, ed.nb_participants, ed.id_edition
-                        FROM edition ed
-                        WHERE ed.id_course = $idCourse
-                        ORDER BY $order";
+            $requete .= " ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -211,9 +208,6 @@
                 $sens = $sensGet;
             }
         }else{
-            $requete = "SELECT ed.annee, ed.nb_participants, ed.id_edition
-                        FROM edition ed
-                        WHERE ed.id_course = $idCourse";
             $order = "";
             $orderSec = "";
             $sensGet = "";
@@ -273,20 +267,6 @@
 
         mysqli_close($connexion);
     }
-
-    // Ajout des chevrons pour le sens du trie des colonnes
-    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
-    {
-        if($_GET['sens'] == "DESC")
-        {
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
-        }else{
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-        }
-    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
-    {
-        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-    }
 ?>
                 </tbody>
             </table>
@@ -306,6 +286,7 @@
                     </div>
                 </div>";
     }
+
     include "includes/footer.php";
 ?>
 
@@ -361,16 +342,35 @@
     </div>
 </div>
 
+<?php
+    // Ajout des chevrons pour le sens du trie des colonnes
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    {
+        if($_GET['sens'] == "DESC")
+        {
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
+        }else{
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+        }
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
+    {
+        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+    }
+?>
+
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de la course
 
+    // Appelle des fonction en cas de clic sur les boutons
     document.getElementById("modifInfo").onclick = afficheForm;
     document.getElementById("annulerInfo").onclick = annulerForm;
 
+    // Sauvegarde des champs
     const anneeCreation = document.getElementById('anneeCreationInput').value;
     const mois = document.getElementById('moisInput').value;
     const site = document.getElementById('siteInput').value;
 
+    // Fonction qui affiche le formulaire de modification
     function afficheForm()
     {
         Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "inline-block");
@@ -378,12 +378,14 @@
         Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "none");
     }
 
+    // Fonction qui cache le formulaire de modification et remet les valeures initiales
     function annulerForm()
     {
         Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "none");
         Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "inline-block");
         Array.from(document.getElementsByClassName('readInfoFlex')).forEach(n => n.style.display = "flex");
 
+        // Re-mise en place des valeures initiales
         document.getElementById('anneeCreationInput').value = anneeCreation;
         document.getElementById('moisInput').value = mois;
         document.getElementById('siteInput').value = site;

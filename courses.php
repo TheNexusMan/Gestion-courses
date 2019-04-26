@@ -71,7 +71,8 @@
                 print "<script>alert(\"Échec de la requête de l'ajout de la course\")</script>";
         }
 
-        // Récupération des courses en fonction du trie du tableau :
+        // Récupération des courses en fonction du trie du tableau
+        $requete = "SELECT * FROM course";
 
         // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
@@ -80,7 +81,7 @@
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT * FROM course ORDER BY $order $sensGet";
+            $requete .= " ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -98,7 +99,7 @@
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT * FROM course ORDER BY $order";
+            $requete .= " ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -106,7 +107,6 @@
                 $sens = $sensGet;
             }
         }else{
-            $requete = "SELECT * FROM course";
             $order = "";
             $orderSec = "";
             $sensGet = "";
@@ -179,19 +179,7 @@
         mysqli_close($connexion);
     }
 
-    // Ajout des chevrons pour le sens du trie des colonnes
-    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
-    {
-        if($_GET['sens'] == "DESC")
-        {
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
-        }else{
-            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-        }
-    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
-    {
-        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
-    }
+    include "includes/footer.php";
 ?>
 
 <!-- Bouton d'ajout de course -->
@@ -259,6 +247,22 @@
     </div>
 </div>
 
+<?php
+    // Ajout des chevrons pour le sens du trie des colonnes
+    if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order'])) // Si deuxième clic sur la même colone, on inverse le sens du chevron
+    {
+        if($_GET['sens'] == "DESC")
+        {
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-up\"></i>'</script>";
+        }else{
+            print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+        }
+    }else if(!empty($_GET['order'])) // Si clic sur colonne, on affiche le chevron croissant
+    {
+        print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
+    }
+?>
+
 <script>
     // Fonction de confirmation de suppression d'une course
     function attention()
@@ -273,5 +277,3 @@
         }
     }
 </script>
-
-<?php include "includes/footer.php"; ?>

@@ -110,10 +110,10 @@
 
             print "<section class='sectionInfos'>
                         <h2>Informations personnelles</h2>
-                        <div class='info container'>
+                        <div class='infos container'>
                             <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                 <form action='' method='POST'>
-                                    <div class='row ligneInfo'>
+                                    <div class='row ligneInfos'>
                                         <div class='col-md-4'>
                                             <p class='nomInfo'>Nom</p>
                                             <p class='readInfo'>$nom</p>
@@ -126,7 +126,7 @@
                                             <input type='text' id='prenomInput' class='form-control writeInfo' name='prenom' value=\"$prenom\" placeholder='Prenom' required>
                                         </div>
                                     </div>
-                                    <div class='row ligneInfo'>
+                                    <div class='row ligneInfos'>
                                         <div class='col-md-4'>
                                             <p class='nomInfo'>Date de naissance</p>
                                             <p class='readInfo'>" . ($dateNaissance == NULL ? "" : date('d/m/Y', strtotime($dateNaissance))) . "</p>
@@ -141,14 +141,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class='row ligneInfo'>
+                                    <div class='row ligneInfos'>
                                         <div class='col-md-6'>
                                             <p class='nomInfo'>Adresse</p>
                                             <p class='readInfo'>$adresse</p>
                                             <input type='text' id='adresseInput' class='form-control writeInfo' name='adresse' value=\"$adresse\" placeholder='Adresse'>
                                         </div>
                                     </div>
-                                    <div class='row ligneInfo'>
+                                    <div class='row ligneInfos'>
                                         <div class='col-md-4'>
                                             <p class='nomInfo'>Date de certification du club</p>
                                             <p class='readInfo'>" . ($dateClub == NULL ? "" : date('d/m/Y', strtotime($dateClub))) . "</p>
@@ -180,6 +180,13 @@
 
         // Récupération et affichage des éditions participées par l'adhérent
         // Récupération des éditions en fonction du trie du tableau
+        $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
+                    FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
+                            NATURAL JOIN epreuve Ep
+                            NATURAL JOIN edition Ed
+                            JOIN COURSE Co ON Ed.id_course = Co.id_course
+                            JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
+                                FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
 
         // Cas où on clic deux fois à la suite sur une colonne (changement de l'ordre du trie)
         if(!empty($_GET['order']) && ($_GET['orderSec'] == $_GET['order']))
@@ -188,14 +195,7 @@
             $orderSec = $_GET['orderSec'];
             $sensGet = mysqli_real_escape_string($connexion, $_GET['sens']);
 
-            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
-                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
-                                NATURAL JOIN epreuve Ep
-                                NATURAL JOIN edition Ed
-                                JOIN COURSE Co ON Ed.id_course = Co.id_course
-                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
-                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard
-                        ORDER BY $order $sensGet";
+            $requete .= " ORDER BY $order $sensGet";
 
             if($sensGet == "DESC" && $_GET['clic'])
             {
@@ -213,14 +213,7 @@
             $sensGet = $_GET['sens'];
             $orderSec = $_GET['orderSec'];
 
-            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
-                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
-                                NATURAL JOIN epreuve Ep
-                                NATURAL JOIN edition Ed
-                                JOIN COURSE Co ON Ed.id_course = Co.id_course
-                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
-                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard
-                        ORDER BY $order";
+            $requete .= " ORDER BY $order";
 
             if($_GET['clic']){
                 $sens = "DESC";
@@ -228,13 +221,6 @@
                 $sens = $sensGet;
             }
         }else{
-            $requete = "SELECT Co.nom, year(Ed.date) AS annee, Ep.distance, Tp.temps AS temps, Ed.id_edition
-                        FROM (SELECT Pa.* FROM participation Pa WHERE Pa.id_adherent = $idUser) AS Part
-                                NATURAL JOIN epreuve Ep
-                                NATURAL JOIN edition Ed
-                                JOIN COURSE Co ON Ed.id_course = Co.id_course
-                                JOIN (SELECT id_epreuve, dossard, MAX(temps) AS temps
-                                    FROM temps_passage GROUP BY id_epreuve, dossard) AS Tp ON Tp.id_epreuve = Part.id_epreuve AND Tp.dossard = Part.dossard";
             $order = "";
             $orderSec = "";
             $sensGet = "";
@@ -315,9 +301,11 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de l'adhérent
 
+    // Appelle des fonction en cas de clic sur les boutons
     document.getElementById("modifInfo").onclick = afficheForm;
     document.getElementById("annulerInfo").onclick = annulerForm;
 
+    // Sauvegarde des champs
     const nom = document.getElementById('nomInput').value;
     const prenom = document.getElementById('prenomInput').value;
     const naissance = document.getElementById('naissanceInput').value;
@@ -326,6 +314,7 @@
     const dateClub = document.getElementById('dateClubInput').value;
     const nomClub = document.getElementById('nomClubInput').value;
 
+    // Fonction qui affiche le formulaire de modification
     function afficheForm()
     {
         Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "inline-block");
@@ -333,12 +322,14 @@
         Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "none");
     }
 
+    // Fonction qui cache le formulaire de modification et remet les valeures initiales
     function annulerForm()
     {
         Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "none");
         Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "inline-block");
         Array.from(document.getElementsByClassName('readInfoFlex')).forEach(n => n.style.display = "flex");
 
+        // Re-mise en place des valeures initiales
         document.getElementById('nomInput').value = nom;
         document.getElementById('prenomInput').value = prenom;
         document.getElementById('naissanceInput').value = naissance;
