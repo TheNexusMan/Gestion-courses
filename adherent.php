@@ -106,7 +106,7 @@
                                 <option value='Femme' selected='selected'>Femme</option>";
             }
 
-            if($nouvelAdherent) print "<p class='textNouvelAdherent'>Nouveau compte, veuillez renseigner les champs marqués d'une *</p>";
+            if($nouvelAdherent) print "<p class='textNouvelAdherent'>Nouveau compte, veuillez compléter votre profil.</p>";
 
             print "<section class='sectionInfos'>
                         <h2>Informations personnelles</h2>

@@ -1,6 +1,6 @@
 <?php
     //On réinitialise les variables de connexion en cas de déconnexion
-    if(isset($_POST['logout']))
+    if(isset($_GET['logout']))
     {
         unset($_SESSION['isConnected']);
         unset($_SESSION['id_adherent']);
@@ -37,37 +37,26 @@
     </head>
 
     <header>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-1">
-                <img src="http://localhost/projet-bdw1/data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
-            </div>
-            <div class="col-2"></div>
-            <div class="col-4 divSiteTitre">
-                <h1>Run 4 your life</h1>
+        <div>
+            <div class="titreBloc">
+                <div class="divSiteTitre">
+                    <a href="index.php">
+                        <img src="http://localhost/projet-bdw1/data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
+                        <h1>Run 4 your life</h1>
+                    </a>
+                </div>
             </div>
 
             <?php
                 if($page != "index.php")
                 {
-                    print '<div class="d-flex flex-row-reverse col-3">
-                        <form method="POST" action="index.php">
-                            <div class="p-2">
-                                <button type="submit" class="btn btn-outline-success" id="home">Accueil</button>
-                            </div>
-                        </form>
-                        <form method="POST" action="">
-                            <div class="p-2">
-                                <input type="hidden" name="logout" value="logout">
-                                <button type="submit" class="btn btn-outline-success" id="logout">Déconnexion</button>
-                            </div>
-                        </form>';
-                }else{
-                    print '<div class="col-3"></div>';
+                    print '<div class="ctnBlocBtn">
+                                <div class="blocBtn">
+                                    <a href="?logout=logout" id="logout"><i class="fas fa-sign-out-alt"></i></a>
+                                    <a href="index.php" id="home"><i class="fas fa-home"></i></a>
+                                </div>
+                            </div>';
                 }
             ?>
-                
-            </div>
-            <div class="col-1"></div>
         </div>
     </header>

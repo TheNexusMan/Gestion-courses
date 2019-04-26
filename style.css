@@ -107,16 +107,57 @@ header{
     -webkit-filter: invert(100%);
 }
 
-.align-right
-{  
-    float:right;
+.titreBloc{
+    display: inline-block;
+}
+
+.ctnBlocBtn{
+    display: inline-block;
+    float: right;
+}
+
+.divSiteTitre{
+    margin-left: 16px;
+}
+
+.divSiteTitre a:hover{
+    text-decoration: none;
+    color: white;
 }
 
 .divSiteTitre h1{
-    margin: 7px 0 0 0;
+    display: inline;
     color: white;
-    text-align: center;
     font-size: 2rem;
+    vertical-align: middle;
+}
+
+.ctnBlocBtn{
+    height: 50px;
+    line-height: 50px;
+}
+
+.blocBtn{
+    margin-right: 25px;
+    float: right;
+    font-size: 2em;
+}
+
+.blocBtn a{
+    color: #fff;
+}
+
+.blocBtn a i:hover{
+    -webkit-transform:scale(1.10); /* Safari and Chrome */
+    -moz-transform:scale(1.10); /* Firefox */
+    -ms-transform:scale(1.10); /* IE 9 */
+    -o-transform:scale(1.10); /* Opera */
+    transform:scale(1.10);
+    cursor: pointer;
+}
+
+#logout{
+    margin-right: 10px;
 }
 
 /*FOOTER*/
@@ -155,4 +196,38 @@ footer p{
 /*EDITIONS*/
 .ligneButtonCourse{
     margin-top: 25px;
+}
+
+/*RESPONSIVE*/
+@media screen and (max-width: 440px)
+{
+    .titreBloc h1{
+        font-size: 1.5rem;
+    }
+
+    .titreBloc img{
+        height: 30px;
+    }
+
+    .titreBloc{
+        display: block;
+        margin: auto;
+    }
+
+    .divSiteTitre{
+        margin: 0;
+        text-align: center;
+    }
+    
+    .ctnBlocBtn{
+        display: block;
+        margin: auto;
+        float: none;
+    }
+
+    .blocBtn{
+        float: none;
+        text-align: center;
+        margin: 0;
+    }
 }
