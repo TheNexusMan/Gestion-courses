@@ -5,7 +5,6 @@
     if (mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
-        mysqli_set_charset($connexion, 'utf8');
 
         // Suppression d'une course
         if (isset($_GET['delete_course']) && $_SESSION['typeUtilisateur'] == "Admin")

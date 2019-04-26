@@ -34,7 +34,7 @@ body{
     border: 1px solid #E6E7E6;
     padding: 20px;
     border-radius: 10px;
-    word-wrap: break-word; 
+    word-wrap: break-word;
 }
 
 .infos p{
@@ -50,11 +50,26 @@ body{
 }
 
 .ligneButton{
-    margin-top: 50px;
+    margin-top: 25px;
+    word-wrap: normal;
 }
 
 .writeInfo{
     display: none;
+}
+
+#labelFile{
+    display: none;
+    top: 25px;
+    z-index: 0;
+}
+#labelFile::after{
+    z-index: 0;
+}
+
+.imgPlan{
+    max-width: 100%;
+    width: 50%;
 }
 
 /*TABLEAUX*/
@@ -102,7 +117,7 @@ header{
     z-index: 1;
 }
 
-.img-fluid
+.logo
 {
     height:50px;
     filter: invert(100%);
@@ -192,11 +207,6 @@ footer p{
 /*ESPACEPERSO*/
 .blockButton{
     margin-bottom: 30px;
-}
-
-/*EDITIONS*/
-.ligneButtonCourse{
-    margin-top: 25px;
 }
 
 /*RESPONSIVE*/

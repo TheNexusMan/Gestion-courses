@@ -16,6 +16,26 @@
     if (mysqli_connect_errno())
         printf("Échec de la connexion : %s", mysqli_connect_error());
     else {
+
+        // Modification des informations de l'édition
+        if(isset($_POST['nom']) && isset($_POST['distance']) && isset($_POST['denivelee']) && $_SESSION['typeUtilisateur'] == "Admin")
+        {
+            $modName = mysqli_real_escape_string($connexion, $_POST['nom']);
+            $modDistance = intval($_POST['distance']);
+            $modAdresse_depart = mysqli_real_escape_string($connexion, $_POST['adresse_depart']);
+            $modDenivelee = intval($_POST['denivelee']);
+            $modType = mysqli_real_escape_string($connexion, $_POST['type']);
+            $modPlan = mysqli_real_escape_string($connexion, $_POST['plan']);
+
+            $requete = "UPDATE epreuve
+                        SET nom = '$modName', distance = $modDistance, adresse_depart = '$modAdresse_depart', denivelee = $modDenivelee, type_epreuve = '$modType', plan = '$modPlan'
+                        WHERE id_epreuve = $idEpreuve";
+
+            if(mysqli_query($connexion, $requete) == FALSE){
+                print "<script>alert('Échec de la requête de modification des informations')</script>";
+            }
+        }
+
         // Requête de récupération de la distance du dernier temps (la distance de
         // l'épreuve dans la bdd ne correspond pas au km du dernier temps)
         $requete = "SELECT MAX(tmp.km) as KM
@@ -32,7 +52,7 @@
         }
 
         // Requête de récupération des infos de l'épreuve et du meilleur et pire temps
-        $requete = "SELECT ep.id_edition, ep.nom, ep.distance, ep.adresse_depart, ep.denivelee, ep.type_epreuve, MIN(tmp.temps) AS Meilleur, MAX(tmp.temps) AS Nul 
+        $requete = "SELECT ep.id_edition, ep.nom, ep.distance, ep.adresse_depart, ep.denivelee, ep.type_epreuve, ep.plan, MIN(tmp.temps) AS Meilleur, MAX(tmp.temps) AS Nul 
                     FROM epreuve ep JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
                     WHERE ep.id_epreuve = $idEpreuve AND tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve"; //Modifier 1 via le post/GET, Distance km devra etre recup par une autre requete
 
@@ -48,6 +68,7 @@
             $adresse = $nuplet['adresse_depart'];
             $denivelee = $nuplet['denivelee'];
             $typeEp = $nuplet['type_epreuve'];
+            $plan = $nuplet['plan'];
             $tempsMin = $nuplet['Meilleur'];
             $tempsMax = $nuplet['Nul'];
         }
@@ -140,7 +161,7 @@
             $nomCourse = $nuplet['nom'];
         }
 
-        print "<div class='container'>
+        print "<div class='container' id='hautPage'>
                     <div class='nomCourse row'>
                         <h1 class='mx-auto mb-4'><a href='course.php?idcourse=$id_course'>$nomCourse</a> - <a href='edition.php?idedition=$id_edition'>édition $annee</a></h1>
                     </div>
@@ -148,39 +169,71 @@
                 <section class='sectionInfos'>
                     <h2>Information de l'épreuve</h2>
                     <div class='infos container'>
-                        <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
+                        <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
+                            <form action='' method='POST'>
 
-                            <div class='row ligneInfos'>
-                                <div class='col-4'>
-                                    <p class='nomInfo'>Nom épreuve</p>
-                                    <p class='readInfo'>$name</p>
+                                <div class='form-row ligneInfos'>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Nom</p>
+                                        <p class='readInfo'>$name</p>
+                                        <input type='text' id='nomInput' class='form-control writeInfo' name='nom' value=\"$name\" placeholder='Nom' required>
+                                    </div>
+                                    <div class='col-md-4'></div>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Distance</p>
+                                        <p class='readInfo'>$distance km</p>
+                                        <input type='text' id='distanceInput' class='form-control writeInfo' name='distance' value=\"$distance\" placeholder='Distance' required>
+                                    </div>
                                 </div>
-                                <div class='col-4'></div>
-                                <div class='col-4'>
-                                    <p class='nomInfo'>Distance</p>
-                                    <p class='readInfo'>$distance km</p>
-                                </div>
-                            </div>
 
-                            <div class='row ligneInfos'>
-                                <div class='col-4'>
-                                    <p class='nomInfo'>Dénivelée</p>
-                                    <p class='readInfo'>$denivelee m</p>
+                                <div class='form-row ligneInfos'>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Dénivelée</p>
+                                        <p class='readInfo'>$denivelee m</p>
+                                        <input type='text' id='deniveleeInput' class='form-control writeInfo' name='denivelee' value=\"$denivelee\" placeholder='Dénivelée' required>
+                                    </div>
+                                    <div class='col-md-4'></div>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Type d'épreuve</p>
+                                        <p class='readInfo'>$typeEp</p>
+                                        <input type='text' id='typeInput' class='form-control writeInfo' name='type' value=\"$typeEp\" placeholder=\"Type d'épreuve\" required>
+                                    </div>
                                 </div>
-                                <div class='col-4'></div>
-                                <div class='col-4'>
-                                    <p class='nomInfo'>Type d'épreuve</p>
-                                    <p class='readInfo'>$typeEp</p>
-                                </div>
-                            </div>
 
-                            <div class='row ligneInfos'>
-                                <div class='col-12'>
-                                    <p class='nomInfo'>Adresse de départ</p>
-                                    <p class='readInfo'>$adresse</p>
+                                <div class='form-row ligneInfos'>
+                                    <div class='col-md-12'>
+                                        <p class='nomInfo'>Adresse de départ</p>
+                                        <p class='readInfo'>$adresse</p>
+                                        <input type='text' id='adresse_departInput' class='form-control writeInfo' name='adresse_depart' value=\"$adresse\" placeholder='Adresse de départ' required>
+                                    </div>
                                 </div>
-                            </div>
 
+                                <div class='form-row ligneInfos'>
+                                    <div class='col-md-12'>
+                                        <p class='nomInfo'>Plan</p>
+                                        <div class='text-center'>
+                                            <img src='data/plan/$plan' class='readInfo imgPlan img-fluid img-thumbnail' alt=\"Plan de l'épreuve\">
+                                        </div>
+                                        <label class='custom-file-label' id='labelFile' for='plan'>Choisissez un plan... </label>
+                                        <input type='file' id='planInput' class='form-control custom-file-input writeInfo' name='plan' value=\"$plan\">
+                                    </div>
+                                </div>";
+
+        if($_SESSION['typeUtilisateur'] == "Admin")
+        {
+            print "             <div class='row ligneButton readInfo readInfoFlex' id='modifInfo'>
+                                    <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
+                                </div>
+                                <div class='row ligneButton writeInfo writeInfoFlex' id='modifInfo'>
+                                    <div class='row mx-auto'>
+                                        <button type='submit' class='btn btn-primary col-md-5'>Valider</button>
+                                        <div class='col-md-1'></div>
+                                        <button type='button' id='annulerInfo' class='btn btn-primary col-md-5'>Annuler</button>
+                                    </div>
+                                </div>";
+        }
+                                
+        print "             </form>
                         </div>
                     </div>
                 </section>
@@ -188,46 +241,46 @@
                 <section class='sectionInfos'>
                     <h2>Statistiques</h2>
                     <div class='infos container'>
-                        <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
+                        <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
 
                             <div class='row ligneInfos'>
-                                <div class='col-4'>
+                                <div class='col-md-4'>
                                 <p class='nomInfo'>Nombre de clubs</p>
                                 <p id='clubsEpreuve' class='readInfo'>$nbClubs clubs</p>
                                 </div>
-                                <div class='col-4'></div>
-                                <div class='col-4'>
+                                <div class='col-md-4'></div>
+                                <div class='col-md-4'>
                                     <p class='nomInfo'>Nombre d'abandons</p>
                                     <p class='readInfo'>$nbAbandons</p>
                                 </div>
                             </div>
 
                             <div class='row ligneInfos'>
-                                <div class='col-4'>
+                                <div class='col-md-4'>
                                 <p class='nomInfo'>Moyenne temps hommes</p>
                                 <p id='tempsHEpreuve' class='readInfo'>$tempsMoyH min</p>
                                 </div>
-                                <div class='col-4'></div>
-                                <div class='col-4'>
+                                <div class='col-md-4'></div>
+                                <div class='col-md-4'>
                                     <p class='nomInfo'>Moyenne temps femmes</p>
                                     <p class='readInfo'>$tempsMoyF min</p>
                                 </div>
                             </div>
 
                             <div class='row ligneInfos'>
-                                <div class='col-4'>
+                                <div class='col-md-4'>
                                     <p class='nomInfo'>Temps vainqueur</p>
                                     <p class='readInfo'>$tempsMin min</p>
                                 </div>
-                                <div class='col-4'></div>
-                                <div class='col-4'>
+                                <div class='col-md-4'></div>
+                                <div class='col-md-4'>
                                     <p class='nomInfo'>Temps dernier</p>
                                     <p class='readInfo'>$tempsMax min</p>
                                 </div>
                             </div>
 
                             <div class='row ligneInfos'>
-                                <div class='col-4'>
+                                <div class='col-md-4'>
                                     <p class='nomInfo'>Moyenne temps adhérents</p>
                                     <p class='readInfo'>$tempsMoyAdh min</p>
                                 </div>
@@ -240,7 +293,7 @@
                 <section class='sectionInfos'>
                         <h2>Tarifs</h2>
                             <div class='infos container'>
-                                <div id='infosBloc' class='infosBloc container mx-auto col-8 mw-50'>
+                                <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
                                     <div class='row'>";
 
 
@@ -253,11 +306,11 @@
                 $ageMax = $nuplet['age_max'];
                 $tarif = $nuplet['tarif'];
 
-                print " <div class='col-4'>
+                print " <div class='col-md-4'>
                             <p class='nomInfo'>$ageMin-$ageMax ans</p>
                             <p id='tarifEpreuve' class='readInfo'>$tarif €</p>
                         </div>
-                    <div class='col-4'></div>";
+                    <div class='col-md-4'></div>";
         }
         print "     </div>
                 </div>                
@@ -350,12 +403,12 @@
                 $temps = $nuplet['temps'];
 
 
-                print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\"  class='text-left'>$rang</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\"  class='text-left'>$nom</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\"  class='text-left'>$prenom</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\"  class='text-left'>".($sexe == 'H' ? 'Homme' : 'Femme')."</td>
-                            <td onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\"  class='text-left'>$temps min</td>
+                print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\">
+                            <td class='text-left'>$rang</td>
+                            <td class='text-left'>$nom</td>
+                            <td class='text-left'>$prenom</td>
+                            <td class='text-left'>".($sexe == 'H' ? 'Homme' : 'Femme')."</td>
+                            <td class='text-left'>$temps min</td>
                         </tr>";
             }
         }
@@ -379,3 +432,46 @@
         print "<script>document.getElementById('". $order ."Col').innerHTML += ' <i class=\"fas fa-chevron-down\"></i>'</script>";
     }
 ?>
+
+<script>
+    // Gestion de l'affichage du formulaire de modification des informations de l'édition
+
+    // Appelle des fonction en cas de clic sur les boutons
+    document.getElementById("modifInfo").onclick = afficheForm;
+    document.getElementById("annulerInfo").onclick = annulerForm;
+
+    // Sauvegarde des champs
+    const nom = document.getElementById('nomInput').value;
+    const distance = document.getElementById('distanceInput').value;
+    const denivelee = document.getElementById('deniveleeInput').value;
+    const adresse_depart = document.getElementById('adresse_departInput').value;
+    const type = document.getElementById('typeInput').value;
+    const plan = document.getElementById('planInput').value;
+
+    // Fonction qui affiche le formulaire de modification
+    function afficheForm()
+    {
+        location.href="#hautPage";
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "inline-block");
+        Array.from(document.getElementsByClassName('writeInfoFlex')).forEach(n => n.style.display = "flex");
+        document.getElementById('labelFile').style.display = "block";
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "none");
+    }
+
+    // Fonction qui cache le formulaire de modification et remet les valeures initiales
+    function annulerForm()
+    {
+        Array.from(document.getElementsByClassName('writeInfo')).forEach(n => n.style.display = "none");
+        Array.from(document.getElementsByClassName('readInfo')).forEach(n => n.style.display = "inline-block");
+        document.getElementById('labelFile').style.display = "none";
+        Array.from(document.getElementsByClassName('readInfoFlex')).forEach(n => n.style.display = "flex");
+
+        // Re-mise en place des valeures initiales
+        document.getElementById('nomInput').value = nom;
+        document.getElementById('distanceInput').value = distance;
+        document.getElementById('deniveleeInput').value = denivelee;
+        document.getElementById('adresse_departInput').value = adresse_depart;
+        document.getElementById('typeInput').value = type;
+        document.getElementById('planInput').value = plan;
+    }
+</script>

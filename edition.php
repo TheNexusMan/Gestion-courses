@@ -160,19 +160,19 @@
 
             if($_SESSION['typeUtilisateur'] == "Admin")
             {
-                print "             <div class='row ligneButtonCourse readInfo readInfoFlex' id='modifInfo'>
+                print "             <div class='row ligneButton readInfo readInfoFlex' id='modifInfo'>
                                         <button type='button' class='btn btn-primary mx-auto'>Modifier</button>
-                                    </div>";
-            }
-                                    
-            print "                 <div class='row ligneButtonCourse writeInfo writeInfoFlex' id='modifInfo'>
+                                    </div>
+                                    <div class='row ligneButton writeInfo writeInfoFlex' id='modifInfo'>
                                         <div class='row mx-auto'>
                                             <button type='submit' class='btn btn-primary col-md-5'>Valider</button>
                                             <div class='col-md-1'></div>
                                             <button type='button' id='annulerInfo' class='btn btn-primary col-md-5'>Annuler</button>
                                         </div>
-                                    </div>
-                                </form>
+                                    </div>";
+            }
+                                    
+            print "             </form>
                             </div>
                         </div>
                         <div id='ancreTri'></div>

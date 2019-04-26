@@ -263,11 +263,11 @@
                 $annee = $nuplet['annee'];
                 $distance = $nuplet['distance'];
                 $temps = $nuplet['temps'];
-                print "<tr class='ligneTabClic'>
-                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$annee</td>
-                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$distance Km</td>
-                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$nom</td>
-                            <td onclick=\"location.href='edition.php?idedition=$id_edition'\" class='text-left'>$temps min</td>
+                print "<tr class='ligneTabClic' onclick=\"location.href='edition.php?idedition=$id_edition'\">
+                            <td class='text-left'>$annee</td>
+                            <td class='text-left'>$distance Km</td>
+                            <td class='text-left'>$nom</td>
+                            <td class='text-left'>$temps min</td>
                         </tr>";
             }
 

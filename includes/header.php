@@ -21,6 +21,7 @@
     $machine = 'localhost';
     $bd = 'bdw1';
     $connexion = mysqli_connect($machine, $user, $mdp, $bd);
+    mysqli_set_charset($connexion, 'utf8');
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@
             <div class="titreBloc">
                 <div class="divSiteTitre">
                     <a href="index.php">
-                        <img src="http://localhost/projet-bdw1/data/logo.jpg" class="img-fluid" alt="Responsive image" height="50px">
+                        <img src="http://localhost/projet-bdw1/data/logo.jpg" class="img-fluid logo" alt="Responsive image" height="50px">
                         <h1>Run 4 your life</h1>
                     </a>
                 </div>
