@@ -42,6 +42,69 @@
                 print "<script>alert(\"Échec de l'ajout du tarif\")</script>";
         }
 
+        // Ajout des résultats et temps
+        if(isset($_FILES['resultatcsv']) && isset($_FILES['tempscsv']))
+        {
+            // UPLOAD DU FICHIER CSV, vérification et insertion en BASE
+            if($_FILES["resultatcsv"]["type"] != "application/vnd.ms-excel" || $_FILES["tempscsv"]["type"] != "application/vnd.ms-excel")
+            {
+                print "<script>alert(\"Ce n'est pas un fichier de type .csv\")</script>";
+            }
+            elseif(is_uploaded_file($_FILES['resultatcsv']['tmp_name']) && is_uploaded_file($_FILES['tempscsv']['tmp_name']))
+            {
+                mysqli_begin_transaction($connexion, MYSQLI_TRANS_START_READ_WRITE);
+
+                // Processe le csv resultat
+                $handle = fopen($_FILES['resultatcsv']['tmp_name'], "r");
+                $data = fgetcsv($handle, 1000, ","); // Enlève l'en-tête du fichier
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+                {
+                    $dossard = intval($data[0]);
+                    $rang = intval($data[1]);
+                    $nom = mysqli_real_escape_string($connexion, $data[2]);
+                    $prenom = mysqli_real_escape_string($connexion, $data[3]);
+                    $sexe = mysqli_real_escape_string($connexion, $data[4]);
+                    
+                    $requete = "INSERT INTO resultat (dossard, id_epreuve, rang, nom, prenom, sexe)
+                                VALUES ($dossard, $idEpreuve, $rang, '$nom', '$prenom', '$sexe')";
+
+                    $resultat = mysqli_query($connexion, $requete);
+                }
+
+                if ($resultat == FALSE)
+                        print "<script>alert(\"Échec de l'ajout des résultats\")</script>";
+                
+                // Processe le csv temps
+                $handle = fopen($_FILES['tempscsv']['tmp_name'], "r");
+                $data = fgetcsv($handle, 1000, ","); // Enlève l'en-tête du fichier
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+                {
+                    $dossard = intval($data[0]);
+                    $km = intval($data[1]);
+                    $temps = intval($data[2]);
+                    
+                    $requete = "INSERT INTO temps_passage (id_epreuve, dossard, km, temps)
+                                VALUES ($idEpreuve, $dossard, $km, $temps)";
+
+                    $resultat = mysqli_query($connexion, $requete);
+                }
+
+                $requete = "INSERT INTO participation (dossard, id_adherent, id_epreuve)
+                                SELECT r.dossard ,a.id_adherent, r.id_epreuve
+                                FROM resultat r
+                                INNER JOIN adherent a on (a.nom = r.nom and a.prenom = r.prenom and a.sexe = r.sexe)
+                                WHERE r.id_epreuve = $idEpreuve";
+                
+                mysqli_query($connexion, $requete);
+
+                if(!mysqli_commit($connexion))
+                    print "<script>alert(\"Échec de l'ajout des résultats et des temps\")</script>";
+
+            } else{
+                die("Vous ne devriez pas être là");
+            }
+        }
+
         // Modification des informations de l'édition
         if(isset($_POST['nom']) && isset($_POST['distance']) && isset($_POST['denivelee']) && $_SESSION['typeUtilisateur'] == "Admin")
         {
@@ -50,22 +113,28 @@
             $modAdresse_depart = mysqli_real_escape_string($connexion, $_POST['adresse_depart']);
             $modDenivelee = intval($_POST['denivelee']);
             $modType = mysqli_real_escape_string($connexion, $_POST['type']);
-            $modPlan = mysqli_real_escape_string($connexion, $_POST['plan']);
-            $tabPlan = explode('.', $modPlan);
-            $idTab = sizeof($tabPlan)-1;
 
-            // Test si le fichier passé est bien un jpg ou un png
-            if((strlen($tabPlan[$idTab]) != 3 && strlen($tabPlan[$idTab]) != 4) || (strlen($tabPlan[$idTab]) == 3 && $tabPlan[$idTab] != "png" && $tabPlan[$idTab] != "jpg" && $tabPlan[$idTab] != "PNG") || (strlen($tabPlan[$idTab]) == 4 && $tabPlan[$idTab] != "jpeg"))
+            $requete = "UPDATE epreuve
+                        SET nom = '$modName', distance = $modDistance, adresse_depart = '$modAdresse_depart', denivelee = $modDenivelee, type_epreuve = '$modType'";
+
+            if($_FILES['plan']['name'] != "")
             {
-                print "<script>alert(\"Le plan inséré n'est pas un png ou jpg\")</script>";
-            }else{
-                $requete = "UPDATE epreuve
-                            SET nom = '$modName', distance = $modDistance, adresse_depart = '$modAdresse_depart', denivelee = $modDenivelee, type_epreuve = '$modType', plan = '$modPlan'
-                            WHERE id_epreuve = $idEpreuve";
+                $modPlan = mysqli_real_escape_string($connexion, $_FILES['plan']['name']);
+                $tabPlan = explode('.', $modPlan);
+                $idTab = sizeof($tabPlan)-1;
 
-                if(mysqli_query($connexion, $requete) == FALSE){
-                    print "<script>alert('Échec de la requête de modification des informations')</script>";
+                if((strlen($tabPlan[$idTab]) != 3 && strlen($tabPlan[$idTab]) != 4) || (strlen($tabPlan[$idTab]) == 3 && $tabPlan[$idTab] != "png" && $tabPlan[$idTab] != "jpg" && $tabPlan[$idTab] != "PNG") || (strlen($tabPlan[$idTab]) == 4 && $tabPlan[$idTab] != "jpeg"))
+                {
+                    print "<script>alert(\"Le plan inséré n'est pas un png ou jpg\")</script>";
+                }else{
+                    $requete .= ", plan = '$modPlan'";
                 }
+            }
+
+            $requete .= "WHERE id_epreuve = $idEpreuve";
+
+            if(mysqli_query($connexion, $requete) == FALSE){
+                print "<script>alert('Échec de la requête de modification des informations')</script>";
             }
         }
 
@@ -279,7 +348,7 @@
                     <h2>Information de l'épreuve</h2>
                     <div class='infos container'>
                         <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
-                            <form action='' method='POST'>
+                            <form action='epreuve.php?id_epreuve=$idEpreuve' method='POST' enctype='multipart/form-data'>
 
                                 <div class='form-row ligneInfos'>
                                     <div class='col-md-4'>
@@ -324,7 +393,7 @@
                                             <img src='data/plan/$plan' class='readInfo imgPlan img-fluid img-thumbnail' alt=\"Plan de l'épreuve\">
                                         </div>
                                         <label class='custom-file-label' id='labelFile' for='planInput'>Choisissez un plan... </label>
-                                        <input type='file' id='planInput' class='custom-file-input writeInfo' name='plan' value=\"$plan\">
+                                        <input type='file' id='planInput' class='custom-file-input writeInfo' name='plan'>
                                     </div>
                                     <div id='ancreTarif'></div>
                                 </div>";
@@ -411,6 +480,33 @@
                             </div>";
                 }
         print "</section>";
+
+        if(!$epreuveTerminee && $_SESSION['typeUtilisateur'] == "Admin")
+        {
+            print "<section class='sectionInfos'>
+                        <h2>Ajouter les résultats</h2>
+                        <div class='infos container'>
+                            <div id='infosBloc' class='infosBloc container mx-auto col-lg-8 col-md-10 col-xs-12 mw-50'>
+                                <form action='epreuve.php?id_epreuve=$idEpreuve' method='POST' enctype='multipart/form-data'>
+                                    <div class='form-row ligneInfos'>
+                                        <div class='col-md-5'>
+                                            <label class='custom-file-label' for='resultatcsv'>CSV des résultats... </label>
+                                            <input type='file' id='resultatcsv' class='custom-file-input' name='resultatcsv' required>
+                                        </div>
+                                        <div class='col-md-2'></div>
+                                        <div class='col-md-5'>
+                                            <label class='custom-file-label' for='tempscsv'>CSV des temps... </label>
+                                            <input type='file' id='tempscsv' class='custom-file-input' name='tempscsv' required>
+                                        </div>
+                                    </div>
+                                    <div class='form-row ligneButton'>
+                                        <button type='submit' class='btn btn-primary mx-auto'>Envoyer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>";
+        }
 
         if($epreuveTerminee)
         {
@@ -580,7 +676,7 @@
                     $temps = $nuplet['temps'];
 
 
-                    print "<tr ". ($_SESSION['typeUtilisateur'] == 'Admin' ? 'class="ligneTabClic" onclick="location.href=\'adherent.php?id_adherent=$id_adherent\'"' : '') .">
+                    print "<tr ". ($_SESSION['typeUtilisateur'] == 'Admin' ? 'class="ligneTabClic" onclick="location.href=\'adherent.php?id_adherent='.$id_adherent.'\'"' : '') .">
                                 <td class='text-left'>$rang</td>
                                 <td class='text-left'>$nom</td>
                                 <td class='text-left'>$prenom</td>

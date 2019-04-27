@@ -47,7 +47,7 @@
             $adresseDepart = mysqli_real_escape_string($connexion, $_POST['adresse_depart']);
             $denivelee = intval($_POST['denivelee']);
             $typeEpreuve = mysqli_real_escape_string($connexion, $_POST['type_epreuve']);
-            $plan = mysqli_real_escape_string($connexion, $_POST['plan']);
+            $plan = mysqli_real_escape_string($connexion, $_FILES['plan']['name']);
             $tabPlan = explode('.', $plan);
             $idTab = sizeof($tabPlan)-1;
 
@@ -331,7 +331,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="edition.php<?php print "?idedition=$idEdition&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
+                <form method="POST" action="edition.php<?php print "?idedition=$idEdition&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>"  enctype="multipart/form-data">
                     <div class='container'>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
