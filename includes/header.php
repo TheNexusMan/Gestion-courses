@@ -13,7 +13,7 @@
     // ou qu'un adhérent essait d'accéder à une page administrateur, il est redirigé vers la page de login
     if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || (($page == "adherents.php" || $page == "espaceperso.php") && isset($_SESSION['id_adherent']))))
     {
-       //header('Location: http://localhost/projet-bdw1/index.php');
+       header('Location: http://localhost/projet-bdw1/index.php');
     }
 
     $user = 'root';
