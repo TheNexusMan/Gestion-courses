@@ -128,6 +128,7 @@
                     print "<script>alert(\"Le plan inséré n'est pas un png ou jpg\")</script>";
                 }else{
                     $requete .= ", plan = '$modPlan'";
+                    move_uploaded_file($_FILES['plan']['tmp_name'], 'data/plan/'.$_FILES['plan']['name']);
                 }
             }
 
