@@ -1,3 +1,4 @@
+<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
 <?php
     //On réinitialise les variables de connexion en cas de déconnexion
     if(isset($_GET['logout']))

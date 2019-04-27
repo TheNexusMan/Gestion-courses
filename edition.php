@@ -1,3 +1,4 @@
+<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
 <?php
     session_start();
 
@@ -66,9 +67,8 @@
         }
 
         // Modification des informations de l'édition
-        if(isset($_POST['annee']) && isset($_POST['nb_participants']) && isset($_POST['date']) && $_SESSION['typeUtilisateur'] == "Admin")
+        if(isset($_POST['nb_participants']) && isset($_POST['date']) && $_SESSION['typeUtilisateur'] == "Admin")
         {
-            $modAnnee = intval($_POST['annee']);
             $modNbParticipants = intval($_POST['nb_participants']);
             $modDate = mysqli_real_escape_string($connexion, $_POST['date']);
             $modDate = ($_POST['date'] == NULL ? 'NULL' : "'".$modDate."'");
@@ -80,7 +80,7 @@
             $modDateRecupDossard = ($_POST['date'] == NULL ? 'NULL' : "'".$modDateRecupDossard."'");
 
             $requete = "UPDATE edition
-                        SET annee = $modAnnee, nb_participants = $modNbParticipants, date = $modDate, date_inscription = $modDateInscription, date_depot_certificat = $modDateDepotCertificat, date_recup_dossard = $modDateRecupDossard
+                        SET nb_participants = $modNbParticipants, date = $modDate, date_inscription = $modDateInscription, date_depot_certificat = $modDateDepotCertificat, date_recup_dossard = $modDateRecupDossard
                         WHERE id_edition = $idEdition";
 
             if(mysqli_query($connexion, $requete) == FALSE){
@@ -131,8 +131,7 @@
                                     <div class='form-row ligneInfos'>
                                         <div class='col-md-3'>
                                             <p class='nomInfo'>Année</p>
-                                            <p class='readInfo'>$annee</p>
-                                            <input type='text' id='anneeInput' class='form-control writeInfo' name='annee' value=\"$annee\" maxlength='4' placeholder='AAAA' required>
+                                            <p>$annee</p>
                                         </div>
                                         <div class='col-md-1'></div>
                                         <div class='col-md-3'>

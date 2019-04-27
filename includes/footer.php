@@ -1,4 +1,5 @@
-        <footer>
+<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
+<footer>
             <p>Créé par Arnaud DEBRABANT et Damien PETITJEAN - Copyright © 2019</p>
         </footer>
         

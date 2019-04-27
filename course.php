@@ -1,3 +1,4 @@
+<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
 <?php
     session_start();
 
@@ -216,26 +217,26 @@
 
         $resultat = mysqli_query($connexion, $requete);
 
-            if($resultat == FALSE)
-                print "<script>alert(\"Échec de l'ajout de l'édition\")</script>";
-            else{
-                print "<section class='liste'>
-                            <h2 class='tableLabel'>Liste des éditions</h2>
-                            <div class='container'>
-                                <div class='table-responsive'>
-                                    <table class='table col-md-6 mx-auto table-bordered table-hover text-center'>
-                                        <thead class='thead-dark'>
-                                            <tr>
-                                                <th id='anneeCol' scope='col'>
-                                                    <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Année</a>
-                                                </th>
-                                                <th id='nb_participantsCol' scope='col'>
-                                                    <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nombre de participants</a>
-                                                </th>
-                                                ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
-                                            </tr>
-                                        </thead>
-                                    <tbody>";
+        if($resultat == FALSE)
+            print "<script>alert(\"Échec de l'ajout de l'édition\")</script>";
+        else{
+            print "<section class='liste'>
+                        <h2 class='tableLabel'>Liste des éditions</h2>
+                        <div class='container'>
+                            <div class='table-responsive'>
+                                <table class='table col-md-6 mx-auto table-bordered table-hover text-center'>
+                                    <thead class='thead-dark'>
+                                        <tr>
+                                            <th id='anneeCol' scope='col'>
+                                                <a href='?idcourse=$idCourse&order=annee&orderSec=$order&sens=$sens&clic=1#ancreTri'>Année</a>
+                                            </th>
+                                            <th id='nb_participantsCol' scope='col'>
+                                                <a href='?idcourse=$idCourse&order=nb_participants&orderSec=$order&sens=$sens&clic=1#ancreTri'>Nombre de participants</a>
+                                            </th>
+                                            ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
+                                        </tr>
+                                    </thead>
+                                <tbody>";
 
             while ($nuplet = mysqli_fetch_assoc($resultat))
             {
