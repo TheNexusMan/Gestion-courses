@@ -116,7 +116,8 @@
 
             // Requête de récupération du meilleur et pire temps
             $requete = "SELECT ep.id_edition, ep.nom, ep.distance, ep.adresse_depart, ep.denivelee, ep.type_epreuve, ep.plan, MIN(tmp.temps) AS Meilleur, MAX(tmp.temps) AS Nul 
-                        FROM epreuve ep JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve
+                        FROM epreuve ep JOIN temps_passage tmp ON ep.id_epreuve = tmp.id_epreuve 
+                                        JOIN participation pa ON (pa.dossard = tmp.dossard AND pa.id_epreuve = tmp.id_epreuve)
                         WHERE ep.id_epreuve = $idEpreuve AND tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve";
 
             $resultat = mysqli_query($connexion, $requete);
@@ -132,6 +133,7 @@
             // Récupération de la moyenne de temps des hommes
             $requete = "SELECT AVG(tmp.temps) AS tempsH
                         FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
+                                               JOIN participation pa ON (tmp.dossard = pa.dossard AND tmp.id_epreuve = pa.id_epreuve)
                         WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'H' ";
 
             $resultat = mysqli_query($connexion, $requete);
@@ -146,6 +148,7 @@
             // Récupération de la moyenne de temps des femmes
             $requete = "SELECT AVG(tmp.temps) AS tempsF
                         FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
+                                               JOIN participation pa ON (tmp.dossard = pa.dossard AND tmp.id_epreuve = pa.id_epreuve)
                         WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'F' ";
 
             $resultat = mysqli_query($connexion, $requete);
@@ -159,9 +162,9 @@
 
             // Récupération du nombre de clubs et de la moyenne de temps des adhérents
             $requete = "SELECT COUNT(DISTINCT adh.club) AS nbClubs, AVG(tmp.temps) AS tmpMoyenAdh
-                        FROM temps_passage tmp JOIN participation pa ON tmp.id_epreuve = pa.id_epreuve
-                                            JOIN adherent adh ON adh.id_adherent = pa.id_adherent
-                        WHERE tmp.km = $distEpreuve";
+                        FROM temps_passage tmp JOIN participation pa ON (tmp.id_epreuve = pa.id_epreuve AND tmp.dossard = pa.dossard)
+                                JOIN adherent adh ON adh.id_adherent = pa.id_adherent
+                        WHERE tmp.km = $distEpreuve AND tmp.id_epreuve = $idEpreuve";
 
             $resultat = mysqli_query($connexion, $requete);
 
@@ -186,6 +189,44 @@
                 $nuplet = mysqli_fetch_assoc($resultat);
                 $nbAbandons = $nuplet['abandons'];
             }
+
+            $requete = "SELECT MIN(tmp.temps) AS bestTimer
+                        FROM resultat re JOIN temps_passage tmp ON re.id_epreuve = tmp.id_epreuve
+                        WHERE re.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve";
+            $resultat = mysqli_query($connexion, $requete);
+
+            if($resultat == FALSE)
+                print "<script>alert(\"Échec de la requête de récupération du meilleur temps'\")</script>";
+            else {
+                $nuplet = mysqli_fetch_assoc($resultat);
+                $bestTime = $nuplet['bestTimer'];
+            }
+
+            $requete = "SELECT COUNT(DISTINCT re.rang) AS nbrAdh
+                        FROM resultat re JOIN participation pa ON (re.id_epreuve = pa.id_epreuve AND re.dossard = pa.dossard)
+                        WHERE re.id_epreuve = $idEpreuve";
+            $resultat = mysqli_query($connexion,$requete);
+
+            if($resultat == FALSE)
+                print "<script>alert(\"Échec de la requête de récupération du nombre d'adhérents'\")</script>";
+            else {
+                $nuplet = mysqli_fetch_assoc($resultat);
+                $nbAdh = $nuplet['nbrAdh'];
+            }
+
+            $requete ="SELECT MIN(re.rang) AS bestRank, MAX(re.rang) AS worstRank
+                       FROM resultat re JOIN participation pa ON (re.id_epreuve = pa.id_epreuve AND re.dossard = pa.dossard)
+                       WHERE re.id_epreuve = $idEpreuve";
+            $resultat = mysqli_query($connexion,$requete);
+
+            if($resultat == FALSE)
+                print "<script>alert(\"Échec de la requête de récupération des meilleurs/pire rangs'\")</script>";
+            else {
+                $nuplet = mysqli_fetch_assoc($resultat);
+                $bestRank = $nuplet['bestRank'];
+                $worstRank = $nuplet['worstRank'];
+            }
+
         }
 
         // Récupération de l'édition
@@ -381,24 +422,24 @@
 
                                 <div class='row ligneInfos'>
                                     <div class='col-md-4'>
-                                    <p class='nomInfo'>Moyenne temps hommes</p>
+                                    <p class='nomInfo'>Moyenne temps hommes Adhérents</p>
                                     <p id='tempsHEpreuve'>$tempsMoyH min</p>
                                     </div>
                                     <div class='col-md-4'></div>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Moyenne temps femmes</p>
+                                        <p class='nomInfo'>Moyenne temps femmes Adhérentes</p>
                                         <p>$tempsMoyF min</p>
                                     </div>
                                 </div>
 
                                 <div class='row ligneInfos'>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Temps vainqueur</p>
+                                        <p class='nomInfo'>Meilleur Temps Adhérent</p>
                                         <p>$tempsMin min</p>
                                     </div>
                                     <div class='col-md-4'></div>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Temps dernier</p>
+                                        <p class='nomInfo'>Dernier temps Adhérent</p>
                                         <p>$tempsMax min</p>
                                     </div>
                                 </div>
@@ -408,7 +449,35 @@
                                         <p class='nomInfo'>Moyenne temps adhérents</p>
                                         <p>$tempsMoyAdh min</p>
                                     </div>
+                                    <div class='col-md-4'></div>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Temps vainqueur</p>
+                                        <p>$bestTime min</p>
+                                    </div>
+
                                 </div>
+
+                                <div class='row ligneInfos'>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Nombre d'adhérents </p>
+                                        <p>$nbAdh</p>
+                                    </div>
+                                    <div class='col-md-4'></div>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Meilleur rang Adhérent </p>
+                                        <p>$bestRank</p>
+                                    </div>
+                                </div>
+
+                                <div class='row ligneInfos'>
+                                    <div class='col-md-4'>
+                                        <p class='nomInfo'>Pire rang Adhérent</p>
+                                        <p>$worstRank</p>
+                                    </div>
+
+                                </div>
+                                
+
 
                             </div>
                         </div>
