@@ -237,7 +237,8 @@
                                         </thead>
                                     <tbody>";
 
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            while ($nuplet = mysqli_fetch_assoc($resultat))
+            {
                 $annee = $nuplet['annee'];
                 $nb_participants = $nuplet['nb_participants'];
                 $idEdition = $nuplet['id_edition'];
@@ -259,15 +260,16 @@
                                         <i class='fas fa-trash-alt'></i>
                                     </button>
                                 </form>
-                            </td>
-                        </tr>";
+                            </td>";
                 }
+                print "</tr>";
             }
         }
 
         mysqli_close($connexion);
     }
 ?>
+
                 </tbody>
             </table>
         </div>
@@ -280,7 +282,7 @@
     {
         print "<div class='container'>
                     <div class='row mb-4'>
-                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjoutEdition'>
+                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjout'>
                             Ajouter une édition
                         </button>
                     </div>
@@ -291,7 +293,7 @@
 ?>
 
 <!-- Modal du formulaire d'ajout d'édition -->
-<div class="modal fade" id="modalAjoutEdition" tabindex="-1" role="dialog" aria-labelledby="modalAjoutEdition" aria-hidden="true">
+<div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="modalAjout" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -304,30 +306,30 @@
                 <form method="POST" action="course.php<?php print "?idcourse=$idCourse&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class='container'>
                         <div class="form-row">
-                            <div class="col-md-md-2 mb-3">
-                                <label for="anneeEd">Année édition :</label>
+                            <div class="col-md-2 mb-3">
+                                <label for="anneeEd">Année édition</label>
                                 <input type="text" class="form-control" id="anneeEd" name="anneeEd" maxlength="4" placeholder="AAAA" required>
                             </div>
-                            <div class="col-md-md-4 mb-3">
-                                <label for="nbPart">Nombre de participants :</label>
+                            <div class="col-md-4 mb-3">
+                                <label for="nbPart">Nombre de participants</label>
                                 <input type="text" class="form-control" id="nbPart" name="nbPart" placeholder="1234" required>
                             </div>
-                            <div class="col-md-md-6 mb-3">
-                                <label for="dateAdd">Date :</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="dateAdd">Date</label>
                                 <input type="date" class="form-control" id="dateAdd" name="dateAdd" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-md-4 mb-3">
-                                <label for="dateIns">Date inscription : </label>
+                            <div class="col-md-4 mb-3">
+                                <label for="dateIns">Date inscription</label>
                                 <input type="date" class="form-control" id="dateIns" name="dateIns" required>
                             </div>
-                            <div class="col-md-md-4 mb-3">
-                                <label for="dateDepot">Date dépôt des certificats : </label>
+                            <div class="col-md-4 mb-3">
+                                <label for="dateDepot">Date dépôt des certificats</label>
                                 <input type="date" class="form-control" id="dateDepot" name="dateDepot" required>
                             </div>
-                            <div class="col-md-md-4 mb-3">
-                                <label for="dateDossard">Date récupération des dossards : </label>
+                            <div class="col-md-4 mb-3">
+                                <label for="dateDossard">Date récupération des dossards</label>
                                 <input type="date" class="form-control" id="dateDossard" name="dateDossard" required>
                             </div>
                         </div>

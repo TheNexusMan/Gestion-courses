@@ -208,13 +208,13 @@
                             <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="anneeCrea">Année création </label>
+                            <label for="anneeCrea">Année création</label>
                             <input type="text" class="form-control" id="anneeCrea" name="anneeCrea" maxlength="4" placeholder="AAAA" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="month">Mois</label>
                             <select class="custom-select" id="month" name="month" required>
-                                <option selected> Mois... </option>
+                                <option selected>Mois...</option>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>

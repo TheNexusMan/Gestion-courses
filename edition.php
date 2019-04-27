@@ -252,7 +252,8 @@
                                         </thead>
                                     <tbody>";
 
-            while ($nuplet = mysqli_fetch_assoc($resultat)) {
+            while ($nuplet = mysqli_fetch_assoc($resultat))
+            {
                 $id_epreuve = $nuplet['id_epreuve'];
                 $nom = $nuplet['nom'];
                 $distance = $nuplet['distance'];
@@ -278,15 +279,16 @@
                                         <i class='fas fa-trash-alt'></i>
                                     </button>
                                 </form>
-                            </td>
-                        </tr>";
+                            </td>";
                 }
             }
+            print "</tr>";
         }
 
         mysqli_close($connexion);
     }
 ?>
+
                 </tbody>
             </table>
         </div>
@@ -299,7 +301,7 @@
     {
         print "<div class='container'>
                     <div class='row mb-4'>
-                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjoutEdition'>
+                        <button type='button' class='btn btn-primary mx-auto' data-toggle='modal' data-target='#modalAjout'>
                             Ajouter une épreuve
                         </button>
                     </div>
@@ -310,7 +312,7 @@
 ?>
 
 <!-- Modal du formulaire d'ajout d'épreuve -->
-<div class="modal fade" id="modalAjoutEdition" tabindex="-1" role="dialog" aria-labelledby="modalAjoutEdition" aria-hidden="true">
+<div class="modal fade" id="modalAjout" tabindex="-1" role="dialog" aria-labelledby="modalAjout" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -323,33 +325,33 @@
                 <form method="POST" action="edition.php<?php print "?idedition=$idEdition&order=$order&orderSec=$orderSec&sens=$sens&clic=0" ?>">
                     <div class='container'>
                         <div class="form-row">
-                            <div class="col-md-md-6 mb-3">
-                                <label for="nom">Nom :</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="nom">Nom</label>
                                 <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
                             </div>
-                            <div class="col-md-md-6 mb-3">
-                                <label for="typeEpreuve">Type :</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="typeEpreuve">Type</label>
                                 <input type="text" class="form-control" id="typeEpreuve" name="type_epreuve" placeholder="Type d'épreuve" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-md-6 mb-3">
-                                <label for="distance">Distance : </label>
+                            <div class="col-md-6 mb-3">
+                                <label for="distance">Distance</label>
                                 <input type="text" class="form-control" id="distance" name="distance" placeholder="1234" required>
                             </div>
-                            <div class="col-md-md-6 mb-3">
-                                <label for="denivelee">Dénivelée : </label>
+                            <div class="col-md-6 mb-3">
+                                <label for="denivelee">Dénivelée</label>
                                 <input type="text" class="form-control" id="denivelee" name="denivelee" placeholder="1234" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-md-12 mb-3">
-                                <label for="adresse">Adresse de départ : </label>
+                            <div class="col-md-12 mb-3">
+                                <label for="adresse">Adresse de départ</label>
                                 <input type="text" class="form-control" id="adresse" name="adresse_depart" placeholder="Adresse de départ" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-md-12 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <div class="custom-file">
                                     <label class="custom-file-label" for="plan">Choisissez un plan... </label>
                                     <input type="file" class="custom-file-input" id="plan" name="plan" required>
