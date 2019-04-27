@@ -144,7 +144,7 @@
                                     <div class='form-row ligneInfos'>
                                         <div class='col-md-12'>
                                             <p class='nomInfo'>Site</p>
-                                            <a href='$site' target='_blank' class='readInfo'>$site</a>
+                                            <a href='$site' target='_blank' class='readInfo'>Site web de la course</a>
                                             <input type='text' id='siteInput' class='form-control writeInfo' name='site' value=\"$site\" placeholder='https://www.sitedelacourse.fr/' required>
                                         </div>
                                     </div>";
@@ -363,14 +363,17 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de la course
 
-    // Appelle des fonction en cas de clic sur les boutons
-    document.getElementById("modifInfo").onclick = afficheForm;
-    document.getElementById("annulerInfo").onclick = annulerForm;
+    if(document.getElementById("modifInfo"))
+    {
+        // Appelle des fonction en cas de clic sur les boutons
+        document.getElementById("modifInfo").onclick = afficheForm;
+        document.getElementById("annulerInfo").onclick = annulerForm;
 
-    // Sauvegarde des champs
-    const anneeCreation = document.getElementById('anneeCreationInput').value;
-    const mois = document.getElementById('moisInput').value;
-    const site = document.getElementById('siteInput').value;
+        // Sauvegarde des champs
+        const anneeCreation = document.getElementById('anneeCreationInput').value;
+        const mois = document.getElementById('moisInput').value;
+        const site = document.getElementById('siteInput').value;
+    }
 
     // Fonction qui affiche le formulaire de modification
     function afficheForm()

@@ -51,13 +51,21 @@
             $modDenivelee = intval($_POST['denivelee']);
             $modType = mysqli_real_escape_string($connexion, $_POST['type']);
             $modPlan = mysqli_real_escape_string($connexion, $_POST['plan']);
+            $tabPlan = explode('.', $modPlan);
+            $idTab = sizeof($tabPlan)-1;
 
-            $requete = "UPDATE epreuve
-                        SET nom = '$modName', distance = $modDistance, adresse_depart = '$modAdresse_depart', denivelee = $modDenivelee, type_epreuve = '$modType', plan = '$modPlan'
-                        WHERE id_epreuve = $idEpreuve";
+            // Test si le fichier passé est bien un jpg ou un png
+            if((strlen($tabPlan[$idTab]) != 3 && strlen($tabPlan[$idTab]) != 4) || (strlen($tabPlan[$idTab]) == 3 && $tabPlan[$idTab] != "png" && $tabPlan[$idTab] != "jpg" && $tabPlan[$idTab] != "PNG") || (strlen($tabPlan[$idTab]) == 4 && $tabPlan[$idTab] != "jpeg"))
+            {
+                print "<script>alert(\"Le plan inséré n'est pas un png ou jpg\")</script>";
+            }else{
+                $requete = "UPDATE epreuve
+                            SET nom = '$modName', distance = $modDistance, adresse_depart = '$modAdresse_depart', denivelee = $modDenivelee, type_epreuve = '$modType', plan = '$modPlan'
+                            WHERE id_epreuve = $idEpreuve";
 
-            if(mysqli_query($connexion, $requete) == FALSE){
-                print "<script>alert('Échec de la requête de modification des informations')</script>";
+                if(mysqli_query($connexion, $requete) == FALSE){
+                    print "<script>alert('Échec de la requête de modification des informations')</script>";
+                }
             }
         }
 
@@ -190,6 +198,7 @@
                 $nbAbandons = $nuplet['abandons'];
             }
 
+            // Récupération du meilleur temps
             $requete = "SELECT MIN(tmp.temps) AS bestTimer
                         FROM resultat re JOIN temps_passage tmp ON re.id_epreuve = tmp.id_epreuve
                         WHERE re.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve";
@@ -202,6 +211,7 @@
                 $bestTime = $nuplet['bestTimer'];
             }
 
+            // Récupération du nombre d'adhérents
             $requete = "SELECT COUNT(DISTINCT re.rang) AS nbrAdh
                         FROM resultat re JOIN participation pa ON (re.id_epreuve = pa.id_epreuve AND re.dossard = pa.dossard)
                         WHERE re.id_epreuve = $idEpreuve";
@@ -214,6 +224,7 @@
                 $nbAdh = $nuplet['nbrAdh'];
             }
 
+            // Rrécupération des meilleurs/pire rangs
             $requete ="SELECT MIN(re.rang) AS bestRank, MAX(re.rang) AS worstRank
                        FROM resultat re JOIN participation pa ON (re.id_epreuve = pa.id_epreuve AND re.dossard = pa.dossard)
                        WHERE re.id_epreuve = $idEpreuve";
@@ -341,7 +352,7 @@
                     <h2>Tarifs</h2>
                     <div class='infos container'>
                         <div class='table-responsive'>
-                            <table class='table table-bordered text-center'>
+                            <table class='table col-md-4 mx-auto table-bordered text-center'>
                                 <thead class='thead-dark'>
                                     <tr>
                                         <th id='nomCol' scope='col'>
@@ -422,24 +433,24 @@
 
                                 <div class='row ligneInfos'>
                                     <div class='col-md-4'>
-                                    <p class='nomInfo'>Moyenne temps hommes Adhérents</p>
+                                    <p class='nomInfo'>Moyenne temps hommes adhérents</p>
                                     <p id='tempsHEpreuve'>$tempsMoyH min</p>
                                     </div>
                                     <div class='col-md-4'></div>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Moyenne temps femmes Adhérentes</p>
+                                        <p class='nomInfo'>Moyenne temps femmes adhérents</p>
                                         <p>$tempsMoyF min</p>
                                     </div>
                                 </div>
 
                                 <div class='row ligneInfos'>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Meilleur Temps Adhérent</p>
+                                        <p class='nomInfo'>Meilleur temps adhérent</p>
                                         <p>$tempsMin min</p>
                                     </div>
                                     <div class='col-md-4'></div>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Dernier temps Adhérent</p>
+                                        <p class='nomInfo'>Dernier temps adhérent</p>
                                         <p>$tempsMax min</p>
                                     </div>
                                 </div>
@@ -464,14 +475,14 @@
                                     </div>
                                     <div class='col-md-4'></div>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Meilleur rang Adhérent </p>
+                                        <p class='nomInfo'>Meilleur rang adhérent </p>
                                         <p>$bestRank</p>
                                     </div>
                                 </div>
 
                                 <div class='row ligneInfos'>
                                     <div class='col-md-4'>
-                                        <p class='nomInfo'>Pire rang Adhérent</p>
+                                        <p class='nomInfo'>Pire rang adhérent</p>
                                         <p>$worstRank</p>
                                     </div>
 
@@ -538,7 +549,7 @@
                         <h2 class='tableLabel'>Résultats des adhérents</h2>
                         <div class='container'>
                             <div class='table-responsive'>
-                                <table class='table table-bordered table-hover text-center'>
+                                <table class='table table-bordered text-center" . ($_SESSION['typeUtilisateur'] == 'Admin' ? 'table-hover' : '')."'>
                                     <thead class='thead-dark'>
                                         <tr>
                                             <th id='rangCol' scope='col'>
@@ -569,7 +580,7 @@
                     $temps = $nuplet['temps'];
 
 
-                    print "<tr class='ligneTabClic' onclick=\"location.href='adherent.php?id_adherent=$id_adherent'\">
+                    print "<tr ". ($_SESSION['typeUtilisateur'] == 'Admin' ? 'class="ligneTabClic" onclick="location.href=\'adherent.php?id_adherent=$id_adherent\'"' : '') .">
                                 <td class='text-left'>$rang</td>
                                 <td class='text-left'>$nom</td>
                                 <td class='text-left'>$prenom</td>
@@ -649,17 +660,20 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de l'édition
 
-    // Appelle des fonction en cas de clic sur les boutons
-    document.getElementById("modifInfo").onclick = afficheForm;
-    document.getElementById("annulerInfo").onclick = annulerForm;
+    if(document.getElementById("modifInfo"))
+    {
+        // Appelle des fonction en cas de clic sur les boutons
+        document.getElementById("modifInfo").onclick = afficheForm;
+        document.getElementById("annulerInfo").onclick = annulerForm;
 
-    // Sauvegarde des champs
-    const nom = document.getElementById('nomInput').value;
-    const distance = document.getElementById('distanceInput').value;
-    const denivelee = document.getElementById('deniveleeInput').value;
-    const adresse_depart = document.getElementById('adresse_departInput').value;
-    const type = document.getElementById('typeInput').value;
-    const plan = document.getElementById('planInput').value;
+        // Sauvegarde des champs
+        const nom = document.getElementById('nomInput').value;
+        const distance = document.getElementById('distanceInput').value;
+        const denivelee = document.getElementById('deniveleeInput').value;
+        const adresse_depart = document.getElementById('adresse_departInput').value;
+        const type = document.getElementById('typeInput').value;
+        const plan = document.getElementById('planInput').value;
+    }
 
     // Fonction qui affiche le formulaire de modification
     function afficheForm()

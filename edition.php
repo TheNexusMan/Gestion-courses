@@ -48,12 +48,21 @@
             $denivelee = intval($_POST['denivelee']);
             $typeEpreuve = mysqli_real_escape_string($connexion, $_POST['type_epreuve']);
             $plan = mysqli_real_escape_string($connexion, $_POST['plan']);
+            $tabPlan = explode('.', $plan);
+            $idTab = sizeof($tabPlan)-1;
 
-            $requete = "INSERT INTO epreuve (id_edition, nom, distance, adresse_depart, denivelee, type_epreuve, plan)
+            // Test si le fichier passé est bien un jpg ou un png
+            if((strlen($tabPlan[$idTab]) != 3 && strlen($tabPlan[$idTab]) != 4) || (strlen($tabPlan[$idTab]) == 3 && $tabPlan[$idTab] != "png" && $tabPlan[$idTab] != "jpg" && $tabPlan[$idTab] != "PNG") || (strlen($tabPlan[$idTab]) == 4 && $tabPlan[$idTab] != "jpeg"))
+            {
+                print "<script>alert(\"Le plan inséré n'est pas un png ou jpg\")</script>";
+            }else{
+
+                $requete = "INSERT INTO epreuve (id_edition, nom, distance, adresse_depart, denivelee, type_epreuve, plan)
                         VALUES ($idEdition, '$nom', $distance, '$adresseDepart', $denivelee, '$typeEpreuve', '$plan')";
 
-            if (mysqli_query($connexion, $requete) == FALSE)
-                print "<script>alert(\"Échec de l'ajout de l'épreuve\")</script>";
+                if (mysqli_query($connexion, $requete) == FALSE)
+                    print "<script>alert(\"Échec de l'ajout de l'épreuve\")</script>";
+            }
         }
 
         // Modification des informations de l'édition
@@ -388,17 +397,20 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de l'édition
 
-    // Appelle des fonction en cas de clic sur les boutons
-    document.getElementById("modifInfo").onclick = afficheForm;
-    document.getElementById("annulerInfo").onclick = annulerForm;
+    if(document.getElementById("modifInfo"))
+    {
+        // Appelle des fonction en cas de clic sur les boutons
+        document.getElementById("modifInfo").onclick = afficheForm;
+        document.getElementById("annulerInfo").onclick = annulerForm;
 
-    // Sauvegarde des champs
-    const annee = document.getElementById('anneeInput').value;
-    const nbParticipants = document.getElementById('nbParticipantsInput').value;
-    const date = document.getElementById('dateInput').value;
-    const dateInscription = document.getElementById('dateInscriptionInput').value;
-    const dateDepotCertificat = document.getElementById('dateDepotCertificatInput').value;
-    const dateRecupDossard = document.getElementById('dateRecupDossardInput').value;
+        // Sauvegarde des champs
+        const annee = document.getElementById('anneeInput').value;
+        const nbParticipants = document.getElementById('nbParticipantsInput').value;
+        const date = document.getElementById('dateInput').value;
+        const dateInscription = document.getElementById('dateInscriptionInput').value;
+        const dateDepotCertificat = document.getElementById('dateDepotCertificatInput').value;
+        const dateRecupDossard = document.getElementById('dateRecupDossardInput').value;
+    }
 
     // Fonction qui affiche le formulaire de modification
     function afficheForm()

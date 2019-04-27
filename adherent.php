@@ -301,18 +301,21 @@
 <script>
     // Gestion de l'affichage du formulaire de modification des informations de l'adhérent
 
-    // Appelle des fonction en cas de clic sur les boutons
-    document.getElementById("modifInfo").onclick = afficheForm;
-    document.getElementById("annulerInfo").onclick = annulerForm;
+    if(document.getElementById("modifInfo"))
+    {
+        // Appelle des fonction en cas de clic sur les boutons
+        document.getElementById("modifInfo").onclick = afficheForm;
+        document.getElementById("annulerInfo").onclick = annulerForm;
 
-    // Sauvegarde des champs
-    const nom = document.getElementById('nomInput').value;
-    const prenom = document.getElementById('prenomInput').value;
-    const naissance = document.getElementById('naissanceInput').value;
-    const sexe = document.getElementById('sexeInput').value;
-    const adresse = document.getElementById('adresseInput').value;
-    const dateClub = document.getElementById('dateClubInput').value;
-    const nomClub = document.getElementById('nomClubInput').value;
+        // Sauvegarde des champs
+        const nom = document.getElementById('nomInput').value;
+        const prenom = document.getElementById('prenomInput').value;
+        const naissance = document.getElementById('naissanceInput').value;
+        const sexe = document.getElementById('sexeInput').value;
+        const adresse = document.getElementById('adresseInput').value;
+        const dateClub = document.getElementById('dateClubInput').value;
+        const nomClub = document.getElementById('nomClubInput').value;
+    }
 
     // Fonction qui affiche le formulaire de modification
     function afficheForm()
