@@ -647,7 +647,7 @@
                         <h2 class='tableLabel'>Résultats des adhérents</h2>
                         <div class='container'>
                             <div class='table-responsive'>
-                                <table class='table table-bordered text-center" . ($_SESSION['typeUtilisateur'] == 'Admin' ? 'table-hover' : '')."'>
+                                <table class='table table-bordered text-center" . ($_SESSION['typeUtilisateur'] == 'Admin' ? ' table-hover' : '')."'>
                                     <thead class='thead-dark'>
                                         <tr>
                                             <th id='rangCol' scope='col'>
