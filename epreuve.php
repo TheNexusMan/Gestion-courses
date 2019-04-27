@@ -426,10 +426,10 @@
                             <table class='table col-md-4 mx-auto table-bordered text-center'>
                                 <thead class='thead-dark'>
                                     <tr>
-                                        <th id='nomCol' scope='col'>
+                                        <th scope='col'>
                                             Tranche d'âge
                                         </th>
-                                        <th id='nomCol' scope='col'>
+                                        <th scope='col'>
                                             Tarif
                                         </th>
                                         ".($_SESSION['typeUtilisateur'] == 'Admin' ? '<th>Action</th>' : '')."
