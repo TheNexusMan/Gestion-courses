@@ -36,6 +36,7 @@
             $pseudo = mysqli_real_escape_string($connexion, $_POST['pseudo']);
             $mdp = mysqli_real_escape_string($connexion, $_POST['mdp']);
 
+            // Récupération du dernier id adherent
             $requete = "SELECT MAX(id.id_adherent) AS id_adherent FROM (select id_adherent from adherent UNION SELECT id_adherent FROM user) AS id";
 
             $resultat = mysqli_query($connexion, $requete);

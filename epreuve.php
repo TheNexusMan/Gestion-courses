@@ -23,7 +23,6 @@
             $tarifToDelete = intval($_GET['delete_tarif']);
 
             $requete = "DELETE FROM tarif WHERE id_tarif = $tarifToDelete";
-            mysqli_query($connexion, $requete);
 
             if(mysqli_query($connexion, $requete) == FALSE){
                 print "<script>alert('Échec de la requête de suppression du tarif)</script>";
@@ -213,7 +212,7 @@
             $requete = "SELECT AVG(tmp.temps) AS tempsH
                         FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
                                                JOIN participation pa ON (tmp.dossard = pa.dossard AND tmp.id_epreuve = pa.id_epreuve)
-                        WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'H' ";
+                        WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'H'";
 
             $resultat = mysqli_query($connexion, $requete);
 
@@ -228,7 +227,7 @@
             $requete = "SELECT AVG(tmp.temps) AS tempsF
                         FROM temps_passage tmp JOIN resultat re ON tmp.dossard = re.dossard
                                                JOIN participation pa ON (tmp.dossard = pa.dossard AND tmp.id_epreuve = pa.id_epreuve)
-                        WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'F' ";
+                        WHERE tmp.id_epreuve = $idEpreuve AND tmp.km = $distEpreuve AND re.sexe = 'F'";
 
             $resultat = mysqli_query($connexion, $requete);
 
@@ -295,7 +294,7 @@
                 $nbAdh = $nuplet['nbrAdh'];
             }
 
-            // Rrécupération des meilleurs/pire rangs
+            // Récupération des meilleurs/pire rangs
             $requete ="SELECT MIN(re.rang) AS bestRank, MAX(re.rang) AS worstRank
                        FROM resultat re JOIN participation pa ON (re.id_epreuve = pa.id_epreuve AND re.dossard = pa.dossard)
                        WHERE re.id_epreuve = $idEpreuve";
@@ -311,7 +310,7 @@
 
         }
 
-        // Récupération de l'édition
+        // Récupération de l'édition de l'épreuve
         $requete = "SELECT annee, id_course
                     FROM edition
                     WHERE id_edition = $id_edition";
@@ -326,7 +325,7 @@
             $id_course = $nuplet['id_course'];
         }
 
-        // Récupération de la course
+        // Récupération de la course de l'épreuve
         $requete = "SELECT id_course, nom
                     FROM course
                     WHERE id_course = $id_course";
@@ -437,6 +436,7 @@
                                 </thead>
                                 <tbody>";
 
+        // Récupération des tarifs de l'épreuve
         $requete = "SELECT * FROM tarif WHERE id_epreuve = $idEpreuve";
 
         $resultat = mysqli_query($connexion, $requete);
@@ -641,7 +641,7 @@
             $resultat = mysqli_query($connexion, $requete);
 
             if ($resultat == FALSE)
-                print "<script>alert(\"Erreur lors de l'exécution de la requete de récupération des résultats\")</script>";
+                print "<script>alert(\"Erreur lors de l'exécution de la requête de récupération des résultats\")</script>";
             else {
                 print "<section class='liste'>
                         <h2 class='tableLabel'>Résultats des adhérents</h2>

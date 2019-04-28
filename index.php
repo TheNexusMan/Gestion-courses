@@ -17,6 +17,7 @@
             $pseudo = mysqli_real_escape_string($connexion, $_POST['pseudoInput']);
             $pw = mysqli_real_escape_string($connexion, $_POST['inputPw']);
 
+            // On récupère le user correspondant au pseudo
             $requete = "SELECT * FROM user WHERE pseudo = '$pseudo'";
 
             $resultat = mysqli_query($connexion, $requete); //Envoie de la requete
@@ -29,6 +30,7 @@
                 {
                     $goodPseudo = 1;
 
+                    // Si le pseudo existe, on essait de récupérer l'user correspondant au pseudo et au mot de passe
                     $requete = "SELECT * FROM user WHERE pseudo = '$pseudo' AND mdp = '$pw'";
 
                     $resultat = mysqli_query($connexion, $requete); //Envoie de la requete

@@ -63,10 +63,10 @@
             $dateDepot = mysqli_real_escape_string($connexion, $_POST['dateDepot']);
             $dateDossard = mysqli_real_escape_string($connexion, $_POST['dateDossard']);
 
-            $resultat = "INSERT INTO edition (id_course, annee, nb_participants, date, date_inscription, date_depot_certificat, date_recup_dossard)
+            $requete = "INSERT INTO edition (id_course, annee, nb_participants, date, date_inscription, date_depot_certificat, date_recup_dossard)
                         VALUES ('$idCourse', '$anneeEd', '$nbParti', '$dateAdd', '$dateIns', '$dateDepot', '$dateDossard')";
 
-            if (mysqli_query($connexion, $resultat) == FALSE)
+            if (mysqli_query($connexion, $requete) == FALSE)
                 print "<script>alert(\"Échec de l'ajout de l'edition\")</script>";
         }
 
