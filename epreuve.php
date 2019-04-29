@@ -9,7 +9,7 @@
     if (isset($_GET['id_epreuve'])) {
         $idEpreuve = intval($_GET['id_epreuve']);
     } else {
-        header('Location: http://localhost/projet-bdw1/index.php');
+        header('Location: index.php');
     }
 
     include "includes/header.php";

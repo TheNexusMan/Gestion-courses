@@ -7,7 +7,7 @@
     {
         $idCourse = intval($_GET['idcourse']);
     } else{
-        header('Location: http://localhost/projet-bdw1/index.php');
+        header('Location: index.php');
     }
 
     include "includes/header.php";

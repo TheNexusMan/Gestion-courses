@@ -7,7 +7,7 @@
     {
         $idEdition = intval($_GET['idedition']);
     } else{
-        header('Location: http://localhost/projet-bdw1/index.php');
+        header('Location: index.php');
     }
 
     include "includes/header.php";
@@ -62,7 +62,11 @@
                         VALUES ($idEdition, '$nom', $distance, '$adresseDepart', $denivelee, '$typeEpreuve', '$plan')";
 
                 if (mysqli_query($connexion, $requete) == FALSE)
+                {
                     print "<script>alert(\"Échec de l'ajout de l'épreuve\")</script>";
+                } else {
+                    move_uploaded_file($_FILES['plan']['tmp_name'], 'data/plan/'.$_FILES['plan']['name']);
+                }
             }
         }
 

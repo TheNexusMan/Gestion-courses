@@ -70,11 +70,11 @@
         if($_SESSION['isConnected'] && $_SESSION['typeUtilisateur'] == "Adherent")
         {
             //Renvoie sur la page User
-            header('Location: http://localhost/projet-bdw1/adherent.php');
+            header('Location: adherent.php');
         }
         else if($_SESSION['isConnected'] && $_SESSION['typeUtilisateur'] == "Admin"){
             //Renvoie sur la page admin
-            header('Location: http://localhost/projet-bdw1/espaceperso.php');
+            header('Location: espaceperso.php');
         }
     }
 ?>
