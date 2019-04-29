@@ -1,4 +1,4 @@
-<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
+<!-- Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
 <?php
     session_start();
 

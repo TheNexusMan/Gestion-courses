@@ -1,4 +1,4 @@
-<!--Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
+<!-- Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987 -->
 <?php
     //On réinitialise les variables de connexion en cas de déconnexion
     if(isset($_GET['logout']))
@@ -14,15 +14,10 @@
     // ou qu'un adhérent essait d'accéder à une page administrateur, il est redirigé vers la page de login
     if($page != "index.php" && $page != "404.php" && (!isset($_SESSION['isConnected']) || (($page == "adherents.php" || $page == "espaceperso.php") && isset($_SESSION['id_adherent']))))
     {
-       header('Location: http://localhost/projet-bdw1/index.php');
+       header('Location: index.php');
     }
 
-    $user = 'root';
-    $mdp = '';
-    $machine = 'localhost';
-    $bd = 'bdw1';
-    $connexion = mysqli_connect($machine, $user, $mdp, $bd);
-    mysqli_set_charset($connexion, 'utf8');
+    include "includes/connexionBD.php";
 ?>
 
 <!DOCTYPE html>

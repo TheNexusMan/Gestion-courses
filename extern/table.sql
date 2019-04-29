@@ -1,3 +1,5 @@
+#Arnaud DEBRABANT P1707147 - Damien PETITJEAN P1408987
+
 #------------------------------------------------------------
 #        Script MySQL.
 #------------------------------------------------------------
@@ -259,6 +261,8 @@ VALUES (8, 18, 95, 20);
 INSERT INTO tarif (id_epreuve, age_min, age_max, tarif)
 VALUES (9, 18, 95, 25);
 
+
+#Requête pour créer les participations à partir des résultats (à exécuter après avoir importer les adhérents et les résultats)
 #PARTICIPATIONS
 INSERT INTO participation (dossard, id_adherent, id_epreuve)
     SELECT r.dossard ,a.id_adherent, r.id_epreuve
